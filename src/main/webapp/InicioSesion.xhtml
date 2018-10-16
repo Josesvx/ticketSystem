@@ -9,6 +9,7 @@
     <body background="img/fondo13.png">
         <center>
             <h:form>
+                <p:messages autoUpdate="true"/>
                     <div>  
                         <table align="center" style="opacity: 1; margin-top: 100px">
                             <tr>
@@ -18,9 +19,9 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <img src="img/user.png"/>
+                                    <img src="img/user.png" />
                                 </td>
-                                <td><p:inputText  id="txtUsuario" style="opacity: 0.40" />
+                                <td><p:inputText  id="Usuario" style="opacity: 0.40" required="true" placeholder="Usuario" />
                                 </td>
                             </tr>
                             <tr></tr><tr></tr>
@@ -28,7 +29,7 @@
                                 <td>
                                     <img src="img/pass.png"/>
                                 </td>
-                                <td><p:inputText id="txtClave" type="password" style="opacity: 0.40" />
+                                <td><p:inputText id="Clave" type="password" style="opacity: 0.40" required="true" placeholder="Contraseña" />
                                 </td>
                             </tr>
                         </table>
