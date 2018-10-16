@@ -158,7 +158,7 @@
             <plugin>
                 <groupId>com.dkanejs.maven.plugins</groupId>
                 <artifactId>docker-compose-maven-plugin</artifactId>
-                <version>1.0.3</version>
+                <version>1.0.5</version>
                 <executions>
                     <execution>
                         <id>down</id>
@@ -180,6 +180,8 @@
                         <configuration>
                             <composeFile>${project.basedir}/src/main/resources/docker/docker-compose.yml</composeFile>
                             <detachedMode>true</detachedMode>
+                                    <verbose>false</verbose>
+                                    <build>true</build>
                         </configuration>
                     </execution>
                 </executions>
