@@ -5,9 +5,11 @@
  */
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 
 /**
@@ -28,5 +30,22 @@ public class DirectorioFacade extends AbstractFacade<Directorio> implements Dire
     public DirectorioFacade() {
         super(Directorio.class);
     }
-    
+    @Override
+    public Directorio FindByEmail(String correo, String contrasenia) {
+        Directorio Respuesta = null;
+        try {
+            Query consulta = em.createNamedQuery("Directorio.findByCorreo");
+            consulta.setParameter("correo",correo);            
+            List<Directorio> directorio = consulta.getResultList();
+            if (directorio.get(0).getContrasenia().equals(contrasenia)) {
+               Respuesta = directorio.get(0); 
+            }
+            
+        } catch (Exception e) {
+            throw e;
+        } finally {
+        }
+        return Respuesta;
+    }
+
 }

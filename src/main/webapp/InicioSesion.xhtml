@@ -9,7 +9,7 @@
     <body background="img/fondo13.png">
         <center>
             <h:form>
-                <p:messages autoUpdate="true"/>
+                <p:messages autoUpdate="true" showDetail="true"/>
                     <div>  
                         <table align="center" style="opacity: 1; margin-top: 100px">
                             <tr>
@@ -21,7 +21,7 @@
                                 <td>
                                     <img src="img/user.png" />
                                 </td>
-                                <td><p:inputText  id="Usuario" style="opacity: 0.40" required="true" placeholder="Usuario" />
+                                <td><p:inputText  id="Usuario" style="opacity: 0.40" required="true" placeholder="Usuario" value="#{manejadorLogin.directorio.correo}" />
                                 </td>
                             </tr>
                             <tr></tr><tr></tr>
@@ -29,13 +29,13 @@
                                 <td>
                                     <img src="img/pass.png"/>
                                 </td>
-                                <td><p:inputText id="Clave" type="password" style="opacity: 0.40" required="true" placeholder="Contraseña" />
+                                <td><p:inputText id="Clave" type="password" style="opacity: 0.40" required="true" placeholder="Contraseña" value="#{manejadorLogin.directorio.contrasenia}"/>
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <br></br>
-                    <p:commandButton value="Ingresar" style="opacity: 0.70"/>
+                    <p:commandButton value="Ingresar" style="opacity: 0.70" action="#{manejadorLogin.autenticacion()}"/>
             </h:form>
         </center>
     </body>

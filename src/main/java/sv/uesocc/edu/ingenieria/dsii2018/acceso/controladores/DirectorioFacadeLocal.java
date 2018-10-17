@@ -30,4 +30,6 @@ public interface DirectorioFacadeLocal {
 
     int count();
     
+    Directorio FindByEmail(String correo, String contrasenia);
+    
 }
