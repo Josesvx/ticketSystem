@@ -28,5 +28,9 @@ public class EncargadoFacade extends AbstractFacade<Encargado> implements Encarg
     public EncargadoFacade() {
         super(Encargado.class);
     }
-    
+
+    @Override
+    public void change() {
+    }
+
 }

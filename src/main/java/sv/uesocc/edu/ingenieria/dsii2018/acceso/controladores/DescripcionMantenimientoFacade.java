@@ -5,6 +5,7 @@
  */
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,10 @@ public class DescripcionMantenimientoFacade extends AbstractFacade<DescripcionMa
     public DescripcionMantenimientoFacade() {
         super(DescripcionMantenimiento.class);
     }
-    
+
+    @Override
+    public List<DescripcionMantenimiento> findByCorrelativo(int Correlativo) {
+        return null;
+    }
+
 }

@@ -29,5 +29,7 @@ public interface EncargadoFacadeLocal {
     List<Encargado> findRange(int[] range);
 
     int count();
-    
+
+    void change();
+
 }

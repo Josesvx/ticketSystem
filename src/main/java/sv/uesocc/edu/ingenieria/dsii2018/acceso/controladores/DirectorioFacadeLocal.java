@@ -29,7 +29,9 @@ public interface DirectorioFacadeLocal {
     List<Directorio> findRange(int[] range);
 
     int count();
-    
+
     Directorio FindByEmail(String correo, String contrasenia);
-    
+
+    List<Directorio> findByTecFree();
+
 }
