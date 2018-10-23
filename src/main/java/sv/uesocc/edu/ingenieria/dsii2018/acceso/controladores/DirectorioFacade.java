@@ -53,4 +53,22 @@ public class DirectorioFacade extends AbstractFacade<Directorio> implements Dire
     public List<Directorio> findByTecFree() {
         return null;
     }
+
+    @Override
+    public Directorio autenticar(Directorio usuario) {
+        Directorio user= null;
+        try{
+           Query query=em.createNamedQuery("Directorio.autenticarse");
+           query.setParameter("usuario", usuario.getUsuario());
+           query.setParameter("contrasenia", usuario.getContrasenia());
+           
+           List<Directorio> lista = query.getResultList();
+           if(!lista.isEmpty()){
+               user=lista.get(0);
+           }
+        }catch(Exception ex){
+            throw ex;
+        }
+        return user;
+    }
 }

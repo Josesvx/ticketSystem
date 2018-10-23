@@ -28,6 +28,8 @@ public interface DirectorioFacadeLocal {
 
     List<Directorio> findRange(int[] range);
 
+    Directorio autenticar(Directorio usuario);
+    
     int count();
 
     Directorio FindByEmail(String correo, String contrasenia);
