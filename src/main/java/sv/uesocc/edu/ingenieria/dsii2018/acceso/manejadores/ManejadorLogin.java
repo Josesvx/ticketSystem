@@ -50,32 +50,14 @@ public class ManejadorLogin implements Serializable {
         try{
             user= Dfl.autenticar(directorio);
             if(user != null){
-            redireccionar="principal";         
+            redireccionar="principal.jsf?faces-redirect=true";         
             }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso", "usuario o contraseña incorrectos"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso:", "usuario o contraseña incorrectos"));
             }
        
         }catch(Exception ex){
             throw ex;
         }
         return redireccionar;
-    }
-    
-//    public String autenticar(){
-//        String redireccionar= null;
-//        Directorio user;
-//        try{
-//            user= Dfl.autenticar(directorio);
-//            if(user != null){
-//            redireccionar="principal";         
-//            }else{
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso", "usuario o contraseña incorrectos"));
-//            }
-//       
-//        }catch(Exception ex){
-//            throw ex;
-//        }
-//        return redireccionar;
-//    }
-    
+    }    
 }
