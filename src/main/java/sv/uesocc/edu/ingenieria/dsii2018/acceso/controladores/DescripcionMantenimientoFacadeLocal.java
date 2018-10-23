@@ -29,5 +29,7 @@ public interface DescripcionMantenimientoFacadeLocal {
     List<DescripcionMantenimiento> findRange(int[] range);
 
     int count();
-    
+
+    List<DescripcionMantenimiento> findByCorrelativo(int Correlativo);
+
 }

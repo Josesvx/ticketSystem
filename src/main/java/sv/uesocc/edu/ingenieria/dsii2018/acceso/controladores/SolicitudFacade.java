@@ -5,6 +5,11 @@
  */
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores;
 
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+import java.util.Date;
+import java.util.List;
+import javafx.scene.chart.PieChart;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +33,60 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
     public SolicitudFacade() {
         super(Solicitud.class);
     }
-    
+
+    @Override
+    public Solicitud findByCode(String codigo) {
+        return null;
+    }
+
+    @Override
+    public Solicitud findByEstado() {
+        return null;
+    }
+
+    @Override
+    public List<Solicitud> findByTecnic(int tec) {
+        return null;
+    }
+
+    @Override
+    public List<Solicitud> findByCorrelativo(String Correlativo) {
+        return null;
+    }
+
+    @Override
+    public List<Solicitud> findByDirectory(int idDirectorio) {
+        return null;
+    }
+
+    @Override
+    public List<Solicitud> findByDates(Date fechaInicio, Date fechaFinal) {
+        return null;
+    }
+
+    @Override
+    public List<Solicitud> findByDate(Date fecha) {
+        return null;
+    }
+
+    @Override
+    public List<Solicitud> findByEstado(int idEstado) {
+        return null;
+    }
+
+    @Override
+    public List<Solicitud> findByPrioridad(int idPrioridad) {
+        return null;
+    }
+
+    @Override
+    public List<Solicitud> findByDepartamento(int idDepartamento) {
+        return null;
+    }
+
+    @Override
+    public List<Solicitud> findByCategoria(int idCategoria) {
+        return null;
+    }
+
 }

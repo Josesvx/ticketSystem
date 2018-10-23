@@ -30,17 +30,18 @@ public class DirectorioFacade extends AbstractFacade<Directorio> implements Dire
     public DirectorioFacade() {
         super(Directorio.class);
     }
+
     @Override
     public Directorio FindByEmail(String correo, String contrasenia) {
         Directorio Respuesta = null;
         try {
             Query consulta = em.createNamedQuery("Directorio.findByCorreo");
-            consulta.setParameter("correo",correo);            
+            consulta.setParameter("correo", correo);
             List<Directorio> directorio = consulta.getResultList();
             if (directorio.get(0).getContrasenia().equals(contrasenia)) {
-               Respuesta = directorio.get(0); 
+                Respuesta = directorio.get(0);
             }
-            
+
         } catch (Exception e) {
             throw e;
         } finally {
@@ -48,4 +49,26 @@ public class DirectorioFacade extends AbstractFacade<Directorio> implements Dire
         return Respuesta;
     }
 
+    @Override
+    public List<Directorio> findByTecFree() {
+        return null;
+    }
+
+    @Override
+    public Directorio autenticar(Directorio usuario) {
+        Directorio user= null;
+        try{
+           Query query=em.createNamedQuery("Directorio.autenticarse");
+           query.setParameter("usuario", usuario.getUsuario());
+           query.setParameter("contrasenia", usuario.getContrasenia());
+           
+           List<Directorio> lista = query.getResultList();
+           if(!lista.isEmpty()){
+               user=lista.get(0);
+           }
+        }catch(Exception ex){
+            throw ex;
+        }
+        return user;
+    }
 }

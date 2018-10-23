@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Directorio.findByApellido2", query = "SELECT d FROM Directorio d WHERE d.apellido2 = :apellido2")
     , @NamedQuery(name = "Directorio.findByCorreo", query = "SELECT d FROM Directorio d WHERE d.correo = :correo")
     , @NamedQuery(name = "Directorio.findByContrasenia", query = "SELECT d FROM Directorio d WHERE d.contrasenia = :contrasenia")
+    , @NamedQuery(name = "Directorio.autenticarse", query = "select d from Directorio d where d.usuario= :usuario and d.contrasenia= :contrasenia")
     , @NamedQuery(name = "Directorio.findByUsuario", query = "SELECT d FROM Directorio d WHERE d.usuario = :usuario")})
 public class Directorio implements Serializable {
 

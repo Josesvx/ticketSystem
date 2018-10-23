@@ -45,22 +45,19 @@ public class ManejadorLogin implements Serializable {
     }
     
     public String autenticacion(){
-        String redireccion = null;
-        Directorio Miembro =null;
-        try {
-//            Miembro = Dfl.FindByEmail(directorio.getCorreo(), directorio.getContrasenia()); 
-//            if (Miembro != null) {
-                 redireccion = "Principal";
-//            }else{
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Aviso","Credenciales incorrectas"));
-//            }               
-                //System.out.print("hola");
-        } catch (Exception e) {
-            
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Aviso","Error en el try"));
-        }finally{
+        String redireccionar= null;
+        Directorio user;
+        try{
+            user= Dfl.autenticar(directorio);
+            if(user != null){
+            redireccionar="principal.jsf?faces-redirect=true";         
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso:", "usuario o contraseña incorrectos"));
+            }
+       
+        }catch(Exception ex){
+            throw ex;
         }
-        return  redireccion;
-    }
-    
+        return redireccionar;
+    }    
 }
