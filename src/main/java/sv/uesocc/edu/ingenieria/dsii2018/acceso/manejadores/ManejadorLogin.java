@@ -5,10 +5,7 @@
  */
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -75,5 +72,17 @@ public class ManejadorLogin implements Serializable {
 
     public void loginPrincipal() {
         cache.comprobarLoginPrincipal();
+    }
+
+    public void loginGerente() {
+        cache.comprobarLoginRolGerente();
+    }
+
+    public void loginTecnico() {
+        cache.comprobarLoginRolTecnico();
+    }
+
+    public void loginJefe() {
+        cache.comprobarLoginRolJefe();
     }
 }

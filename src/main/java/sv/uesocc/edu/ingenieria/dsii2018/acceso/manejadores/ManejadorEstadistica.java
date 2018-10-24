@@ -12,4 +12,5 @@ public class ManejadorEstadistica {
     public List<Solicitud> MostrarEstadistica(int tipo, Object[] arrayParam) {
         return null;
     }
+    
 }
