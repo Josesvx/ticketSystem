@@ -1,0 +1,5 @@
+create-jdbc-connection-pool --datasourceclassname org.postgresql.ds.PGSimpleDataSource --restype javax.sql.DataSource --property user=ticketuser:password=12345678:DatabaseName=ticketdb:ServerName=db:port=5432 postgres_ticketSystem_local
+
+ping-connection-pool postgres_ticketSystem_local
+
+create-jdbc-resource --connectionpoolid postgres_ticketSystem_local jdbc/ticketdb

@@ -1,0 +1,8 @@
+target/
+nbactions.xml
+*.war
+*.zip
+.classpath
+.project
+.settings/
+
