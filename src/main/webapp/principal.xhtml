@@ -1,12 +1,39 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>EN CONSTRUCCION</title>
     </h:head>
     <body background="img/build.jpg">
-        <h1 style="color: white; background: blue; font-size: 75px;">SITIO EN CONSTRUCCION...</h1>
+        <h:form>     
+            <p:growl id="messages" showDetail="true" />
+
+            <p:toolbar>
+                <f:facet name="left">
+                    <p:commandButton type="button" value="Inicio" icon="ui-icon-home" />
+
+                    <span class="ui-separator">
+                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                    </span>
+
+                    <p:commandButton type="button" value="Creación de ticket"  title="Save" icon="ui-icon-disk" />
+                    <p:commandButton type="button" value="Seguimiento" title="Delete" icon="ui-icon-zoomin" />
+                    <p:commandButton type="button" value="Estadisticas" title="Print" icon="ui-icon-print" />
+                    <span class="ui-separator">
+                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                    </span>
+                </f:facet>
+
+                <f:facet name="right">
+                    <p:commandButton type="button" value="Cerrar Sesión" title="Cerrar Sesion" icon="	ui-icon-person"/>
+                </f:facet>
+
+            </p:toolbar>
+        </h:form>
+        <h1 style="color: white; background: gray; font-size: 75px;">SITIO EN CONSTRUCCION...</h1>
     </body>
 </html>
 
