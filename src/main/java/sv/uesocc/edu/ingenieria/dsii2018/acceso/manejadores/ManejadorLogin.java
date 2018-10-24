@@ -30,11 +30,15 @@ public class ManejadorLogin implements Serializable {
     @EJB
     private DirectorioFacadeLocal Dfl;
     private Directorio directorio;
-
+    private CacheManager cm;
+    private Cache usuarioActual;
+    private String redireccionar = null;
+    
     @PostConstruct
     public void init() {
         directorio = new Directorio();
-
+        cm = CacheManager.create();
+        //comprobarLogin();
     }
 
     public Directorio getDirectorio() {
@@ -46,13 +50,12 @@ public class ManejadorLogin implements Serializable {
     }
 
     public String autenticacion() {
-        String redireccionar = null;
         Directorio user;
         try {
             user = Dfl.autenticar(directorio);
             if (user != null) {
                 CrearCache(user);
-                //redireccionar = "principal.jsf?faces-redirect=true";
+                redireccionar = "principal.jsf?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso:", "usuario o contraseña incorrectos"));
             }
@@ -64,17 +67,33 @@ public class ManejadorLogin implements Serializable {
     }
 
     public void CrearCache(Directorio directorio) {
-        CacheManager cm = CacheManager.create();
+        //CacheManager cm = CacheManager.create();
         cm.addCache("UsuarioActual");
-        Cache usuarioActual = cm.getCache("UsuarioActual");
+        usuarioActual = cm.getCache("UsuarioActual");
         Element usuario = new Element("usuario", directorio.getUsuario());
         usuarioActual.put(usuario);
-        usuario = usuarioActual.get("usuario");
-        String nombre = usuario.getObjectValue().toString();
-        int tamanio = usuarioActual.getSize();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso:", "se creo la cache del usuario "+ nombre +" su tamaño de "+ tamanio));
+//        usuario = usuarioActual.get("usuario");
+//        String nombre = usuario.getObjectValue().toString();
+//        int tamanio = usuarioActual.getSize();
+        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso:", "se creo la cache del usuario " + nombre + " su tamaño de " + tamanio));
+//        usuarioActual.remove("usuario");
+//        cm.shutdown();
+//        CacheManager.getInstance().shutdown();
+    }
+
+    public void cerrarSesion() {
         usuarioActual.remove("usuario");
         cm.shutdown();
         CacheManager.getInstance().shutdown();
+    }
+
+    public void comprobarLogin() {
+        if(cm.getCache("UsuarioActual")!=null){
+            redireccionar = "principal.jsf?faces-redirect=true";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso:", "se creo la cache del usuario " + usuarioActual.get("usuario").getObjectValue().toString()));
+        }else{
+            
+        }
+
     }
 }
