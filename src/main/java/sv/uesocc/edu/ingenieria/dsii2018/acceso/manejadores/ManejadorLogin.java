@@ -6,13 +6,16 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
 import java.io.Serializable;
-import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.swing.JOptionPane;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 
@@ -20,20 +23,22 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
  *
  * @author alexander
  */
-
-
 @Named
 @ViewScoped
 public class ManejadorLogin implements Serializable {
-    
+
     @EJB
     private DirectorioFacadeLocal Dfl;
     private Directorio directorio;
+    private CacheManager cm;
+    private Cache usuarioActual;
+    private String redireccionar = null;
     
     @PostConstruct
-    public void init(){
+    public void init() {
         directorio = new Directorio();
-    
+        cm = CacheManager.create();
+        //comprobarLogin();
     }
 
     public Directorio getDirectorio() {
@@ -43,21 +48,52 @@ public class ManejadorLogin implements Serializable {
     public void setDirectorio(Directorio directorio) {
         this.directorio = directorio;
     }
-    
-    public String autenticacion(){
-        String redireccionar= null;
+
+    public String autenticacion() {
         Directorio user;
-        try{
-            user= Dfl.autenticar(directorio);
-            if(user != null){
-            redireccionar="principal.jsf?faces-redirect=true";         
-            }else{
+        try {
+            user = Dfl.autenticar(directorio);
+            if (user != null) {
+                CrearCache(user);
+                redireccionar = "principal.jsf?faces-redirect=true";
+            } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso:", "usuario o contraseña incorrectos"));
             }
-       
-        }catch(Exception ex){
+
+        } catch (Exception ex) {
             throw ex;
         }
         return redireccionar;
-    }    
+    }
+
+    public void CrearCache(Directorio directorio) {
+        //CacheManager cm = CacheManager.create();
+        cm.addCache("UsuarioActual");
+        usuarioActual = cm.getCache("UsuarioActual");
+        Element usuario = new Element("usuario", directorio.getUsuario());
+        usuarioActual.put(usuario);
+//        usuario = usuarioActual.get("usuario");
+//        String nombre = usuario.getObjectValue().toString();
+//        int tamanio = usuarioActual.getSize();
+        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso:", "se creo la cache del usuario " + nombre + " su tamaño de " + tamanio));
+//        usuarioActual.remove("usuario");
+//        cm.shutdown();
+//        CacheManager.getInstance().shutdown();
+    }
+
+    public void cerrarSesion() {
+        usuarioActual.remove("usuario");
+        cm.shutdown();
+        CacheManager.getInstance().shutdown();
+    }
+
+    public void comprobarLogin() {
+        if(cm.getCache("UsuarioActual")!=null){
+            redireccionar = "principal.jsf?faces-redirect=true";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "aviso:", "se creo la cache del usuario " + usuarioActual.get("usuario").getObjectValue().toString()));
+        }else{
+            
+        }
+
+    }
 }
