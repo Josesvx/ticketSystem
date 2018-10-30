@@ -18,6 +18,9 @@
             </f:selectItems>
         </p:selectOneMenu>
         <br></br>
+        <p:outputLabel value="Departamento "></p:outputLabel>
+        <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"></p:inputText>
+        <br></br>
         <p:outputLabel value="Correlativo: "></p:outputLabel>
         <p:inputText id="correlativo" required="true" requiredMessage="Correlativo Requerido" placeholder="correlativo" value="#{manejadorSolicitud.solicitud.correlativo}"></p:inputText>
         <br></br>

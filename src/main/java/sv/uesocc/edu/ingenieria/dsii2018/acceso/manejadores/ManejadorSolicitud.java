@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.cache.CacheInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DepartamentoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
@@ -26,6 +27,8 @@ public class ManejadorSolicitud implements Serializable {
     private List<Categoria> listaCat;
     private Solicitud solicitud;
     private Categoria categoria;
+    private CacheInstance cache;
+    private String nombre,seguimiento, nombreDep;
     @EJB
     private SolicitudFacadeLocal sfl;
     @EJB
@@ -33,7 +36,7 @@ public class ManejadorSolicitud implements Serializable {
 
     @PostConstruct
     public void init() {
-        
+
         List<Categoria> listaC = cfl.findAll();
         if (listaC != null && !listaC.isEmpty()) {
             listaCat = listaC;
@@ -42,7 +45,27 @@ public class ManejadorSolicitud implements Serializable {
         }
 
         solicitud = new Solicitud();
+        cache = CacheInstance.constructor();
+        cache.Instance();
+        
+        nombreDep= cache.ObtenerNombreDepartamento();
+        if(nombreDep!=null && !nombreDep.isEmpty()){
+            nombre=nombreDep;
+        }else{
+            nombre="No Funciona";
+        }
+
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    
 
     public List<Categoria> getListaCat() {
         return listaCat;
@@ -69,10 +92,19 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public String CrearNumSeguimiento(Solicitud solicitud) {
+        nombre = cache.ObtenerNombreDepartamento();
+        if(nombre.equals("")){
+            seguimiento = "";
+        }else if(nombre.equals("")){
+            
+        }else if(nombre.equals("")){
+            
+        }
         return null;
     }
 
     public void CrearSolicitud(Solicitud solicitud) {
+        
 
     }
 
@@ -115,5 +147,4 @@ public class ManejadorSolicitud implements Serializable {
     public void Actualizar(Solicitud solicitud, String comentario) {
 
     }
-
 }

@@ -15,20 +15,19 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
  */
 @Named
 @ViewScoped
-public class ManejadorCategoria implements Serializable{
-    
+public class ManejadorCategoria implements Serializable {
+
     @EJB
     private CategoriaFacadeLocal cfl;
     private Categoria categoria;
     private List<Categoria> listaCat;
-    
 
     public List<Categoria> ObtenerCategoria() {
-        List<Categoria> lista=cfl.findAll();
-        if(lista !=null && !lista.isEmpty()){
-        listaCat=lista;
-        }else{
-            listaCat= new ArrayList<>();
+        List<Categoria> lista = cfl.findAll();
+        if (lista != null && !lista.isEmpty()) {
+            listaCat = lista;
+        } else {
+            listaCat = new ArrayList<>();
         }
         return listaCat;
     }
