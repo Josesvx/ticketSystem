@@ -49,7 +49,7 @@ public class ManejadorLogin implements Serializable {
         Directorio user;
         try {
             user = Dfl.autenticar(directorio);
-            if (user != null) {
+            if (user!= null) {
                 cache.CrearCache(user);
                 redireccionar = "principal.jsf?faces-redirect=true";
             } else {

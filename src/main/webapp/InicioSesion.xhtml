@@ -22,7 +22,7 @@
                             <td>
                                 <img src="img/user.png" />
                             </td>
-                            <td><p:inputText  id="Usuario" style="opacity: 0.40" required="true" placeholder="Usuario" value="#{manejadorLogin.directorio.usuario}" />
+                            <td><p:inputText  id="Usuario" style="opacity: 0.40" required="true" requiredMessage="Usuario Requerido" placeholder="Usuario" value="#{manejadorLogin.directorio.usuario}" />
                             </td>
                         </tr>
                         <tr></tr><tr></tr>
@@ -30,7 +30,7 @@
                             <td>
                                 <img src="img/pass.png"/>
                             </td>
-                            <td><p:inputText id="Clave" type="password" style="opacity: 0.40" required="true" placeholder="Contraseña" value="#{manejadorLogin.directorio.contrasenia}"/>
+                            <td><p:inputText id="Clave" type="password" style="opacity: 0.40" requiredMessage="Contraseña Requerida" required="true" placeholder="Contraseña" value="#{manejadorLogin.directorio.contrasenia}"/>
                             </td>
                         </tr>
                     </table>
