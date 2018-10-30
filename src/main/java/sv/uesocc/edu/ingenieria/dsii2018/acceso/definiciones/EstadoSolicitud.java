@@ -20,8 +20,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -35,27 +33,45 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EstadoSolicitud.findAll", query = "SELECT e FROM EstadoSolicitud e")
     , @NamedQuery(name = "EstadoSolicitud.findByIdEstadoSolicitud", query = "SELECT e FROM EstadoSolicitud e WHERE e.idEstadoSolicitud = :idEstadoSolicitud")
     , @NamedQuery(name = "EstadoSolicitud.findByFecha", query = "SELECT e FROM EstadoSolicitud e WHERE e.fecha = :fecha")
-    , @NamedQuery(name = "EstadoSolicitud.findByJustificacion", query = "SELECT e FROM EstadoSolicitud e WHERE e.justificacion = :justificacion")})
+    , @NamedQuery(name = "EstadoSolicitud.findByJustificacion", query = "SELECT e FROM EstadoSolicitud e WHERE e.justificacion = :justificacion")
+    , @NamedQuery(name = "EstadoSolicitud.findByAudNombreCreacion", query = "SELECT e FROM EstadoSolicitud e WHERE e.audNombreCreacion = :audNombreCreacion")
+    , @NamedQuery(name = "EstadoSolicitud.findByAudFechaCreacion", query = "SELECT e FROM EstadoSolicitud e WHERE e.audFechaCreacion = :audFechaCreacion")
+    , @NamedQuery(name = "EstadoSolicitud.findByAudNombreModificacion", query = "SELECT e FROM EstadoSolicitud e WHERE e.audNombreModificacion = :audNombreModificacion")
+    , @NamedQuery(name = "EstadoSolicitud.findByAudFechaModificacion", query = "SELECT e FROM EstadoSolicitud e WHERE e.audFechaModificacion = :audFechaModificacion")
+    , @NamedQuery(name = "EstadoSolicitud.findByAudStatus", query = "SELECT e FROM EstadoSolicitud e WHERE e.audStatus = :audStatus")})
 public class EstadoSolicitud implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id_estado_solicitud")
+    @Column(name = "id_estado_solicitud", nullable = false)
     private Integer idEstadoSolicitud;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @Size(max = 500)
-    @Column(name = "justificacion")
+    @Column(name = "justificacion", length = 500)
     private String justificacion;
-    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
+    @Basic(optional = false)
+    @Column(name = "aud_nombre_creacion", nullable = false, length = 250)
+    private String audNombreCreacion;
+    @Basic(optional = false)
+    @Column(name = "aud_fecha_creacion", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date audFechaCreacion;
+    @Column(name = "aud_nombre_modificacion", length = 250)
+    private String audNombreModificacion;
+    @Column(name = "aud_fecha_modificacion")
+    @Temporal(TemporalType.DATE)
+    private Date audFechaModificacion;
+    @Basic(optional = false)
+    @Column(name = "aud_status", nullable = false)
+    private boolean audStatus;
+    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado", nullable = false)
     @ManyToOne(optional = false)
     private Estado idEstado;
-    @JoinColumn(name = "id_solicitud", referencedColumnName = "id_solicitud")
+    @JoinColumn(name = "id_solicitud", referencedColumnName = "id_solicitud", nullable = false)
     @ManyToOne(optional = false)
     private Solicitud idSolicitud;
 
@@ -66,9 +82,12 @@ public class EstadoSolicitud implements Serializable {
         this.idEstadoSolicitud = idEstadoSolicitud;
     }
 
-    public EstadoSolicitud(Integer idEstadoSolicitud, Date fecha) {
+    public EstadoSolicitud(Integer idEstadoSolicitud, Date fecha, String audNombreCreacion, Date audFechaCreacion, boolean audStatus) {
         this.idEstadoSolicitud = idEstadoSolicitud;
         this.fecha = fecha;
+        this.audNombreCreacion = audNombreCreacion;
+        this.audFechaCreacion = audFechaCreacion;
+        this.audStatus = audStatus;
     }
 
     public Integer getIdEstadoSolicitud() {
@@ -93,6 +112,46 @@ public class EstadoSolicitud implements Serializable {
 
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
+    }
+
+    public String getAudNombreCreacion() {
+        return audNombreCreacion;
+    }
+
+    public void setAudNombreCreacion(String audNombreCreacion) {
+        this.audNombreCreacion = audNombreCreacion;
+    }
+
+    public Date getAudFechaCreacion() {
+        return audFechaCreacion;
+    }
+
+    public void setAudFechaCreacion(Date audFechaCreacion) {
+        this.audFechaCreacion = audFechaCreacion;
+    }
+
+    public String getAudNombreModificacion() {
+        return audNombreModificacion;
+    }
+
+    public void setAudNombreModificacion(String audNombreModificacion) {
+        this.audNombreModificacion = audNombreModificacion;
+    }
+
+    public Date getAudFechaModificacion() {
+        return audFechaModificacion;
+    }
+
+    public void setAudFechaModificacion(Date audFechaModificacion) {
+        this.audFechaModificacion = audFechaModificacion;
+    }
+
+    public boolean getAudStatus() {
+        return audStatus;
+    }
+
+    public void setAudStatus(boolean audStatus) {
+        this.audStatus = audStatus;
     }
 
     public Estado getIdEstado() {
@@ -133,7 +192,7 @@ public class EstadoSolicitud implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud[ idEstadoSolicitud=" + idEstadoSolicitud + " ]";
+        return "sv.uesocc.edu.ingenieria.dsii2018.lacualquiera.EstadoSolicitud[ idEstadoSolicitud=" + idEstadoSolicitud + " ]";
     }
     
 }

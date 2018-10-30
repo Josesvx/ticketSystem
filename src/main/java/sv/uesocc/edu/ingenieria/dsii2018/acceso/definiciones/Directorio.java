@@ -6,6 +6,7 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -20,8 +21,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -41,55 +42,61 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Directorio.findByApellido2", query = "SELECT d FROM Directorio d WHERE d.apellido2 = :apellido2")
     , @NamedQuery(name = "Directorio.findByCorreo", query = "SELECT d FROM Directorio d WHERE d.correo = :correo")
     , @NamedQuery(name = "Directorio.findByContrasenia", query = "SELECT d FROM Directorio d WHERE d.contrasenia = :contrasenia")
-    , @NamedQuery(name = "Directorio.autenticarse", query = "select d from Directorio d where d.usuario= :usuario and d.contrasenia= :contrasenia")
-    , @NamedQuery(name = "Directorio.findByUsuario", query = "SELECT d FROM Directorio d WHERE d.usuario = :usuario")})
+    , @NamedQuery(name = "Directorio.findByUsuario", query = "SELECT d FROM Directorio d WHERE d.usuario = :usuario")
+    , @NamedQuery(name = "Directorio.findByAudNombreCreacion", query = "SELECT d FROM Directorio d WHERE d.audNombreCreacion = :audNombreCreacion")
+    , @NamedQuery(name = "Directorio.findByAudFechaCreacion", query = "SELECT d FROM Directorio d WHERE d.audFechaCreacion = :audFechaCreacion")
+    , @NamedQuery(name = "Directorio.findByAudNombreModificacion", query = "SELECT d FROM Directorio d WHERE d.audNombreModificacion = :audNombreModificacion")
+    , @NamedQuery(name = "Directorio.findByAudFechaModificacion", query = "SELECT d FROM Directorio d WHERE d.audFechaModificacion = :audFechaModificacion")
+    , @NamedQuery(name = "Directorio.findByAudStatus", query = "SELECT d FROM Directorio d WHERE d.audStatus = :audStatus")
+    , @NamedQuery(name = "Directorio.autenticarse", query = "select d from Directorio d where d.usuario= :usuario and d.contrasenia= :contrasenia")})
 public class Directorio implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id_directorio")
+    @Column(name = "id_directorio", nullable = false)
     private Integer idDirectorio;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
-    @Column(name = "nombre1")
+    @Column(name = "nombre1", nullable = false, length = 25)
     private String nombre1;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
-    @Column(name = "nombre2")
+    @Column(name = "nombre2", nullable = false, length = 25)
     private String nombre2;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
-    @Column(name = "apellido1")
+    @Column(name = "apellido1", nullable = false, length = 25)
     private String apellido1;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
-    @Column(name = "apellido2")
+    @Column(name = "apellido2", nullable = false, length = 25)
     private String apellido2;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "correo")
+    @Column(name = "correo", nullable = false, length = 50)
     private String correo;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 8)
-    @Column(name = "contrasenia")
+    @Column(name = "contrasenia", nullable = false, length = 8)
     private String contrasenia;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "usuario")
+    @Column(name = "usuario", nullable = false, length = 50)
     private String usuario;
-    @JoinColumn(name = "id_departemento", referencedColumnName = "id_departamento")
+    @Basic(optional = false)
+    @Column(name = "aud_nombre_creacion", nullable = false, length = 250)
+    private String audNombreCreacion;
+    @Basic(optional = false)
+    @Column(name = "aud_fecha_creacion", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date audFechaCreacion;
+    @Column(name = "aud_nombre_modificacion", length = 250)
+    private String audNombreModificacion;
+    @Column(name = "aud_fecha_modificacion")
+    @Temporal(TemporalType.DATE)
+    private Date audFechaModificacion;
+    @Basic(optional = false)
+    @Column(name = "aud_status", nullable = false)
+    private boolean audStatus;
+    @JoinColumn(name = "id_departamento", referencedColumnName = "id_departamento", nullable = false)
     @ManyToOne(optional = false)
-    private Departamento idDepartemento;
-    @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
+    private Departamento idDepartamento;
+    @JoinColumn(name = "id_rol", referencedColumnName = "id_rol", nullable = false)
     @ManyToOne(optional = false)
     private Rol idRol;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDirectorio")
@@ -104,7 +111,7 @@ public class Directorio implements Serializable {
         this.idDirectorio = idDirectorio;
     }
 
-    public Directorio(Integer idDirectorio, String nombre1, String nombre2, String apellido1, String apellido2, String correo, String contrasenia, String usuario) {
+    public Directorio(Integer idDirectorio, String nombre1, String nombre2, String apellido1, String apellido2, String correo, String contrasenia, String usuario, String audNombreCreacion, Date audFechaCreacion, boolean audStatus) {
         this.idDirectorio = idDirectorio;
         this.nombre1 = nombre1;
         this.nombre2 = nombre2;
@@ -113,6 +120,9 @@ public class Directorio implements Serializable {
         this.correo = correo;
         this.contrasenia = contrasenia;
         this.usuario = usuario;
+        this.audNombreCreacion = audNombreCreacion;
+        this.audFechaCreacion = audFechaCreacion;
+        this.audStatus = audStatus;
     }
 
     public Integer getIdDirectorio() {
@@ -179,12 +189,52 @@ public class Directorio implements Serializable {
         this.usuario = usuario;
     }
 
-    public Departamento getIdDepartemento() {
-        return idDepartemento;
+    public String getAudNombreCreacion() {
+        return audNombreCreacion;
     }
 
-    public void setIdDepartemento(Departamento idDepartemento) {
-        this.idDepartemento = idDepartemento;
+    public void setAudNombreCreacion(String audNombreCreacion) {
+        this.audNombreCreacion = audNombreCreacion;
+    }
+
+    public Date getAudFechaCreacion() {
+        return audFechaCreacion;
+    }
+
+    public void setAudFechaCreacion(Date audFechaCreacion) {
+        this.audFechaCreacion = audFechaCreacion;
+    }
+
+    public String getAudNombreModificacion() {
+        return audNombreModificacion;
+    }
+
+    public void setAudNombreModificacion(String audNombreModificacion) {
+        this.audNombreModificacion = audNombreModificacion;
+    }
+
+    public Date getAudFechaModificacion() {
+        return audFechaModificacion;
+    }
+
+    public void setAudFechaModificacion(Date audFechaModificacion) {
+        this.audFechaModificacion = audFechaModificacion;
+    }
+
+    public boolean getAudStatus() {
+        return audStatus;
+    }
+
+    public void setAudStatus(boolean audStatus) {
+        this.audStatus = audStatus;
+    }
+
+    public Departamento getIdDepartamento() {
+        return idDepartamento;
+    }
+
+    public void setIdDepartamento(Departamento idDepartamento) {
+        this.idDepartamento = idDepartamento;
     }
 
     public Rol getIdRol() {
@@ -235,7 +285,7 @@ public class Directorio implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio[ idDirectorio=" + idDirectorio + " ]";
+        return "sv.uesocc.edu.ingenieria.dsii2018.lacualquiera.Directorio[ idDirectorio=" + idDirectorio + " ]";
     }
-    
+
 }

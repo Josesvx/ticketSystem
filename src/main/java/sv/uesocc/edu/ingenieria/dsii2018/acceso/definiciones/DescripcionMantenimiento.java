@@ -6,6 +6,7 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,7 +18,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,21 +34,39 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "DescripcionMantenimiento.findAll", query = "SELECT d FROM DescripcionMantenimiento d")
     , @NamedQuery(name = "DescripcionMantenimiento.findByIdDescripcionMantenimiento", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.idDescripcionMantenimiento = :idDescripcionMantenimiento")
     , @NamedQuery(name = "DescripcionMantenimiento.findByDescripcionProblema", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.descripcionProblema = :descripcionProblema")
-    , @NamedQuery(name = "DescripcionMantenimiento.findByDescripcionSolucion", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.descripcionSolucion = :descripcionSolucion")})
+    , @NamedQuery(name = "DescripcionMantenimiento.findByDescripcionSolucion", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.descripcionSolucion = :descripcionSolucion")
+    , @NamedQuery(name = "DescripcionMantenimiento.findByAudNombreCreacion", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.audNombreCreacion = :audNombreCreacion")
+    , @NamedQuery(name = "DescripcionMantenimiento.findByAudFechaCreacion", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.audFechaCreacion = :audFechaCreacion")
+    , @NamedQuery(name = "DescripcionMantenimiento.findByAudNombreModificacion", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.audNombreModificacion = :audNombreModificacion")
+    , @NamedQuery(name = "DescripcionMantenimiento.findByAudFechaModificacion", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.audFechaModificacion = :audFechaModificacion")
+    , @NamedQuery(name = "DescripcionMantenimiento.findByAudStatus", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.audStatus = :audStatus")})
 public class DescripcionMantenimiento implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id_descripcion_mantenimiento")
+    @Column(name = "id_descripcion_mantenimiento", nullable = false)
     private Integer idDescripcionMantenimiento;
-    @Size(max = 500)
-    @Column(name = "descripcion_problema")
+    @Column(name = "descripcion_problema", length = 500)
     private String descripcionProblema;
-    @Size(max = 500)
-    @Column(name = "descripcion_solucion")
+    @Column(name = "descripcion_solucion", length = 500)
     private String descripcionSolucion;
+    @Basic(optional = false)
+    @Column(name = "aud_nombre_creacion", nullable = false, length = 250)
+    private String audNombreCreacion;
+    @Basic(optional = false)
+    @Column(name = "aud_fecha_creacion", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date audFechaCreacion;
+    @Column(name = "aud_nombre_modificacion", length = 250)
+    private String audNombreModificacion;
+    @Column(name = "aud_fecha_modificacion")
+    @Temporal(TemporalType.DATE)
+    private Date audFechaModificacion;
+    @Basic(optional = false)
+    @Column(name = "aud_status", nullable = false)
+    private boolean audStatus;
     @OneToMany(mappedBy = "idDescripcionMantenimiento")
     private List<MantenimientoEncargado> mantenimientoEncargadoList;
 
@@ -55,6 +75,13 @@ public class DescripcionMantenimiento implements Serializable {
 
     public DescripcionMantenimiento(Integer idDescripcionMantenimiento) {
         this.idDescripcionMantenimiento = idDescripcionMantenimiento;
+    }
+
+    public DescripcionMantenimiento(Integer idDescripcionMantenimiento, String audNombreCreacion, Date audFechaCreacion, boolean audStatus) {
+        this.idDescripcionMantenimiento = idDescripcionMantenimiento;
+        this.audNombreCreacion = audNombreCreacion;
+        this.audFechaCreacion = audFechaCreacion;
+        this.audStatus = audStatus;
     }
 
     public Integer getIdDescripcionMantenimiento() {
@@ -79,6 +106,46 @@ public class DescripcionMantenimiento implements Serializable {
 
     public void setDescripcionSolucion(String descripcionSolucion) {
         this.descripcionSolucion = descripcionSolucion;
+    }
+
+    public String getAudNombreCreacion() {
+        return audNombreCreacion;
+    }
+
+    public void setAudNombreCreacion(String audNombreCreacion) {
+        this.audNombreCreacion = audNombreCreacion;
+    }
+
+    public Date getAudFechaCreacion() {
+        return audFechaCreacion;
+    }
+
+    public void setAudFechaCreacion(Date audFechaCreacion) {
+        this.audFechaCreacion = audFechaCreacion;
+    }
+
+    public String getAudNombreModificacion() {
+        return audNombreModificacion;
+    }
+
+    public void setAudNombreModificacion(String audNombreModificacion) {
+        this.audNombreModificacion = audNombreModificacion;
+    }
+
+    public Date getAudFechaModificacion() {
+        return audFechaModificacion;
+    }
+
+    public void setAudFechaModificacion(Date audFechaModificacion) {
+        this.audFechaModificacion = audFechaModificacion;
+    }
+
+    public boolean getAudStatus() {
+        return audStatus;
+    }
+
+    public void setAudStatus(boolean audStatus) {
+        this.audStatus = audStatus;
     }
 
     @XmlTransient
@@ -112,7 +179,7 @@ public class DescripcionMantenimiento implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento[ idDescripcionMantenimiento=" + idDescripcionMantenimiento + " ]";
+        return "sv.uesocc.edu.ingenieria.dsii2018.lacualquiera.DescripcionMantenimiento[ idDescripcionMantenimiento=" + idDescripcionMantenimiento + " ]";
     }
     
 }

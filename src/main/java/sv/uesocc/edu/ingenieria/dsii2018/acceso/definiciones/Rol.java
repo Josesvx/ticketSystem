@@ -6,6 +6,7 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,8 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -33,20 +34,38 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Rol.findAll", query = "SELECT r FROM Rol r")
     , @NamedQuery(name = "Rol.findByIdRol", query = "SELECT r FROM Rol r WHERE r.idRol = :idRol")
-    , @NamedQuery(name = "Rol.findByNombre", query = "SELECT r FROM Rol r WHERE r.nombre = :nombre")})
+    , @NamedQuery(name = "Rol.findByNombre", query = "SELECT r FROM Rol r WHERE r.nombre = :nombre")
+    , @NamedQuery(name = "Rol.findByAudNombreCreacion", query = "SELECT r FROM Rol r WHERE r.audNombreCreacion = :audNombreCreacion")
+    , @NamedQuery(name = "Rol.findByAudFechaCreacion", query = "SELECT r FROM Rol r WHERE r.audFechaCreacion = :audFechaCreacion")
+    , @NamedQuery(name = "Rol.findByAudNombreModificacion", query = "SELECT r FROM Rol r WHERE r.audNombreModificacion = :audNombreModificacion")
+    , @NamedQuery(name = "Rol.findByAudFechaModificacion", query = "SELECT r FROM Rol r WHERE r.audFechaModificacion = :audFechaModificacion")
+    , @NamedQuery(name = "Rol.findByAudStatus", query = "SELECT r FROM Rol r WHERE r.audStatus = :audStatus")})
 public class Rol implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id_rol")
+    @Column(name = "id_rol", nullable = false)
     private Integer idRol;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
+    @Basic(optional = false)
+    @Column(name = "aud_nombre_creacion", nullable = false, length = 250)
+    private String audNombreCreacion;
+    @Basic(optional = false)
+    @Column(name = "aud_fecha_creacion", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date audFechaCreacion;
+    @Column(name = "aud_nombre_modificacion", length = 250)
+    private String audNombreModificacion;
+    @Column(name = "aud_fecha_modificacion")
+    @Temporal(TemporalType.DATE)
+    private Date audFechaModificacion;
+    @Basic(optional = false)
+    @Column(name = "aud_status", nullable = false)
+    private boolean audStatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRol")
     private List<Directorio> directorioList;
 
@@ -57,9 +76,12 @@ public class Rol implements Serializable {
         this.idRol = idRol;
     }
 
-    public Rol(Integer idRol, String nombre) {
+    public Rol(Integer idRol, String nombre, String audNombreCreacion, Date audFechaCreacion, boolean audStatus) {
         this.idRol = idRol;
         this.nombre = nombre;
+        this.audNombreCreacion = audNombreCreacion;
+        this.audFechaCreacion = audFechaCreacion;
+        this.audStatus = audStatus;
     }
 
     public Integer getIdRol() {
@@ -76,6 +98,46 @@ public class Rol implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getAudNombreCreacion() {
+        return audNombreCreacion;
+    }
+
+    public void setAudNombreCreacion(String audNombreCreacion) {
+        this.audNombreCreacion = audNombreCreacion;
+    }
+
+    public Date getAudFechaCreacion() {
+        return audFechaCreacion;
+    }
+
+    public void setAudFechaCreacion(Date audFechaCreacion) {
+        this.audFechaCreacion = audFechaCreacion;
+    }
+
+    public String getAudNombreModificacion() {
+        return audNombreModificacion;
+    }
+
+    public void setAudNombreModificacion(String audNombreModificacion) {
+        this.audNombreModificacion = audNombreModificacion;
+    }
+
+    public Date getAudFechaModificacion() {
+        return audFechaModificacion;
+    }
+
+    public void setAudFechaModificacion(Date audFechaModificacion) {
+        this.audFechaModificacion = audFechaModificacion;
+    }
+
+    public boolean getAudStatus() {
+        return audStatus;
+    }
+
+    public void setAudStatus(boolean audStatus) {
+        this.audStatus = audStatus;
     }
 
     @XmlTransient
@@ -109,7 +171,7 @@ public class Rol implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Rol[ idRol=" + idRol + " ]";
+        return "sv.uesocc.edu.ingenieria.dsii2018.lacualquiera.Rol[ idRol=" + idRol + " ]";
     }
     
 }

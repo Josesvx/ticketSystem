@@ -6,6 +6,7 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -20,8 +21,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -40,45 +41,56 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Solicitud.findByAdjunto", query = "SELECT s FROM Solicitud s WHERE s.adjunto = :adjunto")
     , @NamedQuery(name = "Solicitud.findByNSeguimiento", query = "SELECT s FROM Solicitud s WHERE s.nSeguimiento = :nSeguimiento")
     , @NamedQuery(name = "Solicitud.findByFeedback", query = "SELECT s FROM Solicitud s WHERE s.feedback = :feedback")
-    , @NamedQuery(name = "Solicitud.findByCorrelativo", query = "SELECT s FROM Solicitud s WHERE s.correlativo = :correlativo")})
+    , @NamedQuery(name = "Solicitud.findByCorrelativo", query = "SELECT s FROM Solicitud s WHERE s.correlativo = :correlativo")
+    , @NamedQuery(name = "Solicitud.findByAudNombreCreacion", query = "SELECT s FROM Solicitud s WHERE s.audNombreCreacion = :audNombreCreacion")
+    , @NamedQuery(name = "Solicitud.findByAudFechaCreacion", query = "SELECT s FROM Solicitud s WHERE s.audFechaCreacion = :audFechaCreacion")
+    , @NamedQuery(name = "Solicitud.findByAudNombreModificacion", query = "SELECT s FROM Solicitud s WHERE s.audNombreModificacion = :audNombreModificacion")
+    , @NamedQuery(name = "Solicitud.findByAudFechaModificacion", query = "SELECT s FROM Solicitud s WHERE s.audFechaModificacion = :audFechaModificacion")
+    , @NamedQuery(name = "Solicitud.findByAudStatus", query = "SELECT s FROM Solicitud s WHERE s.audStatus = :audStatus")})
 public class Solicitud implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id_solicitud")
+    @Column(name = "id_solicitud", nullable = false)
     private Integer idSolicitud;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "titulo")
+    @Column(name = "titulo", nullable = false, length = 50)
     private String titulo;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 250)
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", nullable = false, length = 250)
     private String descripcion;
-    @Size(max = 250)
-    @Column(name = "adjunto")
+    @Column(name = "adjunto", length = 250)
     private String adjunto;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
-    @Column(name = "n_seguimiento")
+    @Column(name = "n_seguimiento", nullable = false, length = 25)
     private String nSeguimiento;
-    @Size(max = 500)
-    @Column(name = "feedback")
+    @Column(name = "feedback", length = 500)
     private String feedback;
-    @Size(max = 10)
-    @Column(name = "correlativo")
+    @Column(name = "correlativo", length = 10)
     private String correlativo;
+    @Basic(optional = false)
+    @Column(name = "aud_nombre_creacion", nullable = false, length = 250)
+    private String audNombreCreacion;
+    @Basic(optional = false)
+    @Column(name = "aud_fecha_creacion", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date audFechaCreacion;
+    @Column(name = "aud_nombre_modificacion", length = 250)
+    private String audNombreModificacion;
+    @Column(name = "aud_fecha_modificacion")
+    @Temporal(TemporalType.DATE)
+    private Date audFechaModificacion;
+    @Basic(optional = false)
+    @Column(name = "aud_status", nullable = false)
+    private boolean audStatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSolicitud")
     private List<MantenimientoEncargado> mantenimientoEncargadoList;
-    @JoinColumn(name = "id_categoria", referencedColumnName = "id_categoria")
+    @JoinColumn(name = "id_categoria", referencedColumnName = "id_categoria", nullable = false)
     @ManyToOne(optional = false)
     private Categoria idCategoria;
-    @JoinColumn(name = "id_directorio", referencedColumnName = "id_directorio")
+    @JoinColumn(name = "id_directorio", referencedColumnName = "id_directorio", nullable = false)
     @ManyToOne(optional = false)
     private Directorio idDirectorio;
     @JoinColumn(name = "id_prioridad", referencedColumnName = "id_prioridad")
@@ -94,11 +106,14 @@ public class Solicitud implements Serializable {
         this.idSolicitud = idSolicitud;
     }
 
-    public Solicitud(Integer idSolicitud, String titulo, String descripcion, String nSeguimiento) {
+    public Solicitud(Integer idSolicitud, String titulo, String descripcion, String nSeguimiento, String audNombreCreacion, Date audFechaCreacion, boolean audStatus) {
         this.idSolicitud = idSolicitud;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.nSeguimiento = nSeguimiento;
+        this.audNombreCreacion = audNombreCreacion;
+        this.audFechaCreacion = audFechaCreacion;
+        this.audStatus = audStatus;
     }
 
     public Integer getIdSolicitud() {
@@ -155,6 +170,46 @@ public class Solicitud implements Serializable {
 
     public void setCorrelativo(String correlativo) {
         this.correlativo = correlativo;
+    }
+
+    public String getAudNombreCreacion() {
+        return audNombreCreacion;
+    }
+
+    public void setAudNombreCreacion(String audNombreCreacion) {
+        this.audNombreCreacion = audNombreCreacion;
+    }
+
+    public Date getAudFechaCreacion() {
+        return audFechaCreacion;
+    }
+
+    public void setAudFechaCreacion(Date audFechaCreacion) {
+        this.audFechaCreacion = audFechaCreacion;
+    }
+
+    public String getAudNombreModificacion() {
+        return audNombreModificacion;
+    }
+
+    public void setAudNombreModificacion(String audNombreModificacion) {
+        this.audNombreModificacion = audNombreModificacion;
+    }
+
+    public Date getAudFechaModificacion() {
+        return audFechaModificacion;
+    }
+
+    public void setAudFechaModificacion(Date audFechaModificacion) {
+        this.audFechaModificacion = audFechaModificacion;
+    }
+
+    public boolean getAudStatus() {
+        return audStatus;
+    }
+
+    public void setAudStatus(boolean audStatus) {
+        this.audStatus = audStatus;
     }
 
     @XmlTransient
@@ -221,7 +276,7 @@ public class Solicitud implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud[ idSolicitud=" + idSolicitud + " ]";
+        return "sv.uesocc.edu.ingenieria.dsii2018.lacualquiera.Solicitud[ idSolicitud=" + idSolicitud + " ]";
     }
     
 }
