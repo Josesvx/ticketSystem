@@ -3,35 +3,72 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        <center>
-        <p:outputLabel value="Titulo:"></p:outputLabel>
-        <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}"></p:inputText>
-        <br></br>
-        <p:outputLabel value="Categoria:"></p:outputLabel>
-        <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.solicitud.idCategoria}">
-            <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
-            </f:selectItems>
-        </p:selectOneMenu>
-        <br></br>
-        <p:outputLabel value="Departamento "></p:outputLabel>
-        <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"></p:inputText>
-        <br></br>
-        <p:outputLabel value="Correlativo: "></p:outputLabel>
-        <p:inputText id="correlativo" required="true" requiredMessage="Correlativo Requerido" placeholder="correlativo" value="#{manejadorSolicitud.solicitud.correlativo}"></p:inputText>
-        <br></br>
-        <p:outputLabel value="Descripcion: "></p:outputLabel>
-        <p:inputTextarea rows="6" cols="25" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}"></p:inputTextarea>
-        <br></br>
-        <p:outputLabel value="Adjunto: "></p:outputLabel>
-        <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"></p:inputText>
-        <br></br>
-        <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" ></p:commandButton>
-        </center>
-    </h:body>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="resources/layout.xhtml">
+
+        <ui:define name="titulo">
+            <h:head>Crear Ticket</h:head>
+        </ui:define>
+        <ui:define name="body">
+            <h:form>
+                <center>
+                    <p:outputLabel value="Titulo:"></p:outputLabel>
+                    <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}"></p:inputText>
+                    <br></br>
+                    <p:outputLabel value="Categoria:"></p:outputLabel>
+                    <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.solicitud.idCategoria}">
+                        <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
+                        </f:selectItems>
+                    </p:selectOneMenu>
+                    <br></br>
+                    <p:outputLabel value="Departamento "></p:outputLabel>
+                    <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"></p:inputText>
+                    <br></br>
+                    <p:outputLabel value="Correlativo: "></p:outputLabel>
+                    <p:inputText id="correlativo" required="true" requiredMessage="Correlativo Requerido" placeholder="correlativo" value="#{manejadorSolicitud.solicitud.correlativo}"></p:inputText>
+                    <br></br>
+                    <p:outputLabel value="Descripcion: "></p:outputLabel>
+                    <p:inputTextarea rows="6" cols="25" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}"></p:inputTextarea>
+                    <br></br>
+                    <p:outputLabel value="Adjunto: "></p:outputLabel>
+                    <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"></p:inputText>
+                    <br></br>
+                    <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" ></p:commandButton>
+                </center>
+                <f:metadata>
+                    <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
+                </f:metadata>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+    <!-- <h:body>
+         <center>
+         <p:outputLabel value="Titulo:"></p:outputLabel>
+         <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}"></p:inputText>
+         <br></br>
+         <p:outputLabel value="Categoria:"></p:outputLabel>
+         <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.solicitud.idCategoria}">
+             <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
+             </f:selectItems>
+         </p:selectOneMenu>
+         <br></br>
+         <p:outputLabel value="Departamento "></p:outputLabel>
+         <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"></p:inputText>
+         <br></br>
+         <p:outputLabel value="Correlativo: "></p:outputLabel>
+         <p:inputText id="correlativo" required="true" requiredMessage="Correlativo Requerido" placeholder="correlativo" value="#{manejadorSolicitud.solicitud.correlativo}"></p:inputText>
+         <br></br>
+         <p:outputLabel value="Descripcion: "></p:outputLabel>
+         <p:inputTextarea rows="6" cols="25" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}"></p:inputTextarea>
+         <br></br>
+         <p:outputLabel value="Adjunto: "></p:outputLabel>
+         <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"></p:inputText>
+         <br></br>
+         <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" ></p:commandButton>
+         </center>
+     </h:body>
+    -->
 </html>
 

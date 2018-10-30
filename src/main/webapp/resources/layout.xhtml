@@ -5,34 +5,23 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-     <ui:composition template="resources/layout.xhtml">
-        
-        <ui:define name="titulo"></ui:define>
-        <ui:define name="body">
-
-        <h1 style="color: white; background: blue; font-size: 75px;">SITIO EN CONSTRUCCION...</h1>
-        <f:metadata>
-            <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
-        </f:metadata>
-            
-        </ui:define>
-    </ui:composition>
-    <!--  <h:head>
-        <title>EN CONSTRUCCION</title>
+    <h:head>
+        <ui:insert name="meta"></ui:insert>
     </h:head>
-    <body background="img/build.jpg">
+    <h:body id="padre">
+
         <h:form>
             <p:growl id="messages" showDetail="true" />
 
             <p:toolbar>
                 <f:facet name="left">
-                    <p:commandButton type="button" value="Inicio" icon="ui-icon-home" />
+                    <p:commandButton type="button" value="Inicio" onclick="location.href='principal.jsf'" icon="ui-icon-home" />
 
                     <span class="ui-separator">
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
                     </span>
 
-                    <p:commandButton type="button" value="Creación de ticket"   title="Save" icon="ui-icon-disk" />
+                    <p:commandButton type="button" value="Creación de ticket"  onclick="location.href='CrearTicket.jsf'" title="Save" icon="ui-icon-disk" />
                     <p:commandButton type="button" value="Seguimiento" title="Delete" icon="ui-icon-zoomin" />
                     <p:commandButton type="button" value="Estadisticas" title="Print" icon="ui-icon-print" />
                     <span class="ui-separator">
@@ -46,11 +35,8 @@
 
             </p:toolbar>
         </h:form>
-        <h1 style="color: white; background: blue; font-size: 75px;">SITIO EN CONSTRUCCION...</h1>
-        <f:metadata>
-            <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
-        </f:metadata>
-    </body>
-  -->
+        <ui:insert name="titulo"></ui:insert>
+        <ui:insert name="body">Sin contenido</ui:insert>
+    </h:body>
 </html>
 
