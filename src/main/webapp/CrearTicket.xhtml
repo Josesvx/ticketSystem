@@ -11,25 +11,27 @@
         <ui:define name="titulo">
             <h:head>Crear Ticket</h:head>
             <style>
-
+                body{
+                    background-color: #f2f2f2;
+                }
             </style>
 
         </ui:define>
-        <ui:define name="body">
+        <ui:define name="body"  >
             <h:form>
                 <center>
                     <div id="cabCreate" 
                          style="
                          background-color:#04B486; 
-                         width:65%; 
-                         height:100px; 
+                         width:70%; 
+                         height:80px; 
                          border-top-left-radius:25px; 
                          border-top-right-radius:25px;">
 
                         <h:outputLabel  value="Crear un ticket" 
                                         style="
                                         color: white;
-                                        font-size:40px;
+                                        font-size:35px;
                                         font-weight:bold;
                                         font-family:Helvetica;
                                         position: relative;
@@ -40,7 +42,9 @@
                     <div id="formCreate" 
                          style="
                          background-color: #585858 ; 
-                         width:65%;
+                         width:70%;
+                         border-bottom-left-radius: 25px;
+                         border-bottom-right-radius: 25px;
                          color: gainsboro;">
                         <br></br><br></br>     
                         <p:outputLabel value="Titulo:"
@@ -102,6 +106,7 @@
                         <br></br><br></br><br></br>
                         <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" >                                         
                         </p:commandButton>
+                        <br></br><br></br><br></br>
                     </div>
                 </center>
                 <f:metadata>
