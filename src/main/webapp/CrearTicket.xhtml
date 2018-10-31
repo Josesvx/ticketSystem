@@ -10,40 +10,110 @@
 
         <ui:define name="titulo">
             <h:head>Crear Ticket</h:head>
+            <style>
+                body{
+                    background-color: #f2f2f2;
+                }
+            </style>
+
         </ui:define>
-        <ui:define name="body">
+        <ui:define name="body"  >
             <h:form>
                 <center>
-                    <!--<p:outputLabel value="Titulo:"></p:outputLabel>
-                    <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}"></p:inputText>
-                    <br></br>
-                    <p:outputLabel value="Categoria:"></p:outputLabel>
-                    <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.solicitud.idCategoria}">
-                        <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
-                        </f:selectItems>
-                    </p:selectOneMenu>
-                    <br></br>
-                    <p:outputLabel value="Departamento "></p:outputLabel>
-                    <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"></p:inputText>
-                    <br></br>
-                    <p:outputLabel value="Correlativo: "></p:outputLabel>
-                    <p:inputText id="correlativo" required="true" requiredMessage="Correlativo Requerido" placeholder="correlativo" value="#{manejadorSolicitud.solicitud.correlativo}"></p:inputText>
-                    <br></br>
-                    <p:outputLabel value="Descripcion: "></p:outputLabel>
-                    <p:inputTextarea rows="6" cols="25" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}"></p:inputTextarea>
-                    <br></br>
-                    <p:outputLabel value="Adjunto: "></p:outputLabel>
-                    <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"></p:inputText>
-                    <br></br>-->
-                    <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" action="#{manejadorSolicitud.CrearSolicitud()}" ></p:commandButton>
+                    <div id="cabCreate" 
+                         style="
+                         background-color:#04B486; 
+                         width:70%; 
+                         height:80px; 
+                         border-top-left-radius:25px; 
+                         border-top-right-radius:25px;">
+
+                        <h:outputLabel  value="Crear un ticket" 
+                                        style="
+                                        color: white;
+                                        font-size:35px;
+                                        font-weight:bold;
+                                        font-family:Helvetica;
+                                        position: relative;
+                                        top:20%;
+                                        left:2%;">                                            
+                        </h:outputLabel>
+                    </div>
+                    <div id="formCreate" 
+                         style="
+                         background-color: #585858 ; 
+                         width:70%;
+                         border-bottom-left-radius: 25px;
+                         border-bottom-right-radius: 25px;
+                         color: gainsboro;">
+                        <br></br><br></br>     
+                        <p:outputLabel value="Titulo:"
+                                       style="
+                                       position: relative;
+                                       left: -120px;
+                                       font-size:16px;
+                                       font-weight: bold;">                                       
+                        </p:outputLabel>
+                        <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}"></p:inputText>
+                        <br></br><br></br>
+                        <p:outputLabel value="Categoria:"
+                                       style="
+                                       position: relative;
+                                       left: -120px;
+                                       font-size:16px;
+                                       font-weight: bold;">                                       
+                        </p:outputLabel>
+                        <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.solicitud.idCategoria}">
+                            <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
+                            </f:selectItems>
+                        </p:selectOneMenu>
+                        <br></br><br></br>
+                        <p:outputLabel value="Departamento "
+                                       style="
+                                       position: relative;
+                                       left: -120px;
+                                       font-size:16px;
+                                       font-weight: bold;">                                       
+                        </p:outputLabel>
+                        <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"></p:inputText>
+                        <br></br><br></br>
+                        <p:outputLabel value="Correlativo: "
+                                       style="
+                                       position: relative;
+                                       left: -120px;
+                                       font-size:16px;
+                                       font-weight: bold;">                                       
+                        </p:outputLabel>
+                        <p:inputText id="correlativo" required="true" requiredMessage="Correlativo Requerido" placeholder="correlativo" value="#{manejadorSolicitud.solicitud.correlativo}"></p:inputText>
+                        <br></br><br></br>
+                        <p:outputLabel value="Descripcion: "
+                                       style="
+                                       position: relative;
+                                       left: -120px;
+                                       font-size:16px;
+                                       font-weight: bold;">                                       
+                        </p:outputLabel>
+                        <p:inputTextarea rows="6" cols="25" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}"></p:inputTextarea>
+                        <br></br><br></br>
+                        <p:outputLabel value="Adjunto: "
+                                       style="
+                                       position: relative;
+                                       left: -120px;
+                                       font-size:16px;
+                                       font-weight: bold;">                                       
+                        </p:outputLabel>
+                        <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"></p:inputText>
+                        <br></br><br></br><br></br>
+                        <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" >                                         
+                        </p:commandButton>
+                        <br></br><br></br><br></br>
+                    </div>
                 </center>
                 <f:metadata>
                     <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
                 </f:metadata>
             </h:form>
-            
-            <h:outputStylesheet name="style/stilo.css"/>
-            
+            <h:outputStylesheet name="stilo.css" />
         </ui:define>
     </ui:composition>
     <!-- <h:body>
