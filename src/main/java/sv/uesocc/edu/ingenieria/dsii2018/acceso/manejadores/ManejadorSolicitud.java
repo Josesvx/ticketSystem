@@ -11,10 +11,12 @@ import javax.inject.Named;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cache.CacheInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DepartamentoFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Departamento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Prioridad;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
@@ -29,12 +31,16 @@ public class ManejadorSolicitud implements Serializable {
     private List<Categoria> listaCat;
     private Solicitud solicitud;
     private Categoria categoria;
+    private Directorio directorio;
     private CacheInstance cache;
-    private String nombre,seguimiento, nombreDep;
+    private String nombre, seguimiento, nombreDep;
+    private int  idCategoria;
     @EJB
     private SolicitudFacadeLocal sfl;
     @EJB
     private CategoriaFacadeLocal cfl;
+    @EJB
+    private DirectorioFacadeLocal dfl;
 
     @PostConstruct
     public void init() {
@@ -47,16 +53,29 @@ public class ManejadorSolicitud implements Serializable {
         }
 
         solicitud = new Solicitud();
+
+        categoria = new Categoria();
+
+        directorio = new Directorio();
+
         cache = CacheInstance.constructor();
         cache.Instance();
-        
-        nombreDep= cache.ObtenerNombreDepartamento();
-        if(nombreDep!=null && !nombreDep.isEmpty()){
-            nombre=nombreDep;
-        }else{
-            nombre="No Funciona";
+
+        nombreDep = cache.ObtenerNombreDepartamento();
+        if (nombreDep != null && !nombreDep.isEmpty()) {
+            nombre = nombreDep;
+        } else {
+            nombre = "No Funciona";
         }
 
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     public String getNombre() {
@@ -66,8 +85,6 @@ public class ManejadorSolicitud implements Serializable {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    
 
     public List<Categoria> getListaCat() {
         return listaCat;
@@ -95,27 +112,34 @@ public class ManejadorSolicitud implements Serializable {
 
     public String CrearNumSeguimiento(Solicitud solicitud) {
         nombre = cache.ObtenerNombreDepartamento();
-        if(nombre.equals("")){
+        if (nombre.equals("")) {
             seguimiento = "";
-        }else if(nombre.equals("")){
-            
-        }else if(nombre.equals("")){
-            
+        } else if (nombre.equals("")) {
+
+        } else if (nombre.equals("")) {
+
         }
         return null;
     }
 
-    public void CrearSolicitud() {
-        solicitud.setIdSolicitud(sfl.count()+1);
-        solicitud.setIdCategoria(new Categoria(2));
-        solicitud.setTitulo("prueba2");
-        solicitud.setNSeguimiento("123445645");
-        solicitud.setAudStatus(true);
-        solicitud.setDescripcion("descripcion Prueba2");
-        solicitud.setIdDirectorio(cache.ObtenerDirectorio());
-        solicitud.setAudNombreCreacion("diseñoII");
-        solicitud.setAudFechaCreacion(new Date());
-        sfl.create(solicitud);
+    public  void CrearSolicitud() {
+        try  {
+            this.solicitud.setIdSolicitud(sfl.count() + 1);
+            this.solicitud.setAudFechaCreacion(new Date());
+            this.directorio = cache.ObtenerDirectorio();
+            this.solicitud.setIdCategoria( cfl.find(1)) ;
+            this.solicitud.setAudNombreCreacion(directorio.getUsuario());
+            this.solicitud.setAudStatus(true);
+            this.solicitud.setNSeguimiento("HHRR2346");
+            this.solicitud.setIdCategoria(cfl.find(idCategoria));
+            this.solicitud.setIdDirectorio(directorio);
+
+            sfl.create(this.solicitud);
+            
+        } catch (Exception e) {
+        }
+     
+
     }
 
     public void CrearEstadoS(Solicitud solicitud) {

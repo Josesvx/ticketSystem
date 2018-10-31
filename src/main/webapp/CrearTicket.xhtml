@@ -9,7 +9,9 @@
     <ui:composition template="resources/layout.xhtml">
 
         <ui:define name="titulo">
-            <h:head>Crear Ticket</h:head>
+            <h:head>
+                <title>Crear ticket</title>
+            </h:head>
             <style>
                 body{
                     background-color: #f2f2f2;
@@ -63,7 +65,7 @@
                                        font-size:16px;
                                        font-weight: bold;">                                       
                         </p:outputLabel>
-                        <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.solicitud.idCategoria}">
+                        <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.idCategoria}">
                             <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
                             </f:selectItems>
                         </p:selectOneMenu>
@@ -104,7 +106,7 @@
                         </p:outputLabel>
                         <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"></p:inputText>
                         <br></br><br></br><br></br>
-                        <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" >                                         
+                        <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" action="#{manejadorSolicitud.CrearSolicitud()}" >                                        
                         </p:commandButton>
                         <br></br><br></br><br></br>
                     </div>
@@ -113,7 +115,6 @@
                     <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
                 </f:metadata>
             </h:form>
-            <h:outputStylesheet name="stilo.css" />
         </ui:define>
     </ui:composition>
     <!-- <h:body>

@@ -19,13 +19,13 @@
 
                 <p:messages autoUpdate="true" showDetail="true"/>
                 <div style="
-                     background-color: RGB(255, 255, 255,0.3) ;
-                     width: 26%; 
+                     background-color: RGB(255, 255, 255,0.8) ;
+                     width: 25%; 
                      border-radius: 30px;
                      position:absolute;
                      top: 20%;
-                     left:37%;">  
-                    <table align="center" style="opacity: 1; margin-top: 30px; ">
+                     left:37.5%;">  
+                    <table align="center" style="opacity: 1; margin-top: 30px; font-family:Helvetica; ">
                         <tr>
                             <td colspan="2" align="center">
                                 <!--<img src="img/aircall.png" height="70px" width="220px"/>-->
@@ -41,7 +41,10 @@
                                 <img src="img/user.png" />
                             </td>
                             <td>
-                                <p:inputText  id="Usuario" style="opacity: 0.40; height: 5px;" required="true" requiredMessage="Usuario Requerido" placeholder="Usuario" value="#{manejadorLogin.directorio.usuario}" />
+                                <p:inputText  id="Usuario" style="
+                                              height: 25px;  
+                                              width:200px;"
+                                              required="true" requiredMessage="Usuario Requerido" placeholder="Usuario" value="#{manejadorLogin.directorio.usuario}" />
                                 <br></br><br></br>
                             </td>
                         </tr>                       
@@ -50,13 +53,16 @@
                                 <img src="img/pass.png"/>
                             </td>
                             <td>
-                                <p:inputText id="Clave" type="password" style="opacity: 0.40; height: 5px;" requiredMessage="Contraseña Requerida" required="true" placeholder="Contraseña" value="#{manejadorLogin.directorio.contrasenia}"/>
+                                <p:inputText id="Clave" type="password" style=" 
+                                             height: 25px;  
+                                             width:200px;"
+                                             requiredMessage="Contraseña Requerida" required="true" placeholder="Contraseña" value="#{manejadorLogin.directorio.contrasenia}"/>
                                 <br></br><br></br>
                             </td>
                         </tr>
                     </table>
                     <br></br>
-                    <p:commandButton value="Ingresar" style="opacity: 0.70" action="#{manejadorLogin.autenticacion()}"/>
+                    <p:commandButton value="Ingresar" style="opacity: 0.70" action ="#{manejadorLogin.autenticacion()}"/>
                     <br></br><br></br><br></br><br></br>
                 </div>
 
