@@ -2,6 +2,7 @@ package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -14,6 +15,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLoc
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Departamento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Prioridad;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
 /**
@@ -103,9 +105,17 @@ public class ManejadorSolicitud implements Serializable {
         return null;
     }
 
-    public void CrearSolicitud(Solicitud solicitud) {
-        
-
+    public void CrearSolicitud() {
+        solicitud.setIdSolicitud(sfl.count()+1);
+        solicitud.setIdCategoria(new Categoria(2));
+        solicitud.setTitulo("prueba2");
+        solicitud.setNSeguimiento("123445645");
+        solicitud.setAudStatus(true);
+        solicitud.setDescripcion("descripcion Prueba2");
+        solicitud.setIdDirectorio(cache.ObtenerDirectorio());
+        solicitud.setAudNombreCreacion("diseñoII");
+        solicitud.setAudFechaCreacion(new Date());
+        sfl.create(solicitud);
     }
 
     public void CrearEstadoS(Solicitud solicitud) {
