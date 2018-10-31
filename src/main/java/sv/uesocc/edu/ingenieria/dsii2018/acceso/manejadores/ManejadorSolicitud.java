@@ -62,7 +62,7 @@ public class ManejadorSolicitud implements Serializable {
             listaP = new ArrayList<>();
         }
         
-        List<Solicitud> listaS = sfl.findAll();
+        List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
             listaSol = listaS;
         } else {

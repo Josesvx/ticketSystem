@@ -5,14 +5,12 @@
  */
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.util.Date;
 import java.util.List;
-import javafx.scene.chart.PieChart;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
 /**
@@ -41,7 +39,7 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public Solicitud findByEstado() {
-        return null;
+       return null;
     }
 
     @Override
@@ -71,12 +69,20 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public List<Solicitud> findByEstado(int idEstado) {
-        return null;
+        List<Solicitud> listaS = null;
+        try{
+            Query consulta = em.createNamedQuery("Solicitud.findByEstado");
+            consulta.setParameter("idEstado", idEstado);
+            listaS= consulta.getResultList();
+        }catch(Exception ex){
+            throw ex;
+        }
+        return listaS;
     }
 
     @Override
     public List<Solicitud> findByPrioridad(int idPrioridad) {
-        return null;
+        return null; 
     }
 
     @Override
