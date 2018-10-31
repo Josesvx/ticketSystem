@@ -14,7 +14,7 @@
         <ui:define name="body">
             <h:form>
                 <center>
-                    <p:outputLabel value="Titulo:"></p:outputLabel>
+                    <!--<p:outputLabel value="Titulo:"></p:outputLabel>
                     <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}"></p:inputText>
                     <br></br>
                     <p:outputLabel value="Categoria:"></p:outputLabel>
@@ -34,8 +34,8 @@
                     <br></br>
                     <p:outputLabel value="Adjunto: "></p:outputLabel>
                     <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"></p:inputText>
-                    <br></br>
-                    <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" ></p:commandButton>
+                    <br></br>-->
+                    <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" action="#{manejadorSolicitud.CrearSolicitud()}" ></p:commandButton>
                 </center>
                 <f:metadata>
                     <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />

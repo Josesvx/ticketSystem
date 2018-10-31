@@ -18,6 +18,7 @@ public class CacheInstance {
     private CacheManager cm;
     private Cache usuarioActual;
     private static CacheInstance obj;
+    private Directorio directorio;
 
     public static CacheInstance constructor() {
         if (obj == null) {
@@ -37,26 +38,20 @@ public class CacheInstance {
     public void CrearCache(Directorio directorio) {
         cm.addCache("UsuarioActual");
         usuarioActual = cm.getCache("UsuarioActual");
-        Element usuario = new Element("usuario", directorio.getUsuario());
-        Element rol = new Element("rol", directorio.getIdRol().getIdRol());
-        Element departamento = new Element("departamento", directorio.getIdDepartamento().getNombre());
-        Element id_directorio = new Element("directorio", directorio.getIdDirectorio());
+        Element usuario = new Element("directorio", directorio);
         usuarioActual.put(usuario);
-        usuarioActual.put(rol);
-        usuarioActual.put(departamento);
-        usuarioActual.put(id_directorio);
     }
 
     public String ObtenerNombreDepartamento() {
         String nombre;
-        nombre = cm.getCache("UsuarioActual").get("departamento").getObjectValue().toString();
+        directorio = (Directorio) cm.getCache("UsuarioActual").get("directorio").getObjectValue();
+        nombre = directorio.getIdDepartamento().getNombre();
         return nombre;
     }
 
-    public int ObtenerIdDirectorio() {
-        int id;
-        id = (int) cm.getCache("UsuarioActual").get("directorio").getObjectValue();
-        return id;
+    public Directorio ObtenerDirectorio() {
+        directorio = (Directorio) cm.getCache("UsuarioActual").get("directorio").getObjectValue();
+        return directorio;
     }
 
     public void cerrarSesion() {
@@ -92,7 +87,8 @@ public class CacheInstance {
 
     public void comprobarLoginRolGerente() {
         if (cm.cacheExists("UsuarioActual") == true) {
-            if (!(cm.getCache("UsuarioActual").get("rol").getObjectValue().toString().equals("4"))) {
+            directorio = (Directorio) cm.getCache("UsuarioActual").get("directorio").getObjectValue();
+            if (!(directorio.getIdRol().toString().equals("4"))) {
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
                 } catch (IOException ex) {
@@ -110,7 +106,9 @@ public class CacheInstance {
 
     public void comprobarLoginRolTecnico() {
         if (cm.cacheExists("UsuarioActual") == true) {
-            if (!(cm.getCache("UsuarioActual").get("rol").getObjectValue().toString().equals("2"))) {
+            directorio = (Directorio) cm.getCache("UsuarioActual").get("directorio").getObjectValue();
+
+            if (!(directorio.getIdRol().toString().equals("2"))) {
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
                 } catch (IOException ex) {
@@ -128,7 +126,8 @@ public class CacheInstance {
 
     public void comprobarLoginRolJefe() {
         if (cm.cacheExists("UsuarioActual") == true) {
-            if (!(cm.getCache("UsuarioActual").get("rol").getObjectValue().toString().equals("3"))) {
+            directorio = (Directorio) cm.getCache("UsuarioActual").get("directorio").getObjectValue();
+            if (!(directorio.getIdRol().toString().equals("3"))) {
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
                 } catch (IOException ex) {
