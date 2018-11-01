@@ -49,7 +49,7 @@ public interface SolicitudFacadeLocal {
 
     List<Solicitud> findByPrioridad(int idPrioridad);
 
-    List<Solicitud> findByDepartamento(int idDepartemento);
+    int findByDepartamento(int idDepartemento);
 
     List<Solicitud> findByCategoria(int idCategoria);
 }

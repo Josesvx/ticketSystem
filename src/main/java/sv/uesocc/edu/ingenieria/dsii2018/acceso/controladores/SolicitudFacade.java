@@ -86,8 +86,16 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
     }
 
     @Override
-    public List<Solicitud> findByDepartamento(int idDepartamento) {
-        return null;
+    public int findByDepartamento(int idDepartamento) {
+        int numero = 0;
+        try{
+            Query consulta = em.createNamedQuery("Solicitud.findByIdDepartamento");
+            consulta.setParameter("idDepartamento", idDepartamento);
+            numero= Integer.parseInt(String.valueOf(consulta.getSingleResult()));
+        }catch(Exception ex){
+            throw ex;
+        }
+        return numero;
     }
 
     @Override
