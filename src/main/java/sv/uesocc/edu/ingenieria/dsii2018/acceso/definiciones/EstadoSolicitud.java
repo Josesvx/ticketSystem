@@ -189,7 +189,7 @@ public class EstadoSolicitud implements Serializable {
         }
         return true;
     }
-
+ 
     @Override
     public String toString() {
         return "sv.uesocc.edu.ingenieria.dsii2018.lacualquiera.EstadoSolicitud[ idEstadoSolicitud=" + idEstadoSolicitud + " ]";

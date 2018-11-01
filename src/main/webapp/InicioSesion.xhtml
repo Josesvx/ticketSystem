@@ -6,38 +6,68 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Inicio de Sesión</title>
+        <style>
+            body{
+                background-color: #04B486;
+            }
+        </style>
     </h:head>
-    <body background="img/fondo13.png">
+    <body>
         <center>
+
             <h:form>
+
                 <p:messages autoUpdate="true" showDetail="true"/>
-                <div>  
-                    <table align="center" style="opacity: 1; margin-top: 100px">
+                <div style="
+                     background-color: RGB(255, 255, 255,0.8) ;
+                     width: 25%; 
+                     border-radius: 30px;
+                     position:absolute;
+                     top: 20%;
+                     left:37.5%;">  
+                    <table align="center" style="opacity: 1; margin-top: 30px; font-family:Helvetica; ">
                         <tr>
                             <td colspan="2" align="center">
-                                <img src="img/aircall.png" height="70px" width="220px"/>
-                            </td>
+                                <!--<img src="img/aircall.png" height="70px" width="220px"/>-->
+                                <h1 style="
+                                    font-weight:bold;
+                                    font-family:Helvetica;">
+                                    Inicio de sesion</h1>
+                                <br></br>
+                            </td>                            
                         </tr>
-                        <tr>
+                        <tr>                            
                             <td>
                                 <img src="img/user.png" />
                             </td>
-                            <td><p:inputText  id="Usuario" style="opacity: 0.40" required="true" requiredMessage="Usuario Requerido" placeholder="Usuario" value="#{manejadorLogin.directorio.usuario}" />
+                            <td>
+                                <p:inputText  id="Usuario" style="
+                                              height: 25px;  
+                                              width:200px;"
+                                              required="true" requiredMessage="Usuario Requerido" placeholder="Usuario" value="#{manejadorLogin.directorio.usuario}" />
+                                <br></br><br></br>
                             </td>
-                        </tr>
-                        <tr></tr><tr></tr>
+                        </tr>                       
                         <tr>
                             <td>
                                 <img src="img/pass.png"/>
                             </td>
-                            <td><p:inputText id="Clave" type="password" style="opacity: 0.40" requiredMessage="Contraseña Requerida" required="true" placeholder="Contraseña" value="#{manejadorLogin.directorio.contrasenia}"/>
+                            <td>
+                                <p:inputText id="Clave" type="password" style=" 
+                                             height: 25px;  
+                                             width:200px;"
+                                             requiredMessage="Contraseña Requerida" required="true" placeholder="Contraseña" value="#{manejadorLogin.directorio.contrasenia}"/>
+                                <br></br><br></br>
                             </td>
                         </tr>
                     </table>
+                    <br></br>
+                    <p:commandButton value="Ingresar" style="opacity: 0.70" action ="#{manejadorLogin.autenticacion()}"/>
+                    <br></br><br></br><br></br><br></br>
                 </div>
-                <br></br>
-                <p:commandButton value="Ingresar" style="opacity: 0.70" action="#{manejadorLogin.autenticacion()}"/>
+
             </h:form>
+
         </center>
         <f:metadata>
             <f:viewAction action="#{manejadorLogin.login()}" />
