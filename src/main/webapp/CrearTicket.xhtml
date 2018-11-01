@@ -14,13 +14,14 @@
             </h:head>
             <style>
                 body{
-                    background-color: #f2f2f2;
+                    background-color: #f2f2f2;                                       
                 }
             </style>
 
         </ui:define>
         <ui:define name="body"  >
             <h:form>
+                <p:messages  id="mensaje" autoUpdate="false"  />
                 <center>
                     <div id="cabCreate" 
                          style="
@@ -47,68 +48,35 @@
                          width:70%;
                          border-bottom-left-radius: 25px;
                          border-bottom-right-radius: 25px;
-                         color: gainsboro;">
-                        <br></br><br></br>     
-                        <p:outputLabel value="Titulo:"
-                                       style="
-                                       position: relative;
-                                       left: -120px;
-                                       font-size:16px;
-                                       font-weight: bold;">                                       
-                        </p:outputLabel>
-                        <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}"></p:inputText>
-                        <br></br><br></br>
-                        <p:outputLabel value="Categoria:"
-                                       style="
-                                       position: relative;
-                                       left: -120px;
-                                       font-size:16px;
-                                       font-weight: bold;">                                       
-                        </p:outputLabel>
-                        <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.idCategoria}">
+                         color: gainsboro;">        
+                        <p:outputLabel value="Titulo:" for="titulo" style="position: relative; left: -120px; font-size:16px; font-weight: bold;"/>
+                        <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}" maxlength="50"/>
+                        <p:message for="titulo"/>
+
+                        <p:outputLabel value="Categoria:" for="idCategoria" style=" position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                                    
+                        <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.idCategoria}" required="true" requiredMessage="Seleccione una categoria">
+                            <f:selectItem itemLabel="Seleccione una categoria" noSelectionOption="true" itemDisabled="true" />
                             <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
                             </f:selectItems>
                         </p:selectOneMenu>
-                        <br></br><br></br>
-                        <p:outputLabel value="Departamento "
-                                       style="
-                                       position: relative;
-                                       left: -120px;
-                                       font-size:16px;
-                                       font-weight: bold;">                                       
-                        </p:outputLabel>
-                        <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"></p:inputText>
-                        <br></br><br></br>
-                        <p:outputLabel value="Correlativo: "
-                                       style="
-                                       position: relative;
-                                       left: -120px;
-                                       font-size:16px;
-                                       font-weight: bold;">                                       
-                        </p:outputLabel>
-                        <p:inputText id="correlativo" required="true" requiredMessage="Correlativo Requerido" placeholder="correlativo" value="#{manejadorSolicitud.solicitud.correlativo}"></p:inputText>
-                        <br></br><br></br>
-                        <p:outputLabel value="Descripcion: "
-                                       style="
-                                       position: relative;
-                                       left: -120px;
-                                       font-size:16px;
-                                       font-weight: bold;">                                       
-                        </p:outputLabel>
-                        <p:inputTextarea rows="6" cols="25" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}"></p:inputTextarea>
-                        <br></br><br></br>
-                        <p:outputLabel value="Adjunto: "
-                                       style="
-                                       position: relative;
-                                       left: -120px;
-                                       font-size:16px;
-                                       font-weight: bold;">                                       
-                        </p:outputLabel>
-                        <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"></p:inputText>
-                        <br></br><br></br><br></br>
-                        <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" action="#{manejadorSolicitud.CrearSolicitud()}" >                                        
-                        </p:commandButton>
-                        <br></br><br></br><br></br>
+                        <p:message for="idCategoria"/>
+
+                        <p:outputLabel value="Departamento " for="departamento" style="position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                                                   
+                        <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"/>
+                        <p:message for="departamento"/>
+
+                        <p:outputLabel value="Correlativo: " style=" position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                                                   
+                        <p:inputText id="correlativo"  placeholder="correlativo"  value="#{manejadorSolicitud.solicitud.correlativo}" maxlength="10" />
+                        <p:message for="correlativo"/>
+
+                        <p:outputLabel value="Descripcion: " for="descripcion" style=" position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                       
+                        <p:inputTextarea rows="7" cols="35" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}" maxlength="250"/>
+                        <p:message for="descripcion"/>
+
+                        <p:outputLabel value="Adjunto: " style=" position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                       
+                        <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"/>                            
+                        <p:message for="adjunto"/>
+                        <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" action="#{manejadorSolicitud.CrearSolicitud()}" update="panel" />                                        
                     </div>
                 </center>
                 <f:metadata>
@@ -116,33 +84,6 @@
                 </f:metadata>
             </h:form>
         </ui:define>
-    </ui:composition>
-    <!-- <h:body>
-         <center>
-         <p:outputLabel value="Titulo:"></p:outputLabel>
-         <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}"></p:inputText>
-         <br></br>
-         <p:outputLabel value="Categoria:"></p:outputLabel>
-         <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.solicitud.idCategoria}">
-             <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
-             </f:selectItems>
-         </p:selectOneMenu>
-         <br></br>
-         <p:outputLabel value="Departamento "></p:outputLabel>
-         <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"></p:inputText>
-         <br></br>
-         <p:outputLabel value="Correlativo: "></p:outputLabel>
-         <p:inputText id="correlativo" required="true" requiredMessage="Correlativo Requerido" placeholder="correlativo" value="#{manejadorSolicitud.solicitud.correlativo}"></p:inputText>
-         <br></br>
-         <p:outputLabel value="Descripcion: "></p:outputLabel>
-         <p:inputTextarea rows="6" cols="25" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}"></p:inputTextarea>
-         <br></br>
-         <p:outputLabel value="Adjunto: "></p:outputLabel>
-         <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"></p:inputText>
-         <br></br>
-         <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-disk" ></p:commandButton>
-         </center>
-     </h:body>
-    -->
+    </ui:composition>    
 </html>
 

@@ -47,7 +47,7 @@ public class ManejadorSolicitud implements Serializable {
     private Directorio directorio;
     private CacheInstance cache;
     private String nombre, seguimiento, nombreDep;
-    private int  idCategoria;
+    private int idCategoria, numero;
     private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
             numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
     private BarChartModel barModel;
@@ -55,7 +55,7 @@ public class ManejadorSolicitud implements Serializable {
     private SolicitudFacadeLocal sfl;
     @EJB
     private CategoriaFacadeLocal cfl;
-    @EJB 
+    @EJB
     private PrioridadFacadeLocal pfl;
     @EJB
     private DirectorioFacadeLocal dfl;
@@ -69,14 +69,14 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             listaCat = new ArrayList<>();
         }
-        
+
         List<Prioridad> listaPri = pfl.findAll();
         if (listaPri != null && !listaPri.isEmpty()) {
-           listaP = listaPri;
+            listaP = listaPri;
         } else {
             listaP = new ArrayList<>();
         }
-        
+
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
             listaSol = listaS;
@@ -124,14 +124,13 @@ public class ManejadorSolicitud implements Serializable {
 
         //nombreDep = cache.ObtenerNombreDepartamento();
         //if (nombreDep != null && !nombreDep.isEmpty()) {
-          //  nombre = nombreDep;
+        //  nombre = nombreDep;
         //} else {
-          //  nombre = "No Funciona";
+        //  nombre = "No Funciona";
         //}
         
         createBarModel();
         initBarModel();
-
     }
 
     public int getIdCategoria() {
@@ -158,7 +157,6 @@ public class ManejadorSolicitud implements Serializable {
         this.listaP = listaP;
     }
 
-
     public List<Categoria> getListaCat() {
         return listaCat;
     }
@@ -182,8 +180,6 @@ public class ManejadorSolicitud implements Serializable {
     public void setSolicitudS(Solicitud solicitudS) {
         this.solicitudS = solicitudS;
     }
-    
-    
 
     public Categoria getCategoria() {
         return categoria;
@@ -201,35 +197,31 @@ public class ManejadorSolicitud implements Serializable {
         this.solicitud = solicitud;
     }
 
-    public String CrearNumSeguimiento(Solicitud solicitud) {
-        nombre = cache.ObtenerNombreDepartamento();
-        if (nombre.equals("")) {
-            seguimiento = "";
-        } else if (nombre.equals("")) {
+    public String CrearNumSeguimiento() {
+        //nombre = cache.ObtenerNombreDepartamento().toUpperCase();
+        nombre ="RECUERSOS HUMANOS";
 
-        } else if (nombre.equals("")) {
-
-        }
-        return null;
+            numero = (int) (Math.random() * 1000000) + 1;
+            seguimiento = nombre.charAt(1) + nombre.charAt(2) +String.valueOf( numero);
+        
+        return seguimiento;
     }
 
-    public  void CrearSolicitud() {
-        try  {
+    public void CrearSolicitud() {
+        try {
             this.solicitud.setIdSolicitud(sfl.count() + 1);
             this.solicitud.setAudFechaCreacion(new Date());
             this.directorio = cache.ObtenerDirectorio();
-            this.solicitud.setIdCategoria( cfl.find(1)) ;
+            this.solicitud.setIdCategoria(cfl.find(1));
             this.solicitud.setAudNombreCreacion(directorio.getUsuario());
             this.solicitud.setAudStatus(true);
-            this.solicitud.setNSeguimiento("HHRR2346");
+            this.solicitud.setNSeguimiento(CrearNumSeguimiento());
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
-
             sfl.create(this.solicitud);
-            
+
         } catch (Exception e) {
         }
-     
 
     }
 
