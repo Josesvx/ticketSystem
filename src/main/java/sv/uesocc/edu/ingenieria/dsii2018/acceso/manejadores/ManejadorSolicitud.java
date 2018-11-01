@@ -61,12 +61,12 @@ public class ManejadorSolicitud implements Serializable {
         cache = CacheInstance.constructor();
         cache.Instance();
 
-        nombreDep = cache.ObtenerNombreDepartamento();
-        if (nombreDep != null && !nombreDep.isEmpty()) {
-            nombre = nombreDep;
-        } else {
-            nombre = "No Funciona";
-        }
+        //nombreDep = cache.ObtenerNombreDepartamento();
+        //if (nombreDep != null && !nombreDep.isEmpty()) {
+          //  nombre = nombreDep;
+        //} else {
+          //  nombre = "No Funciona";
+        //}
 
     }
 
