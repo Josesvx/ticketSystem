@@ -6,16 +6,19 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cache.CacheInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.PrioridadFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DepartamentoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
-import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Departamento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Prioridad;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
@@ -24,12 +27,17 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
  *
  * @author katiro
  */
+@ManagedBean
 @Named
 @ViewScoped
 public class ManejadorSolicitud implements Serializable {
 
     private List<Categoria> listaCat;
+    private List<Solicitud> listaSol;
+    private List<Prioridad> listaP;
     private Solicitud solicitud;
+    private Solicitud solicitudS;
+    private EstadoSolicitud eSol;
     private Categoria categoria;
     private Directorio directorio;
     private CacheInstance cache;
@@ -39,6 +47,8 @@ public class ManejadorSolicitud implements Serializable {
     private SolicitudFacadeLocal sfl;
     @EJB
     private CategoriaFacadeLocal cfl;
+    @EJB 
+    private PrioridadFacadeLocal pfl;
     @EJB
     private DirectorioFacadeLocal dfl;
 
@@ -50,6 +60,20 @@ public class ManejadorSolicitud implements Serializable {
             listaCat = listaC;
         } else {
             listaCat = new ArrayList<>();
+        }
+        
+        List<Prioridad> listaPri = pfl.findAll();
+        if (listaPri != null && !listaPri.isEmpty()) {
+           listaP = listaPri;
+        } else {
+            listaP = new ArrayList<>();
+        }
+        
+        List<Solicitud> listaS = sfl.findByEstado(1);
+        if (listaS != null && !listaS.isEmpty()) {
+            listaSol = listaS;
+        } else {
+            listaSol = new ArrayList<>();
         }
 
         solicitud = new Solicitud();
@@ -86,6 +110,15 @@ public class ManejadorSolicitud implements Serializable {
         this.nombre = nombre;
     }
 
+    public List<Prioridad> getListaP() {
+        return listaP;
+    }
+
+    public void setListaP(List<Prioridad> listaP) {
+        this.listaP = listaP;
+    }
+
+
     public List<Categoria> getListaCat() {
         return listaCat;
     }
@@ -93,6 +126,24 @@ public class ManejadorSolicitud implements Serializable {
     public void setListaCat(List<Categoria> listaCat) {
         this.listaCat = listaCat;
     }
+
+    public List<Solicitud> getListaSol() {
+        return listaSol;
+    }
+
+    public void setListaSol(List<Solicitud> listaSol) {
+        this.listaSol = listaSol;
+    }
+
+    public Solicitud getSolicitudS() {
+        return solicitudS;
+    }
+
+    public void setSolicitudS(Solicitud solicitudS) {
+        this.solicitudS = solicitudS;
+    }
+    
+    
 
     public Categoria getCategoria() {
         return categoria;
