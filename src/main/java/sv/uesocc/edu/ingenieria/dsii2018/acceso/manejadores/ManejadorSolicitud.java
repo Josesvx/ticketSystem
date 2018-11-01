@@ -9,6 +9,10 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.ChartSeries;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cache.CacheInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
@@ -17,6 +21,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DepartamentoFacade
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Departamento_;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
@@ -43,6 +48,9 @@ public class ManejadorSolicitud implements Serializable {
     private CacheInstance cache;
     private String nombre, seguimiento, nombreDep;
     private int  idCategoria;
+    private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
+            numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
+    private BarChartModel barModel;
     @EJB
     private SolicitudFacadeLocal sfl;
     @EJB
@@ -54,7 +62,7 @@ public class ManejadorSolicitud implements Serializable {
 
     @PostConstruct
     public void init() {
-
+        
         List<Categoria> listaC = cfl.findAll();
         if (listaC != null && !listaC.isEmpty()) {
             listaCat = listaC;
@@ -75,7 +83,36 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             listaSol = new ArrayList<>();
         }
-
+        
+        for(int i=1; i<=8; i++){
+            switch (i){
+                case 1:
+                    numeroSolicitudes1=sfl.findByDepartamento(i);
+                    break;
+                case 2:
+                    numeroSolicitudes2=sfl.findByDepartamento(i);
+                    break;
+                case 3:
+                    numeroSolicitudes3=sfl.findByDepartamento(i);
+                    break;
+                case 4:
+                    numeroSolicitudes4=sfl.findByDepartamento(i);
+                    break;
+                case 5:
+                    numeroSolicitudes5=sfl.findByDepartamento(i);
+                    break;
+                case 6:
+                    numeroSolicitudes6=sfl.findByDepartamento(i);
+                    break;
+                case 7:
+                    numeroSolicitudes7=sfl.findByDepartamento(i);
+                    break;
+                case 8:
+                    numeroSolicitudes8=sfl.findByDepartamento(i);
+                    break;  
+            }
+        }
+        
         solicitud = new Solicitud();
 
         categoria = new Categoria();
@@ -91,6 +128,9 @@ public class ManejadorSolicitud implements Serializable {
         //} else {
           //  nombre = "No Funciona";
         //}
+        
+        createBarModel();
+        initBarModel();
 
     }
 
@@ -232,4 +272,107 @@ public class ManejadorSolicitud implements Serializable {
     public void Actualizar(Solicitud solicitud, String comentario) {
 
     }
+    
+    private void createBarModel() {
+        barModel = initBarModel();
+         
+        barModel.setTitle("Solicitudes Por Departamento");
+        barModel.setLegendPosition("ne");
+         
+        Axis xAxis = barModel.getAxis(AxisType.X);
+        xAxis.setLabel("Departamento");
+         
+        Axis yAxis = barModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Numero Solicitudes");
+        yAxis.setMin(0);
+        yAxis.setMax(15);
+    }
+    
+    private BarChartModel initBarModel() {
+        BarChartModel model = new BarChartModel();
+ 
+        ChartSeries solicitudes = new ChartSeries();
+        solicitudes.setLabel("Solicitudes");
+        solicitudes.set("Reclutamiento", numeroSolicitudes1);
+        solicitudes.set("Contabilidad", numeroSolicitudes2);
+        solicitudes.set("HR", numeroSolicitudes3);
+        solicitudes.set("IT", numeroSolicitudes4);
+        solicitudes.set("Mantenimiento", numeroSolicitudes5);
+        solicitudes.set("Seguridad", numeroSolicitudes6);
+        solicitudes.set("Teleoperadores", numeroSolicitudes7);
+        solicitudes.set("Gerencia", numeroSolicitudes8);
+ 
+        model.addSeries(solicitudes);
+        return model;
+    }
+    
+    public BarChartModel getBarModel() {
+        return barModel;
+    }
+
+    public int getNumeroSolicitudes1() {
+        return numeroSolicitudes1;
+    }
+
+    public void setNumeroSolicitudes1(int numeroSolicitudes1) {
+        this.numeroSolicitudes1 = numeroSolicitudes1;
+    }
+
+    public int getNumeroSolicitudes2() {
+        return numeroSolicitudes2;
+    }
+
+    public void setNumeroSolicitudes2(int numeroSolicitudes2) {
+        this.numeroSolicitudes2 = numeroSolicitudes2;
+    }
+
+    public int getNumeroSolicitudes3() {
+        return numeroSolicitudes3;
+    }
+
+    public void setNumeroSolicitudes3(int numeroSolicitudes3) {
+        this.numeroSolicitudes3 = numeroSolicitudes3;
+    }
+
+    public int getNumeroSolicitudes4() {
+        return numeroSolicitudes4;
+    }
+
+    public void setNumeroSolicitudes4(int numeroSolicitudes4) {
+        this.numeroSolicitudes4 = numeroSolicitudes4;
+    }
+
+    public int getNumeroSolicitudes5() {
+        return numeroSolicitudes5;
+    }
+
+    public void setNumeroSolicitudes5(int numeroSolicitudes5) {
+        this.numeroSolicitudes5 = numeroSolicitudes5;
+    }
+
+    public int getNumeroSolicitudes6() {
+        return numeroSolicitudes6;
+    }
+
+    public void setNumeroSolicitudes6(int numeroSolicitudes6) {
+        this.numeroSolicitudes6 = numeroSolicitudes6;
+    }
+
+    public int getNumeroSolicitudes7() {
+        return numeroSolicitudes7;
+    }
+
+    public void setNumeroSolicitudes7(int numeroSolicitudes7) {
+        this.numeroSolicitudes7 = numeroSolicitudes7;
+    }
+
+    public int getNumeroSolicitudes8() {
+        return numeroSolicitudes8;
+    }
+
+    public void setNumeroSolicitudes8(int numeroSolicitudes8) {
+        this.numeroSolicitudes8 = numeroSolicitudes8;
+    }
+    
+    
 }
