@@ -13,15 +13,12 @@ import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
-import sv.uesocc.edu.ingenieria.dsii2018.acceso.cache.CacheInstance;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
-import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.PrioridadFacadeLocal;
-import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DepartamentoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
-import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Departamento_;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
@@ -44,10 +41,10 @@ public class ManejadorSolicitud implements Serializable {
     private Solicitud solicitudS;
     private EstadoSolicitud eSol;
     private Categoria categoria;
-    private Directorio directorio;
-    private CacheInstance cache;
+    private Directorio directorio,Departamento;
+    private CookieInstance oreo;
     private String nombre, seguimiento, nombreDep;
-    private int idCategoria, numero;
+    private int idCategoria, numero,id,id2;
     private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
             numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
     private BarChartModel barModel;
@@ -119,15 +116,16 @@ public class ManejadorSolicitud implements Serializable {
 
         directorio = new Directorio();
 
-        cache = CacheInstance.constructor();
-        cache.Instance();
+        oreo = new CookieInstance();
 
-        //nombreDep = cache.ObtenerNombreDepartamento();
-        //if (nombreDep != null && !nombreDep.isEmpty()) {
-        //  nombre = nombreDep;
-        //} else {
-        //  nombre = "No Funciona";
-        //}
+        id2 = oreo.UsuarioId();
+        Departamento = dfl.find(id2);
+        nombreDep = Departamento.getIdDepartamento().getNombre();
+        if (nombreDep != null && !nombreDep.isEmpty()) {
+          nombre = nombreDep;
+        } else {
+          nombre = "No Funciona";
+        }
         
         createBarModel();
         initBarModel();
@@ -211,7 +209,8 @@ public class ManejadorSolicitud implements Serializable {
         try {
             this.solicitud.setIdSolicitud(sfl.count() + 1);
             this.solicitud.setAudFechaCreacion(new Date());
-            this.directorio = cache.ObtenerDirectorio();
+            id = oreo.UsuarioId();
+            this.directorio = dfl.find(id);
             this.solicitud.setIdCategoria(cfl.find(1));
             this.solicitud.setAudNombreCreacion(directorio.getUsuario());
             this.solicitud.setAudStatus(true);

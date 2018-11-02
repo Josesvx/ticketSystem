@@ -76,7 +76,7 @@
                         <p:outputLabel value="Adjunto: " style=" position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                       
                         <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"/>                            
                         <p:message for="adjunto"/>
-                        <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" action="#{manejadorSolicitud.CrearSolicitud()}" update="panel" />                                        
+                        <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" action="#{manejadorSolicitud.CrearSolicitud()}" update="mensaje"/>                                         
                     </div>
                 </center>
                 <f:metadata>

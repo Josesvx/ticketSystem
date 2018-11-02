@@ -23,7 +23,7 @@
 
                     <p:commandButton type="button" value="Creación de ticket"  onclick="location.href='CrearTicket.jsf'" title="Crear" icon="ui-icon-disk" />
                     <p:commandButton type="button" value="Seguimiento" title="Seguimiento" icon="ui-icon-zoomin" />
-                    <p:commandButton type="button" value="Estadisticas" title="Estadistica" icon="ui-icon-print" />
+                    <p:commandButton type="button" value="Estadisticas" title="Estadistica" onclick="location.href='Estadistica.jsf'" icon="ui-icon-print" />
                     <p:commandButton type="button" value="Asignar Prioridad" onclick="location.href='AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" />
                     <span class="ui-separator">
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
@@ -31,7 +31,7 @@
                 </f:facet>
 
                 <f:facet name="right">
-                    <p:commandButton action="#{manejadorLogin.cerrarSesion()}" value="Cerrar Sesión" title="Cerrar Sesion" icon="	ui-icon-person"/>
+                    <p:commandButton action="#{manejadorLogin.cerrarSesion()}" value="#{manejadorLogin.nombreUsuario}" title="Cerrar Sesion" icon="	ui-icon-person"/>
                 </f:facet>
 
             </p:toolbar>
