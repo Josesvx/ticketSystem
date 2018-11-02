@@ -20,13 +20,14 @@
 
         </ui:define>
         <ui:define name="body"  >
+            <br></br><br></br><br></br>
             <h:form>
                 <p:messages  id="mensaje" autoUpdate="false"  />
                 <center>
                     <div id="cabCreate" 
                          style="
                          background-color:#04B486; 
-                         width:70%; 
+                         width:60%; 
                          height:80px; 
                          border-top-left-radius:25px; 
                          border-top-right-radius:25px;">
@@ -45,38 +46,97 @@
                     <div id="formCreate" 
                          style="
                          background-color: #585858 ; 
-                         width:70%;
+                         width:60%;
                          border-bottom-left-radius: 25px;
                          border-bottom-right-radius: 25px;
-                         color: gainsboro;">        
-                        <p:outputLabel value="Titulo:" for="titulo" style="position: relative; left: -120px; font-size:16px; font-weight: bold;"/>
-                        <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}" maxlength="50"/>
-                        <p:message for="titulo"/>
-
-                        <p:outputLabel value="Categoria:" for="idCategoria" style=" position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                                    
-                        <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.idCategoria}" required="true" requiredMessage="Seleccione una categoria">
-                            <f:selectItem itemLabel="Seleccione una categoria" noSelectionOption="true" itemDisabled="true" />
-                            <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
-                            </f:selectItems>
-                        </p:selectOneMenu>
-                        <p:message for="idCategoria"/>
-
-                        <p:outputLabel value="Departamento " for="departamento" style="position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                                                   
-                        <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"/>
-                        <p:message for="departamento"/>
-
-                        <p:outputLabel value="Correlativo: " style=" position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                                                   
-                        <p:inputText id="correlativo"  placeholder="correlativo"  value="#{manejadorSolicitud.solicitud.correlativo}" maxlength="10" />
-                        <p:message for="correlativo"/>
-
-                        <p:outputLabel value="Descripcion: " for="descripcion" style=" position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                       
-                        <p:inputTextarea rows="7" cols="35" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}" maxlength="250"/>
-                        <p:message for="descripcion"/>
-
-                        <p:outputLabel value="Adjunto: " style=" position: relative; left: -120px; font-size:16px; font-weight: bold;"/>                                       
-                        <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"/>                            
-                        <p:message for="adjunto"/>
-                        <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" action="#{manejadorSolicitud.CrearSolicitud()}" update="mensaje"/>                                         
+                         color: gainsboro;">  
+                        <table align="center" style="opacity: 1; margin-top: 30px; font-family:Helvetica; ">
+                            <br></br><br></br>
+                            <tr>
+                                <td>
+                                    <p:outputLabel value="Titulo:" for="titulo" style=" font-size:16px; font-weight: bold; position: relative; left: -20px;" />
+                                </td>
+                                <td>
+                                    <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}" maxlength="50"/>
+                                </td>
+                                <td>
+                                    <p:message for="titulo"/>  
+                                </td>
+                            </tr>
+                            <br></br><br></br>
+                            <tr>
+                                <td>
+                                    <p:outputLabel value="Categoria:" for="idCategoria" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>                                                    
+                                </td>
+                                <td>
+                                    <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.idCategoria}" required="true" requiredMessage="Seleccione una categoria">
+                                <f:selectItem itemLabel="Seleccione una categoria" noSelectionOption="true" itemDisabled="true" />
+                                <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
+                                </f:selectItems>
+                            </p:selectOneMenu>
+                                </td>
+                                <td>
+                                   <p:message for="idCategoria"/> 
+                                </td>
+                            </tr>   
+                            <br></br><br></br>
+                            <tr>
+                                <td>
+                                    <p:outputLabel value="Departamento " for="departamento" style="position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
+                                </td>
+                                <td>
+                                    <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"/>
+                                </td>
+                                <td>
+                                    <p:message for="departamento"/>
+                                </td>                                    
+                            </tr> 
+                            <br></br><br></br>
+                            <tr>
+                                <td>
+                                    <p:outputLabel value="Correlativo: " style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
+                                </td>
+                                <td>
+                                   <p:inputText id="correlativo"  placeholder="correlativo"  value="#{manejadorSolicitud.solicitud.correlativo}" maxlength="10" />    
+                                </td>
+                                <td>                                    
+                                    <p:message for="correlativo"/>
+                                </td>
+                                    
+                            </tr>
+                            <br></br><br></br>
+                            <tr>
+                                <td>
+                                    <p:outputLabel value="Descripcion: " for="descripcion" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>
+                                </td>
+                                <td>
+                                   <p:inputTextarea rows="7" cols="35" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}" maxlength="250"/> 
+                                </td>
+                                <td>
+                                    <p:message for="descripcion"/>
+                                </td>
+                                    
+                            </tr>
+                            <br></br><br></br>
+                            <tr>
+                                <td>
+                                     <p:outputLabel value="Adjunto: " style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
+                                </td>
+                                <td>
+                                    <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"/>             
+                                </td>
+                                <td>
+                                    <p:message for="adjunto"/>
+                                </td>
+                                    
+                            </tr>
+                            <br></br><br></br><br></br>
+                            <tr>
+                                <td colspan="2" align="center">
+                                     <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" action="#{manejadorSolicitud.CrearSolicitud()}" update="mensaje"/>   
+                                </td>                                
+                            </tr>                                                            
+                        </table>
                     </div>
                 </center>
                 <f:metadata>
