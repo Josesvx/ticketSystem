@@ -49,9 +49,10 @@
                          width:60%;
                          border-bottom-left-radius: 25px;
                          border-bottom-right-radius: 25px;
-                         color: gainsboro;">  
+                         color: gainsboro;">
+                        <br></br><br></br>
                         <table align="center" style="opacity: 1; margin-top: 30px; font-family:Helvetica; ">
-                            <br></br><br></br>
+
                             <tr>
                                 <td>
                                     <p:outputLabel value="Titulo:" for="titulo" style=" font-size:16px; font-weight: bold; position: relative; left: -20px;" />
@@ -63,7 +64,7 @@
                                     <p:message for="titulo"/>  
                                 </td>
                             </tr>
-                            <br></br><br></br>
+
                             <tr>
                                 <td>
                                     <p:outputLabel value="Categoria:" for="idCategoria" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>                                                    
@@ -79,7 +80,7 @@
                                    <p:message for="idCategoria"/> 
                                 </td>
                             </tr>   
-                            <br></br><br></br>
+
                             <tr>
                                 <td>
                                     <p:outputLabel value="Departamento " for="departamento" style="position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
@@ -91,7 +92,7 @@
                                     <p:message for="departamento"/>
                                 </td>                                    
                             </tr> 
-                            <br></br><br></br>
+
                             <tr>
                                 <td>
                                     <p:outputLabel value="Correlativo: " style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
@@ -104,7 +105,7 @@
                                 </td>
                                     
                             </tr>
-                            <br></br><br></br>
+
                             <tr>
                                 <td>
                                     <p:outputLabel value="Descripcion: " for="descripcion" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>
@@ -116,21 +117,19 @@
                                     <p:message for="descripcion"/>
                                 </td>
                                     
-                            </tr>
-                            <br></br><br></br>
+                            </tr>                            
                             <tr>
                                 <td>
                                      <p:outputLabel value="Adjunto: " style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
                                 </td>
                                 <td>
-                                    <p:inputText id="adjunto" placeholder="adjunto" value="#{manejadorSolicitud.solicitud.adjunto}"/>             
+                                    <p:fileUpload  id="adjunto" mode="advance" update="messages" multiple="true" allowTypes="/(̣\.|\/)(gif|jpe?g|png)$/" value="#{manejadorSolicitud.solicitud.adjunto}" style="border:0"/>             
                                 </td>
                                 <td>
                                     <p:message for="adjunto"/>
                                 </td>
                                     
                             </tr>
-                            <br></br><br></br><br></br>
                             <tr>
                                 <td colspan="2" align="center">
                                      <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" action="#{manejadorSolicitud.CrearSolicitud()}" update="mensaje"/>   
