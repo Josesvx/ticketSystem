@@ -52,9 +52,9 @@ public class ManejadorSolicitud implements Serializable {
     private Directorio directorio, Departamento;
     private CookieInstance oreo;
     private String nombre, seguimiento, nombreDep;
+    private int idCategoria, numero,id,id2, idPrioridad;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
-    private int idCategoria, numero, id, id2;
     private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
             numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
     private BarChartModel barModel;
@@ -137,9 +137,6 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             nombre = "No Funciona";
         }
-
-        createBarModel();
-        initBarModel();
     }
 
     public int getIdCategoria() {
@@ -322,7 +319,9 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public void Actualizar(Solicitud solicitud) {
-
+        Prioridad p =  pfl.find(idPrioridad);
+        solicitudS.setIdPrioridad(p);
+        sfl.edit(solicitudS);
     }
 
     public List<Solicitud> ObtenerPorUsuario(int idDirectorio) {
@@ -333,112 +332,11 @@ public class ManejadorSolicitud implements Serializable {
 
     }
 
-    private void createBarModel() {
-        barModel = initBarModel();
-
-        barModel.setTitle("Solicitudes Por Departamento");
-        barModel.setLegendPosition("ne");
-
-        Axis xAxis = barModel.getAxis(AxisType.X);
-        xAxis.setLabel("Departamento");
-
-        Axis yAxis = barModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Numero Solicitudes");
-        yAxis.setMin(0);
-        yAxis.setMax(15);
+    public int getIdPrioridad() {
+        return idPrioridad;
     }
 
-    private BarChartModel initBarModel() {
-        BarChartModel model = new BarChartModel();
-
-        ChartSeries solicitudes = new ChartSeries();
-        solicitudes.setLabel("Solicitudes");
-        solicitudes.set("Reclutamiento", numeroSolicitudes1);
-        solicitudes.set("Contabilidad", numeroSolicitudes2);
-        solicitudes.set("HR", numeroSolicitudes3);
-        solicitudes.set("IT", numeroSolicitudes4);
-        solicitudes.set("Mantenimiento", numeroSolicitudes5);
-        solicitudes.set("Seguridad", numeroSolicitudes6);
-        solicitudes.set("Teleoperadores", numeroSolicitudes7);
-        solicitudes.set("Gerencia", numeroSolicitudes8);
-
-        model.addSeries(solicitudes);
-        return model;
+    public void setIdPrioridad(int idPrioridad) {
+        this.idPrioridad = idPrioridad;
     }
-
-//    public String getImagenAdj(){
-//        return imagenAdj;
-//    }
-//    
-//    public void setImagenAdj(String imagenAdj){
-//        this.imagenAdj = imagenAdj;
-//    }
-    public BarChartModel getBarModel() {
-        return barModel;
-    }
-
-    public int getNumeroSolicitudes1() {
-        return numeroSolicitudes1;
-    }
-
-    public void setNumeroSolicitudes1(int numeroSolicitudes1) {
-        this.numeroSolicitudes1 = numeroSolicitudes1;
-    }
-
-    public int getNumeroSolicitudes2() {
-        return numeroSolicitudes2;
-    }
-
-    public void setNumeroSolicitudes2(int numeroSolicitudes2) {
-        this.numeroSolicitudes2 = numeroSolicitudes2;
-    }
-
-    public int getNumeroSolicitudes3() {
-        return numeroSolicitudes3;
-    }
-
-    public void setNumeroSolicitudes3(int numeroSolicitudes3) {
-        this.numeroSolicitudes3 = numeroSolicitudes3;
-    }
-
-    public int getNumeroSolicitudes4() {
-        return numeroSolicitudes4;
-    }
-
-    public void setNumeroSolicitudes4(int numeroSolicitudes4) {
-        this.numeroSolicitudes4 = numeroSolicitudes4;
-    }
-
-    public int getNumeroSolicitudes5() {
-        return numeroSolicitudes5;
-    }
-
-    public void setNumeroSolicitudes5(int numeroSolicitudes5) {
-        this.numeroSolicitudes5 = numeroSolicitudes5;
-    }
-
-    public int getNumeroSolicitudes6() {
-        return numeroSolicitudes6;
-    }
-
-    public void setNumeroSolicitudes6(int numeroSolicitudes6) {
-        this.numeroSolicitudes6 = numeroSolicitudes6;
-    }
-
-    public int getNumeroSolicitudes7() {
-        return numeroSolicitudes7;
-    }
-
-    public void setNumeroSolicitudes7(int numeroSolicitudes7) {
-        this.numeroSolicitudes7 = numeroSolicitudes7;
-    }
-
-    public int getNumeroSolicitudes8() {
-        return numeroSolicitudes8;
-    }
-
-    public void setNumeroSolicitudes8(int numeroSolicitudes8) {
-        this.numeroSolicitudes8 = numeroSolicitudes8;
-    }
-
 }
