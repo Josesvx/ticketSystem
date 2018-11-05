@@ -124,11 +124,11 @@
                                 </td>
                                 <td>
                                     <h:panelGroup>
-                                        <p:fileUpload  id="adjunto" mode="single" 
+                                        <p:fileUpload  id="adjunto" mode="advanced" 
                                                        multiple="false" fileUploadListener="#{manejadorSolicitud.subirImagen}" 
                                                        fileLimit="1" sizeLimit ="512000" allowTypes="/(̣\.|\/)(gif|jpe?g|png)$/"  
                                                        cancelLabel ="Cancelar" uploadLabel="Guardar" label="Elegir" 
-                                                       update="previsualizacion" style="border:0"/>             
+                                                       dragDropSupport="true" update="previsualizacion" style="border:0"/>             
                                         <p:graphicImage id ="previsualizacion" value="#{manejadorSolicitud.imagenAdjunto}" 
                                                         width="150" height="120" /> 
                                     </h:panelGroup>
