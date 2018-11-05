@@ -21,8 +21,8 @@
         </ui:define>
         <ui:define name="body"  >
             <br></br><br></br><br></br>
-            <h:form enctype="multipart/form-data">
-                <p:messages  id="mensaje" autoUpdate="false"  />
+            <h:form>
+                <p:messages  id="mensaje" autoUpdate="true"  />
                 <center>
                     <div id="cabCreate" 
                          style="
@@ -125,10 +125,11 @@
                                 <td>
                                     <h:panelGroup>
                                         <p:fileUpload  id="adjunto" mode="advanced" 
-                                                       multiple="false" fileUploadListener="#{manejadorSolicitud.subirImagen}" 
-                                                       fileLimit="1" sizeLimit ="512000" allowTypes="/(̣\.|\/)(gif|jpe?g|png)$/"  
+                                                       multiple="false" allowTypes="/(̣\.|\/)(gif|jpe?g|png)$/" 
+                                                       fileUploadListener="#{manejadorSolicitud.subirImagen}" 
+                                                       fileLimit="1" sizeLimit ="512000"   
                                                        cancelLabel ="Cancelar" uploadLabel="Guardar" label="Elegir" 
-                                                       dragDropSupport="true" update="previsualizacion" style="border:0"/>             
+                                                       dragDropSupport="true" update="previsualizacion" style="border:0"/>
                                         <p:graphicImage id ="previsualizacion" value="#{manejadorSolicitud.imagenAdjunto}" 
                                                         width="150" height="120" /> 
                                     </h:panelGroup>
@@ -137,10 +138,11 @@
                                     <p:message for="adjunto"/>
                                 </td>
 
-                            </tr>
+                            </tr> 
                             <tr>
                                 <td colspan="2" align="center">
-                                    <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" action="#{manejadorSolicitud.CrearSolicitud()}" update="mensaje"/>   
+                                    <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" 
+                                                     action="#{manejadorSolicitud.CrearSolicitud()}" update="mensaje"/>
                                 </td>                                
                             </tr>                                                            
                         </table>

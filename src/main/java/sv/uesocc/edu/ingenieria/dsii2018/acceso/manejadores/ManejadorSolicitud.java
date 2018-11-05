@@ -240,7 +240,7 @@ public class ManejadorSolicitud implements Serializable {
             }
             out.flush();
             out.close();
-            ubicacionArchivo = "../../src/main/resources/img/tmp" + nombreArchivo;
+            ubicacionArchivo = "src/main/resources/img/tmp" + nombreArchivo;
 
         } catch (Exception e) {
             System.err.println("No se pudo cargar la imagen");
@@ -252,8 +252,6 @@ public class ManejadorSolicitud implements Serializable {
         FacesMessage message = new FacesMessage();
         try {
             adjuntoProv = event.getFile().getContents();
-            //        this.solicitud.setAdjunto(event.getFile().getContents());
-            //        imagenAdjunto = guardarBlobEnFicheroTemporal(this.solicitud.getAdjunto(), event.getFile().getFileName());
             message.setSeverity(FacesMessage.SEVERITY_INFO);
             message.setSummary("Adjunto guardado con exito");
         } catch (Exception e) {
