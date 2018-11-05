@@ -21,7 +21,7 @@
             <h:form id="frmAsignar">
                 <center>
                     <p:dataTable id="solicitudes" var="solicitud" value="#{manejadorSolicitud.listaSol}" 
-                                 rowKey="#{solicitud.idSolicitud}" selection="#{manejadorSolicitud.solicitudS}"
+                                 rowKey="#{solicitud}" selection="#{manejadorSolicitud.solicitudS}"
                                  selectionMode="single"
                                  style="
                                  width: 70%;">
@@ -48,11 +48,12 @@
                             <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
 
                                 <h:outputText value="Asignar Prioriodad: " />
-                                <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.solicitudS.idPrioridad}">
+                                <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.idPrioridad}">
                                     <f:selectItems value="#{manejadorSolicitud.listaP}" var="valor" itemValue="#{valor.idPrioridad}" itemLabel="#{valor.nombre}">
                                     </f:selectItems>
                                 </p:selectOneMenu>
                             </p:panelGrid>
+                            <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}"></p:commandButton>
                         </p:outputPanel>
                     </p:dialog>
                 </center>
