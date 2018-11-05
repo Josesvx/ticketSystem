@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -38,7 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Solicitud.findByIdSolicitud", query = "SELECT s FROM Solicitud s WHERE s.idSolicitud = :idSolicitud")
     , @NamedQuery(name = "Solicitud.findByTitulo", query = "SELECT s FROM Solicitud s WHERE s.titulo = :titulo")
     , @NamedQuery(name = "Solicitud.findByDescripcion", query = "SELECT s FROM Solicitud s WHERE s.descripcion = :descripcion")
-    , @NamedQuery(name = "Solicitud.findByAdjunto", query = "SELECT s FROM Solicitud s WHERE s.adjunto = :adjunto")
     , @NamedQuery(name = "Solicitud.findByNSeguimiento", query = "SELECT s FROM Solicitud s WHERE s.nSeguimiento = :nSeguimiento")
     , @NamedQuery(name = "Solicitud.findByFeedback", query = "SELECT s FROM Solicitud s WHERE s.feedback = :feedback")
     , @NamedQuery(name = "Solicitud.findByCorrelativo", query = "SELECT s FROM Solicitud s WHERE s.correlativo = :correlativo")
@@ -63,8 +63,9 @@ public class Solicitud implements Serializable {
     @Basic(optional = false)
     @Column(name = "descripcion", nullable = false, length = 250)
     private String descripcion;
-    @Column(name = "adjunto", length = 250)
-    private String adjunto;
+    @Lob
+    @Column(name = "adjunto")
+    private byte[] adjunto;
     @Basic(optional = false)
     @Column(name = "n_seguimiento", nullable = false, length = 25)
     private String nSeguimiento;
@@ -142,11 +143,11 @@ public class Solicitud implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public String getAdjunto() {
+    public byte[] getAdjunto() {
         return adjunto;
     }
 
-    public void setAdjunto(String adjunto) {
+    public void setAdjunto(byte[] adjunto) {
         this.adjunto = adjunto;
     }
 
@@ -280,5 +281,5 @@ public class Solicitud implements Serializable {
     public String toString() {
         return "sv.uesocc.edu.ingenieria.dsii2018.lacualquiera.Solicitud[ idSolicitud=" + idSolicitud + " ]";
     }
-    
+
 }

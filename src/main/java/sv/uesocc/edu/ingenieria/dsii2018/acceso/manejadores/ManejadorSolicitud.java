@@ -1,14 +1,22 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.ServletContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
@@ -41,13 +49,16 @@ public class ManejadorSolicitud implements Serializable {
     private Solicitud solicitudS;
     private EstadoSolicitud eSol;
     private Categoria categoria;
-    private Directorio directorio,Departamento;
+    private Directorio directorio, Departamento;
     private CookieInstance oreo;
     private String nombre, seguimiento, nombreDep;
     private int idCategoria, numero,id,id2, idPrioridad;
+    private String imagenAdjunto;
+    private byte[] adjuntoProv;
     private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
             numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
     private BarChartModel barModel;
+
     @EJB
     private SolicitudFacadeLocal sfl;
     @EJB
@@ -59,7 +70,7 @@ public class ManejadorSolicitud implements Serializable {
 
     @PostConstruct
     public void init() {
-        
+
         List<Categoria> listaC = cfl.findAll();
         if (listaC != null && !listaC.isEmpty()) {
             listaCat = listaC;
@@ -80,36 +91,36 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             listaSol = new ArrayList<>();
         }
-        
-        for(int i=1; i<=8; i++){
-            switch (i){
+
+        for (int i = 1; i <= 8; i++) {
+            switch (i) {
                 case 1:
-                    numeroSolicitudes1=sfl.findByDepartamento(i);
+                    numeroSolicitudes1 = sfl.findByDepartamento(i);
                     break;
                 case 2:
-                    numeroSolicitudes2=sfl.findByDepartamento(i);
+                    numeroSolicitudes2 = sfl.findByDepartamento(i);
                     break;
                 case 3:
-                    numeroSolicitudes3=sfl.findByDepartamento(i);
+                    numeroSolicitudes3 = sfl.findByDepartamento(i);
                     break;
                 case 4:
-                    numeroSolicitudes4=sfl.findByDepartamento(i);
+                    numeroSolicitudes4 = sfl.findByDepartamento(i);
                     break;
                 case 5:
-                    numeroSolicitudes5=sfl.findByDepartamento(i);
+                    numeroSolicitudes5 = sfl.findByDepartamento(i);
                     break;
                 case 6:
-                    numeroSolicitudes6=sfl.findByDepartamento(i);
+                    numeroSolicitudes6 = sfl.findByDepartamento(i);
                     break;
                 case 7:
-                    numeroSolicitudes7=sfl.findByDepartamento(i);
+                    numeroSolicitudes7 = sfl.findByDepartamento(i);
                     break;
                 case 8:
-                    numeroSolicitudes8=sfl.findByDepartamento(i);
-                    break;  
+                    numeroSolicitudes8 = sfl.findByDepartamento(i);
+                    break;
             }
         }
-        
+
         solicitud = new Solicitud();
 
         categoria = new Categoria();
@@ -122,11 +133,10 @@ public class ManejadorSolicitud implements Serializable {
         Departamento = dfl.find(id2);
         nombreDep = Departamento.getIdDepartamento().getNombre();
         if (nombreDep != null && !nombreDep.isEmpty()) {
-          nombre = nombreDep;
+            nombre = nombreDep;
         } else {
-          nombre = "No Funciona";
+            nombre = "No Funciona";
         }
-        
     }
 
     public int getIdCategoria() {
@@ -195,12 +205,57 @@ public class ManejadorSolicitud implements Serializable {
 
     public String CrearNumSeguimiento() {
         //nombre = cache.ObtenerNombreDepartamento().toUpperCase();
-        nombre ="RECUERSOS HUMANOS";
+        nombre = "RECUERSOS HUMANOS";
 
-            numero = (int) (Math.random() * 1000000) + 1;
-            seguimiento = nombre.charAt(1) + nombre.charAt(2) +String.valueOf( numero);
-        
+        numero = (int) (Math.random() * 1000000) + 1;
+        seguimiento = nombre.charAt(1) + nombre.charAt(2) + String.valueOf(numero);
+
         return seguimiento;
+    }
+
+    public static String guardarBlobEnFicheroTemporal(byte[] bytes, String nombreArchivo) {
+        String ubicacionArchivo = null;
+        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String path = servletContext.getRealPath("")
+                + File.separatorChar + "src"
+                + File.separatorChar + "main"
+                + File.separatorChar + "resources"
+                + File.separatorChar + "img"
+                + File.separatorChar + "tmp"
+                + File.separatorChar + nombreArchivo;
+        File f = null;
+        InputStream in = null;
+
+        try {
+            f = new File(path);
+            in = new ByteArrayInputStream(bytes);
+            FileOutputStream out = new FileOutputStream(f.getAbsolutePath());
+
+            int c = 0;
+            while ((c = in.read()) >= 0) {
+                out.write(c);
+            }
+            out.flush();
+            out.close();
+            ubicacionArchivo = "src/main/resources/img/tmp" + nombreArchivo;
+
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar la imagen");
+        }
+        return ubicacionArchivo;
+    }
+
+    public void subirImagen(FileUploadEvent event) {
+        FacesMessage message = new FacesMessage();
+        try {
+            adjuntoProv = event.getFile().getContents();
+            message.setSeverity(FacesMessage.SEVERITY_INFO);
+            message.setSummary("Adjunto guardado con exito");
+        } catch (Exception e) {
+            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+            message.setSummary("Se debe seleccionar un item  valido para adjuntar a su Solicitud");
+        }
+        FacesContext.getCurrentInstance().addMessage("Mensaje", message);
     }
 
     public void CrearSolicitud() {
@@ -215,11 +270,24 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setNSeguimiento(CrearNumSeguimiento());
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
-            sfl.create(this.solicitud);
+            if (adjuntoProv != null) {
+                this.solicitud.setAdjunto(adjuntoProv);
+                sfl.create(this.solicitud);
+            } else {
+                sfl.create(this.solicitud);
+            }
 
         } catch (Exception e) {
         }
 
+    }
+
+    public String getImagenAdjunto() {
+        return imagenAdjunto;
+    }
+
+    public void setImagenAdjunto(String imagenAdjunto) {
+        this.imagenAdjunto = imagenAdjunto;
     }
 
     public void CrearEstadoS(Solicitud solicitud) {
@@ -271,7 +339,4 @@ public class ManejadorSolicitud implements Serializable {
     public void setIdPrioridad(int idPrioridad) {
         this.idPrioridad = idPrioridad;
     }
-    
-    
-    
 }

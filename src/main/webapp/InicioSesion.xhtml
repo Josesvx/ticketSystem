@@ -8,30 +8,38 @@
         <title>Inicio de Sesión</title>
         <style>
             body{
-                background-color: #04B486;
+                background-image: url(img/FondoLogin.png);
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
             }
         </style>
     </h:head>
     <body>
         <center>
-
+            
             <h:form>
-
+                
                 <p:messages autoUpdate="true" showDetail="true"/>
+                
                 <div style="
-                     background-color: RGB(255, 255, 255,0.8) ;
-                     width: 25%; 
-                     border-radius: 30px;
+                     background-color: rgb(255,255,255,0.7);
+      
+                     width: 24%; 
+                     border-radius: 20px;
                      position:absolute;
                      top: 20%;
-                     left:37.5%;">  
-                    <table align="center" style="opacity: 1; margin-top: 30px; font-family:Helvetica; ">
+                     left:38%;
+                     color: #585858;">
+                    
+                    <table align="center" style="opacity: 1;  font-family:sans-serif; margin-top: 30px;">                        
                         <tr>
                             <td colspan="2" align="center">
-                                <!--<img src="img/aircall.png" height="70px" width="220px"/>-->
-                                <h2 style="
-                                    font-weight:bold;
-                                    font-family:Helvetica;">
+                                
+                                <h2 style="                                    
+                                    font-family: sans-serif;
+                                    font-size: 25px;">
                                     Inicio de sesion</h2>
                                 <br></br>
                             </td>                            
@@ -43,7 +51,8 @@
                             <td>
                                 <p:inputText  id="Usuario" style="
                                               height: 25px;  
-                                              width:200px;"
+                                              width:200px;
+                                              border:0;"
                                               required="true" requiredMessage="Usuario Requerido" placeholder="Usuario" value="#{manejadorLogin.directorio.usuario}" />
                                 <br></br><br></br>
                             </td>
@@ -55,19 +64,25 @@
                             <td>
                                 <p:inputText id="Clave" type="password" style=" 
                                              height: 25px;  
-                                             width:200px;"
+                                             width:200px;
+                                             border:0;"
                                              requiredMessage="Contraseña Requerida" required="true" placeholder="Contraseña" value="#{manejadorLogin.directorio.contrasenia}"/>
                                 <br></br><br></br>
                             </td>
                         </tr>
                     </table>
                     <br></br>
-                    <p:commandButton value="Ingresar" style="opacity: 0.70" action ="#{manejadorLogin.autenticacion()}"/>
+                    <p:commandButton value="Ingresar"  action ="#{manejadorLogin.autenticacion()}" style="width:150px; height:40px; font-size:18px; "/>
                     <br></br><br></br><br></br><br></br>
                 </div>
 
             </h:form>
-
+            <img src="img/logueo2.png" width="80" height="80" alt="Imagen de logueo2" 
+                 style="
+                 position: absolute;
+                 top:15%;
+                 left:47%;
+                 "/>
         </center>
         <f:metadata>
             <f:viewAction action="#{manejadorLogin.login()}" />

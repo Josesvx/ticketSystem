@@ -162,7 +162,7 @@ CREATE TABLE public.solicitud(
 	id_prioridad integer,
 	id_directorio integer NOT NULL,
 	descripcion varchar(250) NOT NULL,
-	adjunto varchar(250),
+	adjunto bytea,
 	n_seguimiento varchar(25) NOT NULL,
 	feedback varchar(500),
 	correlativo varchar(10),
