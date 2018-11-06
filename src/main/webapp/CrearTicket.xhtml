@@ -19,9 +19,9 @@
             </style>
 
         </ui:define>
-        <ui:define name="body"  >
+        <ui:define name="body">
             <br></br><br></br><br></br>
-            <h:form>
+            <h:form >
                 <p:messages  id="mensaje" autoUpdate="true"  />
                 <center>
                     <div id="cabCreate" 
@@ -142,7 +142,7 @@
                             <tr>
                                 <td colspan="2" align="center">
                                     <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" 
-                                                     action="#{manejadorSolicitud.CrearSolicitud()}" update="mensaje"/>
+                                                     action="#{manejadorSolicitud.CrearSolicitud()}" ajax="formCreate" />
                                 </td>                                
                             </tr>                                                            
                         </table>

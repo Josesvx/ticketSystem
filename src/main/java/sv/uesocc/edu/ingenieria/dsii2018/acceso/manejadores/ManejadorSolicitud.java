@@ -25,6 +25,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.PrioridadFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
@@ -67,6 +68,8 @@ public class ManejadorSolicitud implements Serializable {
     private PrioridadFacadeLocal pfl;
     @EJB
     private DirectorioFacadeLocal dfl;
+    @EJB
+    private EstadoSolicitudFacadeLocal esfd;
 
     @PostConstruct
     public void init() {
@@ -139,6 +142,14 @@ public class ManejadorSolicitud implements Serializable {
         }
     }
 
+    public EstadoSolicitud geteSol() {
+        return eSol;
+    }
+
+    public void seteSol(EstadoSolicitud eSol) {
+        this.eSol = eSol;
+    }
+    
     public int getIdCategoria() {
         return idCategoria;
     }
@@ -273,8 +284,11 @@ public class ManejadorSolicitud implements Serializable {
             if (adjuntoProv != null) {
                 this.solicitud.setAdjunto(adjuntoProv);
                 sfl.create(this.solicitud);
+                
+                
             } else {
                 sfl.create(this.solicitud);
+               
             }
 
         } catch (Exception e) {
