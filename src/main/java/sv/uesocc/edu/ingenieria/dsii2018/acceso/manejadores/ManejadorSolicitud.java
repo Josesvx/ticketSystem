@@ -52,12 +52,10 @@ public class ManejadorSolicitud implements Serializable {
     private Directorio directorio, Departamento;
     private CookieInstance oreo;
     private String nombre, seguimiento, nombreDep;
-    private int idCategoria, numero,id,id2, idPrioridad;
+    private int idCategoria, numero, id, id2, idPrioridad;
     private String imagenAdjunto;
-    private byte[] adjuntoProv;
-    private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
-            numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
-    private BarChartModel barModel;
+    //   private byte[] adjuntoProv = null;
+    FacesMessage message = new FacesMessage();
 
     @EJB
     private SolicitudFacadeLocal sfl;
@@ -92,35 +90,6 @@ public class ManejadorSolicitud implements Serializable {
             listaSol = new ArrayList<>();
         }
 
-        for (int i = 1; i <= 8; i++) {
-            switch (i) {
-                case 1:
-                    numeroSolicitudes1 = sfl.findByDepartamento(i);
-                    break;
-                case 2:
-                    numeroSolicitudes2 = sfl.findByDepartamento(i);
-                    break;
-                case 3:
-                    numeroSolicitudes3 = sfl.findByDepartamento(i);
-                    break;
-                case 4:
-                    numeroSolicitudes4 = sfl.findByDepartamento(i);
-                    break;
-                case 5:
-                    numeroSolicitudes5 = sfl.findByDepartamento(i);
-                    break;
-                case 6:
-                    numeroSolicitudes6 = sfl.findByDepartamento(i);
-                    break;
-                case 7:
-                    numeroSolicitudes7 = sfl.findByDepartamento(i);
-                    break;
-                case 8:
-                    numeroSolicitudes8 = sfl.findByDepartamento(i);
-                    break;
-            }
-        }
-
         solicitud = new Solicitud();
 
         categoria = new Categoria();
@@ -137,6 +106,7 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             nombre = "No Funciona";
         }
+
     }
 
     public int getIdCategoria() {
@@ -203,6 +173,13 @@ public class ManejadorSolicitud implements Serializable {
         this.solicitud = solicitud;
     }
 
+//    public byte[] getAdjuntoProv() {
+//        return adjuntoProv;
+//    }
+//
+//    public void setAdjuntoProv(byte[] adjuntoProv) {
+//        this.adjuntoProv = adjuntoProv;
+//    }
     public String CrearNumSeguimiento() {
         //nombre = cache.ObtenerNombreDepartamento().toUpperCase();
         nombre = "RECUERSOS HUMANOS";
@@ -246,11 +223,11 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public void subirImagen(FileUploadEvent event) {
-        FacesMessage message = new FacesMessage();
+
         try {
-            adjuntoProv = event.getFile().getContents();
+            this.solicitud.setAdjunto(event.getFile().getContents());
             message.setSeverity(FacesMessage.SEVERITY_INFO);
-            message.setSummary("Adjunto guardado con exito");
+            message.setSummary("Adjunto guardado con exito ");
         } catch (Exception e) {
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             message.setSummary("Se debe seleccionar un item  valido para adjuntar a su Solicitud");
@@ -270,13 +247,9 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setNSeguimiento(CrearNumSeguimiento());
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
-            if (adjuntoProv != null) {
-                this.solicitud.setAdjunto(adjuntoProv);
-                sfl.create(this.solicitud);
-            } else {
-                sfl.create(this.solicitud);
-            }
-
+            sfl.create(this.solicitud);
+            message.setSeverity(FacesMessage.SEVERITY_INFO);
+            message.setSummary("Tciker creado con exito");
         } catch (Exception e) {
         }
 
@@ -319,7 +292,7 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public void Actualizar(Solicitud solicitud) {
-        Prioridad p =  pfl.find(idPrioridad);
+        Prioridad p = pfl.find(idPrioridad);
         solicitudS.setIdPrioridad(p);
         sfl.edit(solicitudS);
     }

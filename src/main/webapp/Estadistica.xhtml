@@ -24,37 +24,57 @@
         <ui:define name="body"  >
 
             <p:tabView>
-                <p:tab title="por Departamento">
+                <p:tab title="por Departamento" >
                     <p:tabView>
                         <p:tab title="Grafico de Barras">
-                            <p:chart type="bar" model="#{manejadorEstadistica.barModel}" style="height:300px"/>
+                            <p:chart type="bar" model="#{manejadorEstadistica.barModel}" style="height:300px; background-color: black;"/>
                         </p:tab>
                         <p:tab title="Grafico de Lineas">
-                            <p:chart type="line" model="#{manejadorEstadistica.lineModel}" style="height:300px;"/> 
+                            <p:chart type="line" model="#{manejadorEstadistica.lineModel}" style="height:300px; background-color: black;"/> 
                         </p:tab>
                         <p:tab title="Grafico Circular">
-                            <p:chart type="pie" model="#{manejadorEstadistica.pieModel}" style="width:400px;height:300px" />
+                            <p:chart type="pie" model="#{manejadorEstadistica.pieModel}" style="width:400px;height:300px; background-color: black;" />
                         </p:tab>
                     </p:tabView>
                 </p:tab>
                 <p:tab title="Por Estado">
                     <p:tabView>
                         <p:tab title="Grafico de Barras">
-                            <p:chart type="bar" model="#{manejadorEstadistica.barModelEstado}" style="height:300px"/>
+                            <p:chart type="bar" model="#{manejadorEstadistica.barModelEstado}" style="height:300px; background-color: black;"/>
                         </p:tab>
                         <p:tab title="Grafico de Lineas">
-                            <p:chart type="line" model="#{manejadorEstadistica.lineModelestado}" style="height:300px;"/> 
+                            <p:chart type="line" model="#{manejadorEstadistica.lineModelestado}" style="height:300px; background-color: black;"/> 
                         </p:tab>
                         <p:tab title="Grafico Circular">
-                            <p:chart type="pie" model="#{manejadorEstadistica.pieModel}" style="width:400px;height:300px" />
+                            <p:chart type="pie" model="#{manejadorEstadistica.pieModelEstado}" style="width:400px;height:300px; background-color: black;" />
                         </p:tab>
                     </p:tabView>
                 </p:tab>
                 <p:tab title="Por Prioridad">
-                    <p:chart type="line" model="#{manejadorEstadistica.lineModel}" style="height:300px;"/> 
+                    <p:tabView>
+                        <p:tab title="Grafico de Barras">
+                            <p:chart type="bar" model="#{manejadorEstadistica.barModelPrioridad}" style="height:300px; background-color: black;"/>
+                        </p:tab>
+                        <p:tab title="Grafico de Lineas">
+                            <p:chart type="line" model="#{manejadorEstadistica.lineModelPrioridad}" style="height:300px; background-color: black;"/> 
+                        </p:tab>
+                        <p:tab title="Grafico Circular">
+                            <p:chart type="pie" model="#{manejadorEstadistica.pieModelPrioridad}" style="width:400px;height:300px; background-color: black;" />
+                        </p:tab>
+                    </p:tabView>
                 </p:tab>
                 <p:tab title="Por Categoria">
-                    <p:chart type="line" model="#{manejadorEstadistica.lineModel}" style="height:300px;"/> 
+                    <p:tabView>
+                        <p:tab title="Grafico de Barras">
+                            <p:chart type="bar" model="#{manejadorEstadistica.barModelCategoria}" style="height:300px; background-color: black;"/>
+                        </p:tab>
+                        <p:tab title="Grafico de Lineas">
+                            <p:chart type="line" model="#{manejadorEstadistica.lineModelCategoria}" style="height:300px; background-color: black;"/> 
+                        </p:tab>
+                        <p:tab title="Grafico Circular">
+                            <p:chart type="pie" model="#{manejadorEstadistica.pieModelCategoria}" style="width:400px;height:300px; background-color: black;" />
+                        </p:tab>
+                    </p:tabView>
                 </p:tab>
 
             </p:tabView>
