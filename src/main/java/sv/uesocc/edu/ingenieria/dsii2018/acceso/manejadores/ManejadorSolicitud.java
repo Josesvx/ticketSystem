@@ -59,8 +59,9 @@ public class ManejadorSolicitud implements Serializable {
     private int idCategoria, numero, id, id2, idPrioridad;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
-    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
-    private int idCategoria, numero, id, id2, idPrioridad;
+    private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4
+            ,numeroSolicitudes5, numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
+    private String  redirecccion = null, finale = null;
     FacesMessage message = new FacesMessage();
 
     @EJB
@@ -228,7 +229,7 @@ public class ManejadorSolicitud implements Serializable {
         } catch (Exception ex) {
             throw ex;
         }
-        return listaSol
+        return listaSol;
     }
 
     public int getIdCategoria() {
