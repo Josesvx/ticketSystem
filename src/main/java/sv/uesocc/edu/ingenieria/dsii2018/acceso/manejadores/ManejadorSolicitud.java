@@ -107,6 +107,8 @@ public class ManejadorSolicitud implements Serializable {
         categoria = new Categoria();
 
         directorio = new Directorio();
+        
+        estadoSolicitud = new EstadoSolicitud();
 
         oreo = new CookieInstance();
 
@@ -341,8 +343,6 @@ public class ManejadorSolicitud implements Serializable {
                 sfl.create(this.solicitud);
 
             }
-
-            sfl.create(this.solicitud);
             finale = CrearEstadoS();
         } catch (Exception e) {
         }
