@@ -9,8 +9,24 @@
         
         <ui:define name="titulo"></ui:define>
         <ui:define name="body">
-
-        <h1 style="color: white; background: blue; font-size: 75px;">SITIO EN CONSTRUCCION...</h1>
+                <center>
+                <p:dataTable id="solicitudes" var="solicitud" value="#{manejadorSolicitud.llenarPorDirectorio()}" 
+                             style="
+                             width: 70%;">
+                    <f:facet name="header" >
+                        Mantenimientos Solicitados
+                    </f:facet>
+                    <p:column headerText="Id Solicitud">
+                        <h:outputText value="#{solicitud.idSolicitud}" />
+                    </p:column>
+                    <p:column headerText="Titulo">
+                        <h:outputText value="#{solicitud.titulo}" />
+                    </p:column>
+                    <p:column headerText="Departamento">
+                        <h:outputText value="#{solicitud.idDirectorio.idDepartamento.nombre}" />
+                    </p:column>
+                </p:dataTable>
+            </center>
         <f:metadata>
             <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
         </f:metadata>

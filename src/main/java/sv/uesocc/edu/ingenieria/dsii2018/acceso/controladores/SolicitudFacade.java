@@ -39,7 +39,7 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public Solicitud findByEstado() {
-       return null;
+        return null;
     }
 
     @Override
@@ -54,7 +54,15 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public List<Solicitud> findByDirectory(int idDirectorio) {
-        return null;
+        List<Solicitud> listaSol = null;
+        try {
+            Query consulta = em.createNamedQuery("Solicitud.findByIdDirectorio");
+            consulta.setParameter("idDirectorio", idDirectorio);
+            listaSol = consulta.getResultList();
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return listaSol;
     }
 
     @Override
@@ -70,11 +78,11 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
     @Override
     public List<Solicitud> findByEstado(int idEstado) {
         List<Solicitud> listaS = null;
-        try{
+        try {
             Query consulta = em.createNamedQuery("Solicitud.findByEstado");
             consulta.setParameter("idEstado", idEstado);
-            listaS= consulta.getResultList();
-        }catch(Exception ex){
+            listaS = consulta.getResultList();
+        } catch (Exception ex) {
             throw ex;
         }
         return listaS;
@@ -82,12 +90,12 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public List<Solicitud> findByPrioridad(int idPrioridad) {
-        List<Solicitud> lista= null;
-        try{
-            Query consulta= em.createNamedQuery("Solicitud.findByIdPrioridad");
+        List<Solicitud> lista = null;
+        try {
+            Query consulta = em.createNamedQuery("Solicitud.findByIdPrioridad");
             consulta.setParameter("idPrioridad", idPrioridad);
-            lista= consulta.getResultList();
-        }catch(Exception ex){
+            lista = consulta.getResultList();
+        } catch (Exception ex) {
             throw ex;
         }
         return lista;
@@ -96,11 +104,11 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
     @Override
     public int findByDepartamento(int idDepartamento) {
         int numero = 0;
-        try{
+        try {
             Query consulta = em.createNamedQuery("Solicitud.findByIdDepartamento");
             consulta.setParameter("idDepartamento", idDepartamento);
-            numero= Integer.parseInt(String.valueOf(consulta.getSingleResult()));
-        }catch(Exception ex){
+            numero = Integer.parseInt(String.valueOf(consulta.getSingleResult()));
+        } catch (Exception ex) {
             throw ex;
         }
         return numero;
@@ -108,12 +116,12 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public List<Solicitud> findByCategoria(int idCategoria) {
-        List<Solicitud> lista= null;
-        try{
-            Query consulta= em.createNamedQuery("Solicitud.findByIdPrioridad");
-            consulta.setParameter("idPrioridad", idCategoria);
-            lista= consulta.getResultList();
-        }catch(Exception ex){
+        List<Solicitud> lista = null;
+        try {
+            Query consulta = em.createNamedQuery("Solicitud.findByIdCategoria");
+            consulta.setParameter("idCategoria", idCategoria);
+            lista = consulta.getResultList();
+        } catch (Exception ex) {
             throw ex;
         }
         return lista;
