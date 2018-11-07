@@ -25,6 +25,8 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.PrioridadFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
@@ -47,6 +49,7 @@ public class ManejadorSolicitud implements Serializable {
     private List<Prioridad> listaP;
     private Solicitud solicitud;
     private Solicitud solicitudS;
+    private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
     private Categoria categoria;
     private Directorio directorio, Departamento;
@@ -65,6 +68,10 @@ public class ManejadorSolicitud implements Serializable {
     private PrioridadFacadeLocal pfl;
     @EJB
     private DirectorioFacadeLocal dfl;
+     @EJB
+    private EstadoSolicitudFacadeLocal esfl;
+     @EJB
+    private EstadoFacadeLocal efl;
 
     @PostConstruct
     public void init() {
@@ -94,6 +101,8 @@ public class ManejadorSolicitud implements Serializable {
 
         categoria = new Categoria();
 
+        estadoSolicitud = new EstadoSolicitud();
+        
         directorio = new Directorio();
 
         oreo = new CookieInstance();
@@ -248,8 +257,9 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
             sfl.create(this.solicitud);
-            message.setSeverity(FacesMessage.SEVERITY_INFO);
-            message.setSummary("Tciker creado con exito");
+//            message.setSeverity(FacesMessage.SEVERITY_INFO);
+//            message.setSummary("Tciker creado con exito");
+            CrearEstadoS();
         } catch (Exception e) {
         }
 
@@ -262,9 +272,23 @@ public class ManejadorSolicitud implements Serializable {
     public void setImagenAdjunto(String imagenAdjunto) {
         this.imagenAdjunto = imagenAdjunto;
     }
-
-    public void CrearEstadoS(Solicitud solicitud) {
-
+    public void CrearEstadoS() {
+        try {
+            this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
+            this.estadoSolicitud.setFecha(new Date());
+            this.estadoSolicitud.setIdEstado(efl.find(1));
+            this.estadoSolicitud.setIdSolicitud(this.solicitud);
+            this.estadoSolicitud.setJustificacion("Creada");
+            id = oreo.UsuarioId();
+            this.directorio = dfl.find(id);
+            this.estadoSolicitud.setAudNombreCreacion(this.directorio.getUsuario());
+            this.estadoSolicitud.setAudFechaCreacion(new Date());
+            this.estadoSolicitud.setAudStatus(true);
+            esfl.create(this.estadoSolicitud);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Registro con exito"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error al crear el registro"));
+        }
     }
 
     public Solicitud ObtenerSolicitud(String codigo) {
