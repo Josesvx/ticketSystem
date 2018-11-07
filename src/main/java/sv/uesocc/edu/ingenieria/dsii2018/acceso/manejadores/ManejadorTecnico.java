@@ -7,6 +7,7 @@ import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
@@ -18,22 +19,32 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 @ViewScoped
 public class ManejadorTecnico extends ManejadorSolicitud implements Serializable {
 
-
     List<Directorio> listaTec, listaTecnicos;
-  
+    private CookieInstance oreo;
+    private Directorio dir;
     @EJB
     private DirectorioFacadeLocal dfl;
-    
+
     @PostConstruct
     @Override
     public void init() {
+        oreo = new CookieInstance();
         ObtenerTecnicos();
+
     }
-    
+
     public List<Directorio> ObtenerTecnicos() {
-        listaTec = dfl.findByTecFree(solicitudS.getIdDirectorio().getIdDepartamento().getIdDepartamento());
-        return listaTec;
-       
+
+        dir = dfl.find(oreo.UsuarioId());
+        if (dir.getIdDepartamento().getIdDepartamento() == 4) {
+            listaTec = dfl.findByTecFree(4);
+            return listaTec;
+        } else {
+            listaTec = dfl.findByTecFree(7);
+            return listaTec;
+
+        }
+
     }
 
     public List<Directorio> getListaTec() {
@@ -52,10 +63,4 @@ public class ManejadorTecnico extends ManejadorSolicitud implements Serializable
         this.listaTecnicos = listaTecnicos;
     }
 
- 
-
-    
-    
-    
-    
 }
