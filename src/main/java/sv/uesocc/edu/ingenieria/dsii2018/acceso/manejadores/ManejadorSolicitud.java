@@ -17,10 +17,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.PrioridadFacadeLocal;
@@ -115,7 +111,19 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             nombre = "No Funciona";
         }
+        
+        llenarPorDirectorio();
 
+    }
+    
+    public List<Solicitud> llenarPorDirectorio(){
+        List<Solicitud> listaSol= new ArrayList<>();
+        try{
+            listaSol=sfl.findByDirectory(oreo.UsuarioId());
+        }catch(Exception ex){
+            throw ex;
+        }
+        return listaSol;
     }
 
     public int getIdCategoria() {
