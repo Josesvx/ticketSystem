@@ -26,27 +26,35 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 @ManagedBean
 @Named
 @ViewScoped
-public class ManejadorEstadistica implements Serializable{
+public class ManejadorEstadistica implements Serializable {
 
     private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
             numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
-    private int numeroPorEstado, numeroPorEstado1, numeroPorEstado2, numeroPorEstado3, numeroPorEstado4
-            ,numeroPorEstado5;
+    private int numeroPorEstado, numeroPorEstado1, numeroPorEstado2, numeroPorEstado3, numeroPorEstado4, numeroPorEstado5;
+    private int numeroPorPrioridad, numeroPorPrioridad1, numeroPorPrioridad2, numeroPorPrioridad3;
+    private int numeroPorCat, numeroPorCat1, numeroPorCat2, numeroPorCat3;
     private List<Solicitud> listaSol;
     private BarChartModel barModel;
     private BarChartModel barModelEstado;
+    private BarChartModel barModelPrioridad;
+    private BarChartModel barModelCategoria;
     private LineChartModel lineModel;
     private LineChartModel lineModelEstado;
+    private LineChartModel lineModelPrioridad;
+    private LineChartModel lineModelCategoria;
     private PieChartModel pieModel;
     private PieChartModel pieModelEstado;
+    private PieChartModel pieModelPrioridad;
+    private PieChartModel pieModelCategoria;
 
     @EJB
     private SolicitudFacadeLocal sfl;
 
     @PostConstruct
     public void init() {
-        
+
         llenarLista();
+
         for (int i = 1; i <= 8; i++) {
             switch (i) {
                 case 1:
@@ -75,36 +83,88 @@ public class ManejadorEstadistica implements Serializable{
                     break;
             }
         }
-        
-        for(int i=1; i<=5; i++){
-            switch(i){
+
+        for (int i = 1; i <= 5; i++) {
+            switch (i) {
                 case 1:
-                    numeroPorEstado1= llenarPorEstado(i);
+                    numeroPorEstado1 = llenarPorEstado(i);
                     break;
                 case 2:
-                    numeroPorEstado2= llenarPorEstado(i);
+                    numeroPorEstado2 = llenarPorEstado(i);
                     break;
                 case 3:
-                    numeroPorEstado3= llenarPorEstado(i);
+                    numeroPorEstado3 = llenarPorEstado(i);
                     break;
                 case 4:
-                    numeroPorEstado4= llenarPorEstado(i);
+                    numeroPorEstado4 = llenarPorEstado(i);
                     break;
                 case 5:
-                    numeroPorEstado5= llenarPorEstado(i);
+                    numeroPorEstado5 = llenarPorEstado(i);
+                    break;
+            }
+        }
+
+        for (int i = 1; i <= 3; i++) {
+            switch (i) {
+                case 1:
+                    numeroPorPrioridad1 = llenarPorPrioridad(i);
+                    break;
+                case 2:
+                    numeroPorPrioridad2 = llenarPorPrioridad(i);
+                    break;
+                case 3:
+                    numeroPorPrioridad3 = llenarPorPrioridad(i);
                     break;
             }
         }
         
+        for (int i = 1; i <= 3; i++) {
+            switch (i) {
+                case 1:
+                    numeroPorCat1 = llenarPorCategoria(i);
+                    break;
+                case 2:
+                    numeroPorCat2 = llenarPorCategoria(i);
+                    break;
+                case 3:
+                    numeroPorCat3 = llenarPorCategoria(i);
+                    break;
+            }
+        }
+
+        llenarDepartamento();
+        llenarEstado();
+        llenarPrioridad();
+        llenarCategoria();
+
+    }
+
+    public void llenarDepartamento() {
         createBarModel();
         initBarModel();
         createLineModel();
         createPieModel();
-        initBarModelestado();
+    }
+
+    public void llenarEstado() {
         createBarModelestado();
+        initBarModelestado();
         createLineModelEstado();
         createPieModelEstado();
+    }
 
+    public void llenarPrioridad() {
+        createBarModelPrioridad();
+        initBarModelPrioridad();
+        createLineModelPrioridad();
+        createPieModelPrioridad();
+    }
+    
+    public void llenarCategoria(){
+        createBarModelCategoria();
+        initBarModelCategoria();
+        createLineModelCategoria();
+        createPieModelCategoria();
     }
 
     public List<Solicitud> MostrarEstadistica(int tipo, Object[] arrayParam) {
@@ -120,45 +180,93 @@ public class ManejadorEstadistica implements Serializable{
         }
         return listaSol;
     }
-    
-    public int llenarPorEstado(int id){
+
+    public int llenarPorEstado(int id) {
         List<Solicitud> lista = sfl.findByEstado(id);
-        if(lista != null || !lista.isEmpty()){
-            numeroPorEstado=lista.size();
-        }else{
-            numeroPorEstado=0;
+        if (lista != null || !lista.isEmpty()) {
+            numeroPorEstado = lista.size();
+        } else {
+            numeroPorEstado = 0;
         }
         return numeroPorEstado;
     }
+
+    public int llenarPorPrioridad(int id) {
+        List<Solicitud> lista = sfl.findByPrioridad(id);
+        if (lista != null || !lista.isEmpty()) {
+            numeroPorPrioridad = lista.size();
+        } else {
+            numeroPorPrioridad = 0;
+        }
+        return numeroPorPrioridad;
+    }
     
+    public int llenarPorCategoria(int id) {
+        List<Solicitud> lista=sfl.findByCategoria(id);
+        if(lista != null || !lista.isEmpty()) {
+            numeroPorCat= lista.size();
+        }else{
+            numeroPorCat=0;
+        }
+        return numeroPorCat;
+    }
+
     private void createBarModel() {
         barModel = initBarModel();
-        barModel.setTitle("Solicitudes Por Departamento");
+        barModel.setTitle("Solicitudes por Departamento");
         barModel.setLegendPosition("ne");
-         
+
         Axis xAxis = barModel.getAxis(AxisType.X);
         xAxis.setLabel("Departamento");
-         
+
         Axis yAxis = barModel.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
         yAxis.setMax(15);
     }
-    
+
     private void createBarModelestado() {
         barModelEstado = initBarModelestado();
         barModelEstado.setTitle("Solicitudes Por Estado");
         barModelEstado.setLegendPosition("ne");
-         
+
         Axis xAxis = barModelEstado.getAxis(AxisType.X);
         xAxis.setLabel("Estado");
-         
+
         Axis yAxis = barModelEstado.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
         yAxis.setMax(15);
     }
+
+    private void createBarModelPrioridad() {
+        barModelPrioridad = initBarModelPrioridad();
+        barModelPrioridad.setTitle("Solicitudes Por Prioridad");
+        barModelPrioridad.setLegendPosition("ne");
+
+        Axis xAxis = barModelPrioridad.getAxis(AxisType.X);
+        xAxis.setLabel("Prioridad");
+
+        Axis yAxis = barModelPrioridad.getAxis(AxisType.Y);
+        yAxis.setLabel("Numero Solicitudes");
+        yAxis.setMin(0);
+        yAxis.setMax(15);
+    }
     
+    private void createBarModelCategoria() {
+        barModelCategoria = initBarModelCategoria();
+        barModelCategoria.setTitle("Solicitudes Por Categoria");
+        barModelCategoria.setLegendPosition("ne");
+
+        Axis xAxis = barModelCategoria.getAxis(AxisType.X);
+        xAxis.setLabel("Categoria");
+
+        Axis yAxis = barModelCategoria.getAxis(AxisType.Y);
+        yAxis.setLabel("Numero Solicitudes");
+        yAxis.setMin(0);
+        yAxis.setMax(15);
+    }
+
     private void createLineModel() {
         lineModel = initLineModel();
         lineModel.setTitle("Solicitudes por Departamento");
@@ -170,7 +278,7 @@ public class ManejadorEstadistica implements Serializable{
         yAxis.setMin(0);
         yAxis.setMax(10);
     }
-    
+
     private void createLineModelEstado() {
         lineModelEstado = initLineModelEstado();
         lineModelEstado.setTitle("Solicitudes por Estado");
@@ -182,10 +290,34 @@ public class ManejadorEstadistica implements Serializable{
         yAxis.setMin(0);
         yAxis.setMax(10);
     }
+
+    private void createLineModelPrioridad() {
+        lineModelPrioridad = initLineModelPrioridad();
+        lineModelPrioridad.setTitle("Solicitudes por Prioridad");
+        lineModelPrioridad.setLegendPosition("e");
+        lineModelPrioridad.setShowPointLabels(true);
+        lineModelPrioridad.getAxes().put(AxisType.X, new CategoryAxis("Prioridades"));
+        Axis yAxis = lineModelPrioridad.getAxis(AxisType.Y);
+        yAxis.setLabel("Numero de Solicitudes");
+        yAxis.setMin(0);
+        yAxis.setMax(10);
+    }
     
+    private void createLineModelCategoria() {
+        lineModelCategoria = initLineModelCategoria();
+        lineModelCategoria.setTitle("Solicitudes por Categoria");
+        lineModelCategoria.setLegendPosition("e");
+        lineModelCategoria.setShowPointLabels(true);
+        lineModelCategoria.getAxes().put(AxisType.X, new CategoryAxis("Categorias"));
+        Axis yAxis = lineModelCategoria.getAxis(AxisType.Y);
+        yAxis.setLabel("Numero de Solicitudes");
+        yAxis.setMin(0);
+        yAxis.setMax(10);
+    }
+
     private void createPieModel() {
         pieModel = new PieChartModel();
-         
+
         pieModel.set("Reclutamiento", numeroSolicitudes1);
         pieModel.set("Contabilidad", numeroSolicitudes2);
         pieModel.set("HR", numeroSolicitudes3);
@@ -194,30 +326,55 @@ public class ManejadorEstadistica implements Serializable{
         pieModel.set("Seguridad", numeroSolicitudes6);
         pieModel.set("Teleoperadores", numeroSolicitudes7);
         pieModel.set("Gerencia", numeroSolicitudes8);
-         
+
         pieModel.setTitle("Solicitudes por Departamento");
         pieModel.setLegendPosition("w");
         pieModel.setShadow(false);
     }
-    
+
     private void createPieModelEstado() {
         pieModelEstado = new PieChartModel();
-         
+
         pieModelEstado.set("Creado", numeroPorEstado1);
         pieModelEstado.set("Asignado", numeroPorEstado2);
         pieModelEstado.set("Pausado", numeroPorEstado3);
         pieModelEstado.set("Cerrado", numeroPorEstado4);
         pieModelEstado.set("Reabierto", numeroPorEstado5);
-         
-        pieModelEstado.setTitle("Solicitudes por Departamento");
+
+        pieModelEstado.setTitle("Solicitudes por Estado");
         pieModelEstado.setLegendPosition("w");
         pieModelEstado.setShadow(false);
     }
+
+    private void createPieModelPrioridad() {
+        pieModelPrioridad = new PieChartModel();
+
+        pieModelPrioridad.set("Baja", numeroPorPrioridad1);
+        pieModelPrioridad.set("Media", numeroPorPrioridad2);
+        pieModelPrioridad.set("Alta", numeroPorPrioridad3);
+
+        pieModelPrioridad.setTitle("Solicitudes por Prioridad");
+        pieModelPrioridad.setLegendPosition("w");
+        pieModelPrioridad.setShadow(false);
+    }
+    
+    private void createPieModelCategoria() {
+        pieModelCategoria = new PieChartModel();
+
+        pieModelCategoria.set("Infraestructura", numeroPorCat1);
+        pieModelCategoria.set("Hardware", numeroPorCat2);
+        pieModelCategoria.set("Software", numeroPorCat3);
+
+        pieModelCategoria.setTitle("Solicitudes por Categoria");
+        pieModelCategoria.setLegendPosition("w");
+        pieModelCategoria.setShadow(false);
+    }
+
     private BarChartModel initBarModel() {
         BarChartModel model = new BarChartModel();
- 
+
         ChartSeries solicitudes = new ChartSeries();
-        solicitudes.setLabel("Solicitudes");
+        solicitudes.setLabel("Departamento");
         solicitudes.set("Reclutamiento", numeroSolicitudes1);
         solicitudes.set("Contabilidad", numeroSolicitudes2);
         solicitudes.set("HR", numeroSolicitudes3);
@@ -226,14 +383,14 @@ public class ManejadorEstadistica implements Serializable{
         solicitudes.set("Seguridad", numeroSolicitudes6);
         solicitudes.set("Teleoperadores", numeroSolicitudes7);
         solicitudes.set("Gerencia", numeroSolicitudes8);
- 
+
         model.addSeries(solicitudes);
         return model;
     }
-    
+
     private BarChartModel initBarModelestado() {
         BarChartModel model = new BarChartModel();
- 
+
         ChartSeries solicitudes = new ChartSeries();
         solicitudes.setLabel("Estado");
         solicitudes.set("Creado", numeroPorEstado1);
@@ -241,16 +398,43 @@ public class ManejadorEstadistica implements Serializable{
         solicitudes.set("Pausado", numeroPorEstado3);
         solicitudes.set("Cerrado", numeroPorEstado4);
         solicitudes.set("Reabierto", numeroPorEstado5);
- 
+
+        model.addSeries(solicitudes);
+        return model;
+    }
+
+    private BarChartModel initBarModelPrioridad() {
+        BarChartModel model = new BarChartModel();
+
+        ChartSeries solicitudes = new ChartSeries();
+        solicitudes.setLabel("Prioridad");
+        solicitudes.set("Baja", numeroPorPrioridad1);
+        solicitudes.set("Media", numeroPorPrioridad2);
+        solicitudes.set("Alta", numeroPorPrioridad3);
+
         model.addSeries(solicitudes);
         return model;
     }
     
+    private BarChartModel initBarModelCategoria() {
+        BarChartModel model = new BarChartModel();
+
+        ChartSeries solicitudes = new ChartSeries();
+        solicitudes.setLabel("Categoria");
+        solicitudes.set("Infraestructura", numeroPorCat1);
+        solicitudes.set("Hardware", numeroPorCat2);
+        solicitudes.set("Software", numeroPorCat3);
+
+        model.addSeries(solicitudes);
+        return model;
+    }
+
+
     private LineChartModel initLineModel() {
         LineChartModel model = new LineChartModel();
- 
+
         ChartSeries series1 = new LineChartSeries();
-        series1.setLabel("Solicitudes");
+        series1.setLabel("Departamentos");
         series1.set("Reclutamiento", numeroSolicitudes1);
         series1.set("Contabilidad", numeroSolicitudes2);
         series1.set("HR", numeroSolicitudes3);
@@ -259,42 +443,84 @@ public class ManejadorEstadistica implements Serializable{
         series1.set("Seguridad", numeroSolicitudes6);
         series1.set("Teleoperadores", numeroSolicitudes7);
         series1.set("Gerencia", numeroSolicitudes8);
- 
+
         model.addSeries(series1);
         return model;
     }
-    
+
     private LineChartModel initLineModelEstado() {
         LineChartModel model = new LineChartModel();
- 
+
         ChartSeries series1 = new LineChartSeries();
-        series1.setLabel("Solicitudes");
+        series1.setLabel("Estados");
         series1.set("Creado", numeroPorEstado1);
         series1.set("Asignado", numeroPorEstado2);
         series1.set("Pausado", numeroPorEstado3);
         series1.set("Cerrado", numeroPorEstado4);
         series1.set("Reabierto", numeroPorEstado5);
- 
+
+        model.addSeries(series1);
+        return model;
+    }
+
+    private LineChartModel initLineModelPrioridad() {
+        LineChartModel model = new LineChartModel();
+
+        ChartSeries series1 = new LineChartSeries();
+        series1.setLabel("Prioridades");
+        series1.set("Baja", numeroPorPrioridad1);
+        series1.set("Media", numeroPorPrioridad2);
+        series1.set("Alta", numeroPorPrioridad3);
+
         model.addSeries(series1);
         return model;
     }
     
+    private LineChartModel initLineModelCategoria() {
+        LineChartModel model = new LineChartModel();
+
+        ChartSeries series1 = new LineChartSeries();
+        series1.setLabel("Categorias");
+        series1.set("Infraestructura", numeroPorCat1);
+        series1.set("Hardware", numeroPorCat2);
+        series1.set("Software", numeroPorCat3);
+
+        model.addSeries(series1);
+        return model;
+    }
+
     public BarChartModel getBarModel() {
         return barModel;
     }
-    
-    public BarChartModel getBarModelEstado(){
+
+    public BarChartModel getBarModelEstado() {
         return barModelEstado;
     }
+
+    public BarChartModel getBarModelPrioridad() {
+        return barModelPrioridad;
+    }
     
+    public BarChartModel getBarModelCategoria() {
+        return barModelCategoria;
+    }
+
     public LineChartModel getLineModel() {
         return lineModel;
     }
-    
+
     public LineChartModel getLineModelestado() {
         return lineModelEstado;
     }
 
+    public LineChartModel getLineModelPrioridad() {
+        return lineModelPrioridad;
+    }
+
+    public LineChartModel getLineModelCategoria() {
+        return lineModelCategoria;
+    }
+    
     public PieChartModel getPieModel() {
         return pieModel;
     }
@@ -302,10 +528,13 @@ public class ManejadorEstadistica implements Serializable{
     public PieChartModel getPieModelEstado() {
         return pieModelEstado;
     }
+
+    public PieChartModel getPieModelPrioridad() {
+        return pieModelPrioridad;
+    }
     
-    
-    
-    
-    
+    public PieChartModel getPieModelCategoria() {
+        return pieModelCategoria;
+    }
 
 }

@@ -80,53 +80,5 @@
             </f:metadata>
         </ui:define>
     </ui:composition>
-
-    <!--<h:head>
-        <title>Asignación</title>
-    </h:head>
-    <h:body>
-        <h:form id="frmAsignar">
-            <center>
-                <p:dataTable id="solicitudes" var="solicitud" value="#{manejadorSolicitud.listaSol}" 
-                             rowKey="#{solicitud.idSolicitud}" selection="#{manejadorSolicitud.solicitudS}"
-                             selectionMode="single"
-                             style="
-                             width: 70%;">
-                    <f:facet name="header" >
-                        Mantenimientos Solicitados
-                    </f:facet>
-                    <p:column headerText="Codigo">
-                        <h:outputText value="#{solicitud.NSeguimiento}" />
-                    </p:column>
-                    <p:column headerText="Titulo">
-                        <h:outputText value="#{solicitud.titulo}" />
-                    </p:column>
-                    <p:column headerText="Departamento">
-                        <h:outputText value="#{solicitud.idDirectorio.idDepartamento.nombre}" />
-                    </p:column>
-                </p:dataTable>
-
-                <p:contextMenu for="solicitudes">
-                    <p:menuitem value="Asignar Prioridad"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo').show()"/>
-                </p:contextMenu>
-
-                <p:dialog header="Asignaciones" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                <p:outputPanel id="asignar" style="text-align:center;">
-                    <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
-                        
-                        <h:outputText value="Asignar Prioriodad: " />
-                        <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.solicitudS.idPrioridad}">
-                            <f:selectItems value="#{manejadorSolicitud.listaP}" var="valor" itemValue="#{valor.idPrioridad}" itemLabel="#{valor.nombre}">
-                        </f:selectItems>
-                        </p:selectOneMenu>
-                    </p:panelGrid>
-                </p:outputPanel>
-                </p:dialog>
-            </center>
-        </h:form>
-        <f:metadata>
-            <f:viewAction action="#{manejadorLogin.loginJefe()}" />
-        </f:metadata>
-    </h:body>-->
 </html>
 

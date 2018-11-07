@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,20 +19,18 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.PrioridadFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Estado;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Prioridad;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
@@ -47,8 +46,11 @@ public class ManejadorSolicitud implements Serializable {
     private List<Categoria> listaCat;
     private List<Solicitud> listaSol, listaIT, listaGen;
     private List<Prioridad> listaP;
+    private List<Estado> listaEs;
+    private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
     protected Solicitud solicitudS;
+    private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
     private Categoria categoria;
     private Directorio directorio, Departamento;
@@ -57,9 +59,9 @@ public class ManejadorSolicitud implements Serializable {
     private int idCategoria, numero, id, id2, idPrioridad;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
-    private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
-            numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
-    private BarChartModel barModel;
+    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
+    private int idCategoria, numero, id, id2, idPrioridad;
+    FacesMessage message = new FacesMessage();
 
     @EJB
     private SolicitudFacadeLocal sfl;
@@ -70,7 +72,9 @@ public class ManejadorSolicitud implements Serializable {
     @EJB
     private DirectorioFacadeLocal dfl;
     @EJB
-    private EstadoSolicitudFacadeLocal esfd;
+    private EstadoSolicitudFacadeLocal esfl;
+    @EJB
+    private EstadoFacadeLocal efl;
 
     @PostConstruct
     public void init() {
@@ -149,7 +153,6 @@ public class ManejadorSolicitud implements Serializable {
             listaP = new ArrayList<>();
         }
     }
-
     public void llenarDeps() {
         for (int i = 1; i <= 8; i++) {
             switch (i) {
@@ -187,6 +190,45 @@ public class ManejadorSolicitud implements Serializable {
 
     public void seteSol(EstadoSolicitud eSol) {
         this.eSol = eSol;
+      
+        List<Solicitud> listaS = sfl.findByEstado(1);
+        if (listaS != null && !listaS.isEmpty()) {
+            listaSol = listaS;
+        } else {
+            listaSol = new ArrayList<>();
+        }
+
+        solicitud = new Solicitud();
+
+        categoria = new Categoria();
+
+        estadoSolicitud = new EstadoSolicitud();
+
+        directorio = new Directorio();
+
+        oreo = new CookieInstance();
+
+        id2 = oreo.UsuarioId();
+        Departamento = dfl.find(id2);
+        nombreDep = Departamento.getIdDepartamento().getNombre();
+        if (nombreDep != null && !nombreDep.isEmpty()) {
+            nombre = nombreDep;
+        } else {
+            nombre = "No Funciona";
+        }
+
+        llenarPorDirectorio();
+
+    }
+
+    public List<Solicitud> llenarPorDirectorio() {
+        List<Solicitud> listaSol = new ArrayList<>();
+        try {
+            listaSol = sfl.findByDirectory(oreo.UsuarioId());
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return listaSol
     }
 
     public int getIdCategoria() {
@@ -254,61 +296,31 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public String CrearNumSeguimiento() {
-        //nombre = cache.ObtenerNombreDepartamento().toUpperCase();
-        nombre = "RECUERSOS HUMANOS";
-
         numero = (int) (Math.random() * 1000000) + 1;
-        seguimiento = nombre.charAt(1) + nombre.charAt(2) + String.valueOf(numero);
+        seguimiento = "T"+"S"+String.valueOf(numero);
 
         return seguimiento;
     }
 
-    public static String guardarBlobEnFicheroTemporal(byte[] bytes, String nombreArchivo) {
-        String ubicacionArchivo = null;
-        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        String path = servletContext.getRealPath("")
-                + File.separatorChar + "src"
-                + File.separatorChar + "main"
-                + File.separatorChar + "resources"
-                + File.separatorChar + "img"
-                + File.separatorChar + "tmp"
-                + File.separatorChar + nombreArchivo;
-        File f = null;
-        InputStream in = null;
-
-        try {
-            f = new File(path);
-            in = new ByteArrayInputStream(bytes);
-            FileOutputStream out = new FileOutputStream(f.getAbsolutePath());
-
-            int c = 0;
-            while ((c = in.read()) >= 0) {
-                out.write(c);
-            }
-            out.flush();
-            out.close();
-            ubicacionArchivo = "src/main/resources/img/tmp" + nombreArchivo;
-
-        } catch (Exception e) {
-            System.err.println("No se pudo cargar la imagen");
-        }
-        return ubicacionArchivo;
-    }
-
     public void subirImagen(FileUploadEvent event) {
-        FacesMessage message = new FacesMessage();
-        try {
-            adjuntoProv = event.getFile().getContents();
-            message.setSeverity(FacesMessage.SEVERITY_INFO);
-            message.setSummary("Adjunto guardado con exito");
-        } catch (Exception e) {
-            message.setSeverity(FacesMessage.SEVERITY_ERROR);
-            message.setSummary("Se debe seleccionar un item  valido para adjuntar a su Solicitud");
+        String path = System.getProperty("user.home");
+        String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
+        if (event.getFile().getContents() != null && event.getFile().getContents().length > 0) {
+            try (FileOutputStream fl = new FileOutputStream(finalPath)) {
+                fl.write(event.getFile().getContents());
+                fl.close();
+                message.setSeverity(FacesMessage.SEVERITY_INFO);
+                message.setSummary("Adjunto guardado con exito ");
+            } catch (Exception e) {
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                message.setSummary("Se debe seleccionar un item  valido para adjuntar a su Solicitud");
+            }
+            FacesContext.getCurrentInstance().addMessage("Mensaje", message);
         }
-        FacesContext.getCurrentInstance().addMessage("Mensaje", message);
+
     }
 
-    public void CrearSolicitud() {
+    public String CrearSolicitud() {
         try {
             this.solicitud.setIdSolicitud(sfl.count() + 1);
             this.solicitud.setAudFechaCreacion(new Date());
@@ -329,21 +341,32 @@ public class ManejadorSolicitud implements Serializable {
 
             }
 
+            sfl.create(this.solicitud);
+            finale = CrearEstadoS();
         } catch (Exception e) {
         }
-
+        return finale;
     }
 
-    public String getImagenAdjunto() {
-        return imagenAdjunto;
-    }
-
-    public void setImagenAdjunto(String imagenAdjunto) {
-        this.imagenAdjunto = imagenAdjunto;
-    }
-
-    public void CrearEstadoS(Solicitud solicitud) {
-
+    public String CrearEstadoS() {
+        try {
+            this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
+            this.estadoSolicitud.setFecha(new Date());
+            this.estadoSolicitud.setIdEstado(efl.find(1));
+            this.estadoSolicitud.setIdSolicitud(this.solicitud);
+            this.estadoSolicitud.setJustificacion("Creada");
+            id = oreo.UsuarioId();
+            this.directorio = dfl.find(id);
+            this.estadoSolicitud.setAudNombreCreacion(this.directorio.getUsuario());
+            this.estadoSolicitud.setAudFechaCreacion(new Date());
+            this.estadoSolicitud.setAudStatus(true);
+            esfl.create(this.estadoSolicitud);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Registro con exito"));
+            redirecccion = "principal.jsf?faces-redirect=true";
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error al crear el registro"));
+        }
+        return redirecccion;
     }
 
     public Solicitud ObtenerSolicitud(String codigo) {
@@ -390,5 +413,29 @@ public class ManejadorSolicitud implements Serializable {
 
     public void setIdPrioridad(int idPrioridad) {
         this.idPrioridad = idPrioridad;
+    }
+    //METODO PARA BUSCAR TODOS LOS ESTADOS CAMBIADOS PARA LA SOLICITUD BUSCADA
+    public String DevolverEstado(Solicitud s) {
+        listaEs = new ArrayList<>();
+        listaEs =  efl.findLastEstado(s.getIdSolicitud());                                
+        if (listaEs.isEmpty() ) {
+            return "Sin Estado";
+        } else {
+            return listaEs.get(0).getNombre();
+        }
+
+    }
+    
+    //METODO PARA BUSCAR LAS FECHAS DE CREACION DE LAS SOLICITUDES EN LA TABLA ESTADO SOLICITUD
+    public String DevolverFechaCreacion(Solicitud s) {
+        listaESOl = new ArrayList<>();
+        listaESOl =  esfl.findByCreation(s.getIdSolicitud());
+        if (listaESOl.isEmpty() ) {
+            return "Sin fechaCreacion";
+        } else {
+            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
+            return formateador.format(listaESOl.get(0).getFecha());
+        }
+
     }
 }

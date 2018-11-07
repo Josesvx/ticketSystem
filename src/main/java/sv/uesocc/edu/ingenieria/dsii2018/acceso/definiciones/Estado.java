@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Estado.findByAudFechaCreacion", query = "SELECT e FROM Estado e WHERE e.audFechaCreacion = :audFechaCreacion")
     , @NamedQuery(name = "Estado.findByAudNombreModificacion", query = "SELECT e FROM Estado e WHERE e.audNombreModificacion = :audNombreModificacion")
     , @NamedQuery(name = "Estado.findByAudFechaModificacion", query = "SELECT e FROM Estado e WHERE e.audFechaModificacion = :audFechaModificacion")
+    , @NamedQuery(name = "Estado.findLastEstado", query = "SELECT E FROM  Estado AS E JOIN E.estadoSolicitudList AS ES WHERE ES.idSolicitud.idSolicitud = :idSolicitud  ORDER BY ES.idEstadoSolicitud DESC")    
     , @NamedQuery(name = "Estado.findByAudStatus", query = "SELECT e FROM Estado e WHERE e.audStatus = :audStatus")})
 public class Estado implements Serializable {
 
