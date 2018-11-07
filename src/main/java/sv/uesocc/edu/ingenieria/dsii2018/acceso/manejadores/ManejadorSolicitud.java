@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Estado;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Prioridad;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
@@ -43,6 +45,8 @@ public class ManejadorSolicitud implements Serializable {
     private List<Categoria> listaCat;
     private List<Solicitud> listaSol;
     private List<Prioridad> listaP;
+    private List<Estado> listaEs;
+    private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
     private Solicitud solicitudS;
     private EstadoSolicitud estadoSolicitud;
@@ -190,7 +194,7 @@ public class ManejadorSolicitud implements Serializable {
 
     public String CrearNumSeguimiento() {
         numero = (int) (Math.random() * 1000000) + 1;
-        seguimiento = nombre.charAt(1) + nombre.charAt(2) + String.valueOf(numero);
+        seguimiento = "T"+"S"+String.valueOf(numero);
 
         return seguimiento;
     }
@@ -297,5 +301,29 @@ public class ManejadorSolicitud implements Serializable {
 
     public void setIdPrioridad(int idPrioridad) {
         this.idPrioridad = idPrioridad;
+    }
+    //METODO PARA BUSCAR TODOS LOS ESTADOS CAMBIADOS PARA LA SOLICITUD BUSCADA
+    public String DevolverEstado(Solicitud s) {
+        listaEs = new ArrayList<>();
+        listaEs =  efl.findLastEstado(s.getIdSolicitud());                                
+        if (listaEs.isEmpty() ) {
+            return "Sin Estado";
+        } else {
+            return listaEs.get(0).getNombre();
+        }
+
+    }
+    
+    //METODO PARA BUSCAR LAS FECHAS DE CREACION DE LAS SOLICITUDES EN LA TABLA ESTADO SOLICITUD
+    public String DevolverFechaCreacion(Solicitud s) {
+        listaESOl = new ArrayList<>();
+        listaESOl =  esfl.findByCreation(s.getIdSolicitud());
+        if (listaESOl.isEmpty() ) {
+            return "Sin fechaCreacion";
+        } else {
+            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
+            return formateador.format(listaESOl.get(0).getFecha());
+        }
+
     }
 }
