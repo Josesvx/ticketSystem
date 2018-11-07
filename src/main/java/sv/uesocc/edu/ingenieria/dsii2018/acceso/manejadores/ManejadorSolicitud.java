@@ -1,10 +1,6 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +13,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 import org.primefaces.event.FileUploadEvent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
@@ -57,11 +52,8 @@ public class ManejadorSolicitud implements Serializable {
     private CookieInstance oreo;
     private String nombre, seguimiento, nombreDep;
     private int idCategoria, numero, id, id2, idPrioridad;
-    private String imagenAdjunto;
-    private byte[] adjuntoProv;
-    private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4
-            ,numeroSolicitudes5, numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
-    private String  redirecccion = null, finale = null;
+    private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
+    private String redirecccion = null, finale = null;
     FacesMessage message = new FacesMessage();
 
     @EJB
@@ -80,8 +72,8 @@ public class ManejadorSolicitud implements Serializable {
     @PostConstruct
     public void init() {
 
-        listaIT=new ArrayList<>();
-        listaGen=new ArrayList<>();
+        listaIT = new ArrayList<>();
+        listaGen = new ArrayList<>();
         llenarDeps();
         llenarPrioridad();
         llenarCategoria();
@@ -101,13 +93,12 @@ public class ManejadorSolicitud implements Serializable {
             }
         }
 
-
         solicitud = new Solicitud();
 
         categoria = new Categoria();
 
         directorio = new Directorio();
-        
+
         estadoSolicitud = new EstadoSolicitud();
 
         oreo = new CookieInstance();
@@ -120,12 +111,12 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             nombre = "No Funciona";
         }
-        
+
         llenarFiltro();
     }
 
     public List<Solicitud> llenarFiltro() {
-        Directorio dir= dfl.find(oreo.UsuarioId());
+        Directorio dir = dfl.find(oreo.UsuarioId());
         if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
             if (listaIT != null && !listaIT.isEmpty()) {
                 return listaIT;
@@ -156,6 +147,7 @@ public class ManejadorSolicitud implements Serializable {
             listaP = new ArrayList<>();
         }
     }
+
     public void llenarDeps() {
         for (int i = 1; i <= 8; i++) {
             switch (i) {
@@ -193,7 +185,7 @@ public class ManejadorSolicitud implements Serializable {
 
     public void seteSol(EstadoSolicitud eSol) {
         this.eSol = eSol;
-      
+
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
             listaSol = listaS;
@@ -300,7 +292,7 @@ public class ManejadorSolicitud implements Serializable {
 
     public String CrearNumSeguimiento() {
         numero = (int) (Math.random() * 1000000) + 1;
-        seguimiento = "T"+"S"+String.valueOf(numero);
+        seguimiento = "T" + "S" + String.valueOf(numero);
 
         return seguimiento;
     }
@@ -308,6 +300,7 @@ public class ManejadorSolicitud implements Serializable {
     public void subirImagen(FileUploadEvent event) {
         String path = System.getProperty("user.home");
         String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
+        this.solicitud.setAdjunto(finalPath);
         if (event.getFile().getContents() != null && event.getFile().getContents().length > 0) {
             try (FileOutputStream fl = new FileOutputStream(finalPath)) {
                 fl.write(event.getFile().getContents());
@@ -335,14 +328,7 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setNSeguimiento(CrearNumSeguimiento());
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
-            if (adjuntoProv != null) {
-                this.solicitud.setAdjunto(adjuntoProv);
-                sfl.create(this.solicitud);
-
-            } else {
-                sfl.create(this.solicitud);
-
-            }
+            sfl.create(this.solicitud);
             finale = CrearEstadoS();
         } catch (Exception e) {
         }
@@ -415,23 +401,24 @@ public class ManejadorSolicitud implements Serializable {
     public void setIdPrioridad(int idPrioridad) {
         this.idPrioridad = idPrioridad;
     }
+
     //METODO PARA BUSCAR TODOS LOS ESTADOS CAMBIADOS PARA LA SOLICITUD BUSCADA
     public String DevolverEstado(Solicitud s) {
         listaEs = new ArrayList<>();
-        listaEs =  efl.findLastEstado(s.getIdSolicitud());                                
-        if (listaEs.isEmpty() ) {
+        listaEs = efl.findLastEstado(s.getIdSolicitud());
+        if (listaEs.isEmpty()) {
             return "Sin Estado";
         } else {
             return listaEs.get(0).getNombre();
         }
 
     }
-    
+
     //METODO PARA BUSCAR LAS FECHAS DE CREACION DE LAS SOLICITUDES EN LA TABLA ESTADO SOLICITUD
     public String DevolverFechaCreacion(Solicitud s) {
         listaESOl = new ArrayList<>();
-        listaESOl =  esfl.findByCreation(s.getIdSolicitud());
-        if (listaESOl.isEmpty() ) {
+        listaESOl = esfl.findByCreation(s.getIdSolicitud());
+        if (listaESOl.isEmpty()) {
             return "Sin fechaCreacion";
         } else {
             SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
