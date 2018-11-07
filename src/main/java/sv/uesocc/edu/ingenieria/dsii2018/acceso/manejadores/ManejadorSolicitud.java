@@ -50,7 +50,7 @@ public class ManejadorSolicitud implements Serializable {
     private Categoria categoria;
     private Directorio directorio, Departamento;
     private CookieInstance oreo;
-    private String nombre, seguimiento, nombreDep;
+    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
     private int idCategoria, numero, id, id2, idPrioridad;
     FacesMessage message = new FacesMessage();
 
@@ -109,16 +109,16 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             nombre = "No Funciona";
         }
-        
+
         llenarPorDirectorio();
 
     }
-    
-    public List<Solicitud> llenarPorDirectorio(){
-        List<Solicitud> listaSol= new ArrayList<>();
-        try{
-            listaSol=sfl.findByDirectory(oreo.UsuarioId());
-        }catch(Exception ex){
+
+    public List<Solicitud> llenarPorDirectorio() {
+        List<Solicitud> listaSol = new ArrayList<>();
+        try {
+            listaSol = sfl.findByDirectory(oreo.UsuarioId());
+        } catch (Exception ex) {
             throw ex;
         }
         return listaSol;
@@ -189,46 +189,12 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public String CrearNumSeguimiento() {
-        //nombre = cache.ObtenerNombreDepartamento().toUpperCase();
-        nombre = "RECUERSOS HUMANOS";
-
         numero = (int) (Math.random() * 1000000) + 1;
         seguimiento = nombre.charAt(1) + nombre.charAt(2) + String.valueOf(numero);
 
         return seguimiento;
     }
 
-//    public static String guardarBlobEnFicheroTemporal(byte[] bytes, String nombreArchivo) {
-//        String ubicacionArchivo = null;
-//        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-//        String path = servletContext.getRealPath("")
-//                + File.separatorChar + "src"
-//                + File.separatorChar + "main"
-//                + File.separatorChar + "resources"
-//                + File.separatorChar + "img"
-//                + File.separatorChar + "tmp"
-//                + File.separatorChar + nombreArchivo;
-//        File f = null;
-//        InputStream in = null;
-//
-//        try {
-//            f = new File(path);
-//            in = new ByteArrayInputStream(bytes);
-//            FileOutputStream out = new FileOutputStream(f.getAbsolutePath());
-//
-//            int c = 0;
-//            while ((c = in.read()) >= 0) {
-//                out.write(c);
-//            }
-//            out.flush();
-//            out.close();
-//            ubicacionArchivo = "src/main/resources/img/tmp" + nombreArchivo;
-//
-//        } catch (Exception e) {
-//            System.err.println("No se pudo cargar la imagen");
-//        }
-//        return ubicacionArchivo;
-//    }
     public void subirImagen(FileUploadEvent event) {
         String path = System.getProperty("user.home");
         String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
@@ -247,7 +213,7 @@ public class ManejadorSolicitud implements Serializable {
 
     }
 
-    public void CrearSolicitud() {
+    public String CrearSolicitud() {
         try {
             this.solicitud.setIdSolicitud(sfl.count() + 1);
             this.solicitud.setAudFechaCreacion(new Date());
@@ -260,13 +226,13 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
             sfl.create(this.solicitud);
-            CrearEstadoS();
+            finale = CrearEstadoS();
         } catch (Exception e) {
         }
-
+        return finale;
     }
 
-    public void CrearEstadoS() {
+    public String CrearEstadoS() {
         try {
             this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
             this.estadoSolicitud.setFecha(new Date());
@@ -280,9 +246,11 @@ public class ManejadorSolicitud implements Serializable {
             this.estadoSolicitud.setAudStatus(true);
             esfl.create(this.estadoSolicitud);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Registro con exito"));
+            redirecccion = "principal.jsf?faces-redirect=true";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error al crear el registro"));
         }
+        return redirecccion;
     }
 
     public Solicitud ObtenerSolicitud(String codigo) {

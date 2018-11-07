@@ -139,8 +139,12 @@
                             </tr> 
                             <tr>
                                 <td colspan="2" align="center">
-                                    <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" 
-                                                     action="#{manejadorSolicitud.CrearSolicitud()}" update="mensaje,mensaje2"/>
+                                    <p:commandButton value="Ingresar Ticket" 
+                                                     id="ingresar" 
+                                                     icon="ui-icon-check" 
+                                                     action="#{manejadorSolicitud.CrearSolicitud()}" 
+                                                     update="mensaje,mensaje2"                                                     
+                                                     onclick="PF('dlg2').show();" />
                                 </td>                                
                             </tr>                                                            
                         </table>
@@ -150,6 +154,11 @@
                     <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
                 </f:metadata>
             </h:form>
+            <div style="font-size: 25px; font-family: sans-serif">
+                <p:dialog header="Numero de Seguimiento" resizable="false" position="center" widgetVar="dlg2" modal="true" width="300" height="250" footer="Con este numero podras identificar tu solicitud" >                
+                    <h:outputText value="#{manejadorSolicitud.CrearNumSeguimiento()}"/>
+                </p:dialog> 
+            </div>
         </ui:define>
     </ui:composition>    
 </html>
