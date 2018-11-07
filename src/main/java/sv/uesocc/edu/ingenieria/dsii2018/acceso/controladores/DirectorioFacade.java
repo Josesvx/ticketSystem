@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
 /**
  *
@@ -50,23 +51,26 @@ public class DirectorioFacade extends AbstractFacade<Directorio> implements Dire
     }
 
     @Override
-    public List<Directorio> findByTecFree() {
-        return null;
+    public List<Directorio> findByTecFree(int idDepartamento) {
+        Query query = em.createNamedQuery("Directorio.findTecnico");
+        query.setParameter("idDepartamento", idDepartamento);
+        List<Directorio> lista = query.getResultList();
+        return lista;
     }
 
     @Override
     public Directorio autenticar(Directorio usuario) {
-        Directorio user= null;
-        try{
-           Query query=em.createNamedQuery("Directorio.autenticarse");
-           query.setParameter("usuario", usuario.getUsuario());
-           query.setParameter("contrasenia", usuario.getContrasenia());
-           
-           List<Directorio> lista = query.getResultList();
-           if(!lista.isEmpty()){
-               user=lista.get(0);
-           }
-        }catch(Exception ex){
+        Directorio user = null;
+        try {
+            Query query = em.createNamedQuery("Directorio.autenticarse");
+            query.setParameter("usuario", usuario.getUsuario());
+            query.setParameter("contrasenia", usuario.getContrasenia());
+
+            List<Directorio> lista = query.getResultList();
+            if (!lista.isEmpty()) {
+                user = lista.get(0);
+            }
+        } catch (Exception ex) {
             throw ex;
         }
         return user;

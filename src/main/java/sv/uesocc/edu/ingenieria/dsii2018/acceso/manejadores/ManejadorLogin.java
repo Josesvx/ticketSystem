@@ -29,10 +29,10 @@ public class ManejadorLogin implements Serializable {
 
     @EJB
     private DirectorioFacadeLocal Dfl;
-    private Directorio directorio, Usuario;
+    private Directorio directorio, Usuario, direc;
     private String redireccionar = null, nombreUsuario;
     private CookieInstance oreo;
-    private int id, id2;
+    private int id, id2, idg;
 
     @PostConstruct
     public void init() {
@@ -142,6 +142,27 @@ public class ManejadorLogin implements Serializable {
         }
     }
 
+    public boolean usuariogerente() {
+        idg = oreo.UsuarioId();
+        direc= Dfl.find(idg);
+        if((direc.getIdRol().getIdRol()==4)){
+            return false;
+        
+        }else{
+        return true;
+    }
+    }
+    public boolean usuariojefedepto() {
+        idg = oreo.UsuarioId();
+        direc= Dfl.find(idg);
+        if((direc.getIdRol().getIdRol()==3)){
+            return false;
+        
+        }else{
+        return true;
+    }
+    }
+
     public String getNombreUsuario() {
         return nombreUsuario;
     }
@@ -149,5 +170,22 @@ public class ManejadorLogin implements Serializable {
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
     }
+
+    public Directorio getDirec() {
+        return direc;
+    }
+
+    public void setDirec(Directorio direc) {
+        this.direc = direc;
+    }
+
+    public int getIdg() {
+        return idg;
+    }
+
+    public void setIdg(int idg) {
+        this.idg = idg;
+    }
+    
 
 }

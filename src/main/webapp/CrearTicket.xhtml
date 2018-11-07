@@ -19,6 +19,9 @@
             </style>
 
         </ui:define>
+        <ui:define name="body">
+            <br></br><br></br><br></br>
+            <h:form >
         <ui:define name="body"  >
             <br></br>
             <h:form id ="form" enctype="multipart/form-data">
@@ -139,6 +142,8 @@
                             </tr> 
                             <tr>
                                 <td colspan="2" align="center">
+                                    <p:commandButton value="Ingresar Ticket" id="ingresar" icon="ui-icon-check" 
+                                                     action="#{manejadorSolicitud.CrearSolicitud()}" ajax="formCreate" />
                                     <p:commandButton value="Ingresar Ticket" 
                                                      id="ingresar" 
                                                      icon="ui-icon-check" 

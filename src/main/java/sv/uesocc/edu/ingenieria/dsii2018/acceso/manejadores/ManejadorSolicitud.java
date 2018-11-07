@@ -1,5 +1,6 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,17 +44,21 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 public class ManejadorSolicitud implements Serializable {
 
     private List<Categoria> listaCat;
-    private List<Solicitud> listaSol;
+    private List<Solicitud> listaSol, listaIT, listaGen;
     private List<Prioridad> listaP;
     private List<Estado> listaEs;
     private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
-    private Solicitud solicitudS;
+    protected Solicitud solicitudS;
     private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
     private Categoria categoria;
     private Directorio directorio, Departamento;
     private CookieInstance oreo;
+    private String nombre, seguimiento, nombreDep;
+    private int idCategoria, numero, id, id2, idPrioridad;
+    private String imagenAdjunto;
+    private byte[] adjuntoProv;
     private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
     private int idCategoria, numero, id, id2, idPrioridad;
     FacesMessage message = new FacesMessage();
@@ -74,20 +79,118 @@ public class ManejadorSolicitud implements Serializable {
     @PostConstruct
     public void init() {
 
+        listaIT=new ArrayList<>();
+        listaGen=new ArrayList<>();
+        llenarDeps();
+        llenarPrioridad();
+        llenarCategoria();
+
+        List<Solicitud> listaS = sfl.findByEstado(1);
+        if (listaS != null && !listaS.isEmpty()) {
+            listaSol = listaS;
+        } else {
+            listaSol = new ArrayList<>();
+        }
+
+        for (Solicitud solicitud1 : listaSol) {
+            if (solicitud1.getIdCategoria().getIdCategoria() == 1 && solicitud1.getIdDirectorio().getIdRol().getIdRol() == 3) {
+                listaIT.add(solicitud1);
+            } else {
+                listaGen.add(solicitud1);
+            }
+        }
+
+
+        solicitud = new Solicitud();
+
+        categoria = new Categoria();
+
+        directorio = new Directorio();
+
+        oreo = new CookieInstance();
+
+        id2 = oreo.UsuarioId();
+        Departamento = dfl.find(id2);
+        nombreDep = Departamento.getIdDepartamento().getNombre();
+        if (nombreDep != null && !nombreDep.isEmpty()) {
+            nombre = nombreDep;
+        } else {
+            nombre = "No Funciona";
+        }
+        
+        llenarFiltro();
+    }
+
+    public List<Solicitud> llenarFiltro() {
+        Directorio dir= dfl.find(oreo.UsuarioId());
+        if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
+            if (listaIT != null && !listaIT.isEmpty()) {
+                return listaIT;
+            } else {
+                return new ArrayList<>();
+            }
+        } else if (listaGen != null && !listaGen.isEmpty()) {
+            return listaGen;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void llenarCategoria() {
         List<Categoria> listaC = cfl.findAll();
         if (listaC != null && !listaC.isEmpty()) {
             listaCat = listaC;
         } else {
             listaCat = new ArrayList<>();
         }
+    }
 
+    public void llenarPrioridad() {
         List<Prioridad> listaPri = pfl.findAll();
         if (listaPri != null && !listaPri.isEmpty()) {
             listaP = listaPri;
         } else {
             listaP = new ArrayList<>();
         }
+    }
+    public void llenarDeps() {
+        for (int i = 1; i <= 8; i++) {
+            switch (i) {
+                case 1:
+                    numeroSolicitudes1 = sfl.findByDepartamento(i);
+                    break;
+                case 2:
+                    numeroSolicitudes2 = sfl.findByDepartamento(i);
+                    break;
+                case 3:
+                    numeroSolicitudes3 = sfl.findByDepartamento(i);
+                    break;
+                case 4:
+                    numeroSolicitudes4 = sfl.findByDepartamento(i);
+                    break;
+                case 5:
+                    numeroSolicitudes5 = sfl.findByDepartamento(i);
+                    break;
+                case 6:
+                    numeroSolicitudes6 = sfl.findByDepartamento(i);
+                    break;
+                case 7:
+                    numeroSolicitudes7 = sfl.findByDepartamento(i);
+                    break;
+                case 8:
+                    numeroSolicitudes8 = sfl.findByDepartamento(i);
+                    break;
+            }
+        }
+    }
 
+    public EstadoSolicitud geteSol() {
+        return eSol;
+    }
+
+    public void seteSol(EstadoSolicitud eSol) {
+        this.eSol = eSol;
+      
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
             listaSol = listaS;
@@ -125,7 +228,7 @@ public class ManejadorSolicitud implements Serializable {
         } catch (Exception ex) {
             throw ex;
         }
-        return listaSol;
+        return listaSol
     }
 
     public int getIdCategoria() {
@@ -229,6 +332,15 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setNSeguimiento(CrearNumSeguimiento());
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
+            if (adjuntoProv != null) {
+                this.solicitud.setAdjunto(adjuntoProv);
+                sfl.create(this.solicitud);
+
+            } else {
+                sfl.create(this.solicitud);
+
+            }
+
             sfl.create(this.solicitud);
             finale = CrearEstadoS();
         } catch (Exception e) {

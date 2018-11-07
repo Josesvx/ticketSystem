@@ -24,8 +24,8 @@
 
                     <p:commandButton style="height: 35px;" type="button" value="Creación de ticket"  onclick="location.href='CrearTicket.jsf'" title="Crear" icon="ui-icon-disk" />
                     <p:commandButton style="height: 35px;" type="button" value="Seguimiento" title="Seguimiento" icon="ui-icon-zoomin" />
-                    <p:commandButton style="height: 35px;" type="button" value="Estadisticas" title="Estadistica" onclick="location.href='Estadistica.jsf'" icon="ui-icon-print" />
-                    <p:commandButton style="height: 35px;" type="button" value="Asignar Prioridad" onclick="location.href='AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" />
+                    <p:commandButton style="height: 35px;" type="button" value="Estadisticas" title="Estadistica" onclick="location.href='Estadistica.jsf'" icon="ui-icon-print" disabled="#{manejadorLogin.usuariogerente()}" />
+                    <p:commandButton style="height: 35px;" type="button" value="Asignar Prioridad" onclick="location.href='AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" disabled="#{manejadorLogin.usuariojefedepto()}" />
                     <span class="ui-separator">
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
                     </span>
@@ -38,7 +38,7 @@
             </p:toolbar>
         </h:form>
         <ui:insert name="titulo"></ui:insert>
-        <ui:insert name="body">Sin contenido</ui:insert>
+        <ui:insert name="body" >Sin contenido</ui:insert>
     </h:body>
 </html>
 
