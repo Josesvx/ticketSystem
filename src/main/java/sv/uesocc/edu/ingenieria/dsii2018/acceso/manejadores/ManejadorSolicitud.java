@@ -1,5 +1,6 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,16 +45,16 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 public class ManejadorSolicitud implements Serializable {
 
     private List<Categoria> listaCat;
-    private List<Solicitud> listaSol;
+    private List<Solicitud> listaSol, listaIT, listaGen;
     private List<Prioridad> listaP;
     private Solicitud solicitud;
-    private Solicitud solicitudS;
+    protected Solicitud solicitudS;
     private EstadoSolicitud eSol;
     private Categoria categoria;
     private Directorio directorio, Departamento;
     private CookieInstance oreo;
     private String nombre, seguimiento, nombreDep;
-    private int idCategoria, numero,id,id2, idPrioridad;
+    private int idCategoria, numero, id, id2, idPrioridad;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
     private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
@@ -74,19 +75,11 @@ public class ManejadorSolicitud implements Serializable {
     @PostConstruct
     public void init() {
 
-        List<Categoria> listaC = cfl.findAll();
-        if (listaC != null && !listaC.isEmpty()) {
-            listaCat = listaC;
-        } else {
-            listaCat = new ArrayList<>();
-        }
-
-        List<Prioridad> listaPri = pfl.findAll();
-        if (listaPri != null && !listaPri.isEmpty()) {
-            listaP = listaPri;
-        } else {
-            listaP = new ArrayList<>();
-        }
+        listaIT=new ArrayList<>();
+        listaGen=new ArrayList<>();
+        llenarDeps();
+        llenarPrioridad();
+        llenarCategoria();
 
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
@@ -95,6 +88,69 @@ public class ManejadorSolicitud implements Serializable {
             listaSol = new ArrayList<>();
         }
 
+        for (Solicitud solicitud1 : listaSol) {
+            if (solicitud1.getIdCategoria().getIdCategoria() == 1 && solicitud1.getIdDirectorio().getIdRol().getIdRol() == 3) {
+                listaIT.add(solicitud1);
+            } else {
+                listaGen.add(solicitud1);
+            }
+        }
+
+
+        solicitud = new Solicitud();
+
+        categoria = new Categoria();
+
+        directorio = new Directorio();
+
+        oreo = new CookieInstance();
+
+        id2 = oreo.UsuarioId();
+        Departamento = dfl.find(id2);
+        nombreDep = Departamento.getIdDepartamento().getNombre();
+        if (nombreDep != null && !nombreDep.isEmpty()) {
+            nombre = nombreDep;
+        } else {
+            nombre = "No Funciona";
+        }
+        
+        llenarFiltro();
+    }
+
+    public List<Solicitud> llenarFiltro() {
+        Directorio dir= dfl.find(oreo.UsuarioId());
+        if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
+            if (listaIT != null && !listaIT.isEmpty()) {
+                return listaIT;
+            } else {
+                return new ArrayList<>();
+            }
+        } else if (listaGen != null && !listaGen.isEmpty()) {
+            return listaGen;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void llenarCategoria() {
+        List<Categoria> listaC = cfl.findAll();
+        if (listaC != null && !listaC.isEmpty()) {
+            listaCat = listaC;
+        } else {
+            listaCat = new ArrayList<>();
+        }
+    }
+
+    public void llenarPrioridad() {
+        List<Prioridad> listaPri = pfl.findAll();
+        if (listaPri != null && !listaPri.isEmpty()) {
+            listaP = listaPri;
+        } else {
+            listaP = new ArrayList<>();
+        }
+    }
+
+    public void llenarDeps() {
         for (int i = 1; i <= 8; i++) {
             switch (i) {
                 case 1:
@@ -123,23 +179,6 @@ public class ManejadorSolicitud implements Serializable {
                     break;
             }
         }
-
-        solicitud = new Solicitud();
-
-        categoria = new Categoria();
-
-        directorio = new Directorio();
-
-        oreo = new CookieInstance();
-
-        id2 = oreo.UsuarioId();
-        Departamento = dfl.find(id2);
-        nombreDep = Departamento.getIdDepartamento().getNombre();
-        if (nombreDep != null && !nombreDep.isEmpty()) {
-            nombre = nombreDep;
-        } else {
-            nombre = "No Funciona";
-        }
     }
 
     public EstadoSolicitud geteSol() {
@@ -149,7 +188,7 @@ public class ManejadorSolicitud implements Serializable {
     public void seteSol(EstadoSolicitud eSol) {
         this.eSol = eSol;
     }
-    
+
     public int getIdCategoria() {
         return idCategoria;
     }
@@ -284,11 +323,10 @@ public class ManejadorSolicitud implements Serializable {
             if (adjuntoProv != null) {
                 this.solicitud.setAdjunto(adjuntoProv);
                 sfl.create(this.solicitud);
-                
-                
+
             } else {
                 sfl.create(this.solicitud);
-               
+
             }
 
         } catch (Exception e) {
@@ -333,7 +371,7 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public void Actualizar(Solicitud solicitud) {
-        Prioridad p =  pfl.find(idPrioridad);
+        Prioridad p = pfl.find(idPrioridad);
         solicitudS.setIdPrioridad(p);
         sfl.edit(solicitudS);
     }
