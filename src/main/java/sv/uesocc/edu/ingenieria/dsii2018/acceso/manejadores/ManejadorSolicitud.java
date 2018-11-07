@@ -56,8 +56,6 @@ public class ManejadorSolicitud implements Serializable {
     private CookieInstance oreo;
     private String nombre, seguimiento, nombreDep;
     private int idCategoria, numero, id, id2, idPrioridad;
-    private String imagenAdjunto;
-    //   private byte[] adjuntoProv = null;
     FacesMessage message = new FacesMessage();
 
     @EJB
@@ -68,9 +66,9 @@ public class ManejadorSolicitud implements Serializable {
     private PrioridadFacadeLocal pfl;
     @EJB
     private DirectorioFacadeLocal dfl;
-     @EJB
+    @EJB
     private EstadoSolicitudFacadeLocal esfl;
-     @EJB
+    @EJB
     private EstadoFacadeLocal efl;
 
     @PostConstruct
@@ -102,7 +100,7 @@ public class ManejadorSolicitud implements Serializable {
         categoria = new Categoria();
 
         estadoSolicitud = new EstadoSolicitud();
-        
+
         directorio = new Directorio();
 
         oreo = new CookieInstance();
@@ -182,13 +180,6 @@ public class ManejadorSolicitud implements Serializable {
         this.solicitud = solicitud;
     }
 
-//    public byte[] getAdjuntoProv() {
-//        return adjuntoProv;
-//    }
-//
-//    public void setAdjuntoProv(byte[] adjuntoProv) {
-//        this.adjuntoProv = adjuntoProv;
-//    }
     public String CrearNumSeguimiento() {
         //nombre = cache.ObtenerNombreDepartamento().toUpperCase();
         nombre = "RECUERSOS HUMANOS";
@@ -199,49 +190,53 @@ public class ManejadorSolicitud implements Serializable {
         return seguimiento;
     }
 
-    public static String guardarBlobEnFicheroTemporal(byte[] bytes, String nombreArchivo) {
-        String ubicacionArchivo = null;
-        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        String path = servletContext.getRealPath("")
-                + File.separatorChar + "src"
-                + File.separatorChar + "main"
-                + File.separatorChar + "resources"
-                + File.separatorChar + "img"
-                + File.separatorChar + "tmp"
-                + File.separatorChar + nombreArchivo;
-        File f = null;
-        InputStream in = null;
-
-        try {
-            f = new File(path);
-            in = new ByteArrayInputStream(bytes);
-            FileOutputStream out = new FileOutputStream(f.getAbsolutePath());
-
-            int c = 0;
-            while ((c = in.read()) >= 0) {
-                out.write(c);
-            }
-            out.flush();
-            out.close();
-            ubicacionArchivo = "src/main/resources/img/tmp" + nombreArchivo;
-
-        } catch (Exception e) {
-            System.err.println("No se pudo cargar la imagen");
-        }
-        return ubicacionArchivo;
-    }
-
+//    public static String guardarBlobEnFicheroTemporal(byte[] bytes, String nombreArchivo) {
+//        String ubicacionArchivo = null;
+//        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+//        String path = servletContext.getRealPath("")
+//                + File.separatorChar + "src"
+//                + File.separatorChar + "main"
+//                + File.separatorChar + "resources"
+//                + File.separatorChar + "img"
+//                + File.separatorChar + "tmp"
+//                + File.separatorChar + nombreArchivo;
+//        File f = null;
+//        InputStream in = null;
+//
+//        try {
+//            f = new File(path);
+//            in = new ByteArrayInputStream(bytes);
+//            FileOutputStream out = new FileOutputStream(f.getAbsolutePath());
+//
+//            int c = 0;
+//            while ((c = in.read()) >= 0) {
+//                out.write(c);
+//            }
+//            out.flush();
+//            out.close();
+//            ubicacionArchivo = "src/main/resources/img/tmp" + nombreArchivo;
+//
+//        } catch (Exception e) {
+//            System.err.println("No se pudo cargar la imagen");
+//        }
+//        return ubicacionArchivo;
+//    }
     public void subirImagen(FileUploadEvent event) {
-
-        try {
-            this.solicitud.setAdjunto(event.getFile().getContents());
-            message.setSeverity(FacesMessage.SEVERITY_INFO);
-            message.setSummary("Adjunto guardado con exito ");
-        } catch (Exception e) {
-            message.setSeverity(FacesMessage.SEVERITY_ERROR);
-            message.setSummary("Se debe seleccionar un item  valido para adjuntar a su Solicitud");
+        String path = System.getProperty("user.home");
+        String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
+        if (event.getFile().getContents() != null && event.getFile().getContents().length > 0) {
+            try (FileOutputStream fl = new FileOutputStream(finalPath)) {
+                fl.write(event.getFile().getContents());
+                fl.close();
+                message.setSeverity(FacesMessage.SEVERITY_INFO);
+                message.setSummary("Adjunto guardado con exito ");
+            } catch (Exception e) {
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                message.setSummary("Se debe seleccionar un item  valido para adjuntar a su Solicitud");
+            }
+            FacesContext.getCurrentInstance().addMessage("Mensaje", message);
         }
-        FacesContext.getCurrentInstance().addMessage("Mensaje", message);
+
     }
 
     public void CrearSolicitud() {
@@ -257,21 +252,12 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
             sfl.create(this.solicitud);
-//            message.setSeverity(FacesMessage.SEVERITY_INFO);
-//            message.setSummary("Tciker creado con exito");
             CrearEstadoS();
         } catch (Exception e) {
         }
 
     }
 
-    public String getImagenAdjunto() {
-        return imagenAdjunto;
-    }
-
-    public void setImagenAdjunto(String imagenAdjunto) {
-        this.imagenAdjunto = imagenAdjunto;
-    }
     public void CrearEstadoS() {
         try {
             this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
