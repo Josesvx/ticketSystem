@@ -73,7 +73,7 @@ public class ManejadorLogin implements Serializable {
         return nombreUsuario;
 
     }
-    
+
     public String nombreRol() {
         id2 = oreo.UsuarioId();
         Usuario = Dfl.find(id2);
@@ -114,7 +114,7 @@ public class ManejadorLogin implements Serializable {
         id = oreo.UsuarioId();
         if (id > 0) {
             directorio = Dfl.find(id);
-            if (!(directorio.getIdRol().getIdRol() == 2 || directorio.getIdRol().getIdRol()== 4)) {
+            if (!(directorio.getIdRol().getIdRol() == 2 || directorio.getIdRol().getIdRol() == 4)) {
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
                 } catch (IOException ex) {
@@ -134,7 +134,7 @@ public class ManejadorLogin implements Serializable {
         id = oreo.UsuarioId();
         if (id > 0) {
             directorio = Dfl.find(id);
-            if (!(directorio.getIdRol().getIdRol() == 3 || directorio.getIdRol().getIdRol()== 4)) {
+            if (!(directorio.getIdRol().getIdRol() == 3 || directorio.getIdRol().getIdRol() == 4)) {
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
                 } catch (IOException ex) {
@@ -152,35 +152,57 @@ public class ManejadorLogin implements Serializable {
 
     public boolean usuariogerente() {
         idg = oreo.UsuarioId();
-        direc= Dfl.find(idg);
-        if((direc.getIdRol().getIdRol()==4) || direc.getIdRol().getIdRol()==4){
+        direc = Dfl.find(idg);
+        if ((direc.getIdRol().getIdRol() == 4) || direc.getIdRol().getIdRol() == 4) {
             return true;
-        
-        }else{
-        return false;
+
+        } else {
+            return false;
+        }
     }
-    }
-    
+
     public boolean usuariojefedepto() {
         idg = oreo.UsuarioId();
-        direc= Dfl.find(idg);
-        if((direc.getIdRol().getIdRol()==3 || direc.getIdRol().getIdRol()==4)){
+        direc = Dfl.find(idg);
+        if ((direc.getIdRol().getIdRol() == 3 || direc.getIdRol().getIdRol() == 4)) {
             return true;
-        
-        }else{
-        return false;
+
+        } else {
+            return false;
+        }
     }
-    }
-    
-     public boolean usuariotecnico() {
+
+    public boolean usuariotecnico() {
         idg = oreo.UsuarioId();
-        direc= Dfl.find(idg);
-        if((direc.getIdRol().getIdRol()==2 || direc.getIdRol().getIdRol()==4)){
+        direc = Dfl.find(idg);
+        if ((direc.getIdRol().getIdRol() == 2 || direc.getIdRol().getIdRol() == 4)) {
             return true;
-        
-        }else{
-        return false;
+
+        } else {
+            return false;
+        }
     }
+
+    public boolean GerenteGeneral() {
+        idg = oreo.UsuarioId();
+        direc = Dfl.find(idg);
+        if ((direc.getIdRol().getIdRol() == 4)) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
+    public boolean GerenteGeneralTabla() {
+        idg = oreo.UsuarioId();
+        direc = Dfl.find(idg);
+        if ((direc.getIdRol().getIdRol() == 4)) {
+            return false;
+
+        } else {
+            return true;
+        }
     }
 
     public String getNombreUsuario() {
@@ -206,6 +228,5 @@ public class ManejadorLogin implements Serializable {
     public void setIdg(int idg) {
         this.idg = idg;
     }
-    
 
 }
