@@ -1,10 +1,6 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,20 +13,24 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 import org.primefaces.event.FileUploadEvent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DescripcionMantenimientoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.PrioridadFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EncargadoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.MantenimientoEncargadoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Encargado;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Estado;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.MantenimientoEncargado;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Prioridad;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
@@ -46,6 +46,10 @@ public class ManejadorSolicitud implements Serializable {
     private List<Categoria> listaCat;
     private List<Solicitud> listaSol, listaIT, listaGen;
     private List<Prioridad> listaP;
+//    private List<Directorio> listaTec;
+    private DescripcionMantenimiento descMant;
+    private MantenimientoEncargado mantEnc;
+    private Encargado encargado;
     private List<Estado> listaEs;
     private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
@@ -53,14 +57,14 @@ public class ManejadorSolicitud implements Serializable {
     private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
     private Categoria categoria;
-    private Directorio directorio, Departamento;
+    private Directorio directorio, Departamento, dir;
     private CookieInstance oreo;
-    private String nombre, seguimiento, nombreDep;
-    private int idCategoria, numero, id, id2, idPrioridad;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
     private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
-    private int idCategoria, numero, id, id2, idPrioridad;
+    private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
+            numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
+            numeroSolicitudes7, numeroSolicitudes8;
     FacesMessage message = new FacesMessage();
 
     @EJB
@@ -75,10 +79,18 @@ public class ManejadorSolicitud implements Serializable {
     private EstadoSolicitudFacadeLocal esfl;
     @EJB
     private EstadoFacadeLocal efl;
+    @EJB
+    private DescripcionMantenimientoFacadeLocal dmfl;
+    @EJB
+    private MantenimientoEncargadoFacadeLocal mefl;
+    @EJB
+    private EncargadoFacadeLocal enfl;
+    
+    private ManejadorTecnico mantec;
+    
 
     @PostConstruct
     public void init() {
-
         listaIT=new ArrayList<>();
         listaGen=new ArrayList<>();
         llenarDeps();
@@ -93,7 +105,7 @@ public class ManejadorSolicitud implements Serializable {
         }
 
         for (Solicitud solicitud1 : listaSol) {
-            if (solicitud1.getIdCategoria().getIdCategoria() == 1 && solicitud1.getIdDirectorio().getIdRol().getIdRol() == 3) {
+            if (solicitud1.getIdCategoria().getIdCategoria() == 1) {
                 listaIT.add(solicitud1);
             } else {
                 listaGen.add(solicitud1);
@@ -106,6 +118,12 @@ public class ManejadorSolicitud implements Serializable {
         categoria = new Categoria();
 
         directorio = new Directorio();
+        
+        descMant = new DescripcionMantenimiento();
+        
+        mantEnc = new MantenimientoEncargado();
+        
+        encargado = new Encargado();
 
         oreo = new CookieInstance();
 
@@ -119,7 +137,15 @@ public class ManejadorSolicitud implements Serializable {
         }
         
         llenarFiltro();
-    }
+//        ObtenerTecnicos();
+   }
+    
+//    public List<Directorio> ObtenerTecnicos() {
+//        dir = dfl.find(oreo.UsuarioId());
+//            listaTec = dfl.findByTecFree(dir.getIdDepartamento().getIdDepartamento());
+//            return listaTec;
+//
+//    }
 
     public List<Solicitud> llenarFiltro() {
         Directorio dir= dfl.find(oreo.UsuarioId());
@@ -199,7 +225,7 @@ public class ManejadorSolicitud implements Serializable {
         }
 
         solicitud = new Solicitud();
-
+        
         categoria = new Categoria();
 
         estadoSolicitud = new EstadoSolicitud();
@@ -228,7 +254,7 @@ public class ManejadorSolicitud implements Serializable {
         } catch (Exception ex) {
             throw ex;
         }
-        return listaSol
+        return listaSol;
     }
 
     public int getIdCategoria() {
@@ -238,6 +264,14 @@ public class ManejadorSolicitud implements Serializable {
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
+    
+//    public List<Directorio> getListaTec() {
+//        return listaTec;
+//    }
+//
+//    public void setListaTec(List<Directorio> listaTec) {
+//        this.listaTec = listaTec;
+//    }
 
     public String getNombre() {
         return nombre;
@@ -395,8 +429,42 @@ public class ManejadorSolicitud implements Serializable {
 
     public void Actualizar(Solicitud solicitud) {
         Prioridad p = pfl.find(idPrioridad);
+        Directorio d= dfl.find(idDirectorio);
+        this.directorio = dfl.find(oreo.UsuarioId());
+        
+        //crear DescripcionMtto
+        try{
+        this.descMant.setIdDescripcionMantenimiento(dmfl.count()+1);
+        this.descMant.setAudFechaCreacion(new Date());
+        this.descMant.setAudNombreCreacion(this.directorio.getUsuario());
+        this.descMant.setAudStatus(true);
+        //crear MantEncargado
+        this.mantEnc.setIdMantenimientoEncargado(mefl.count()+1);
+        this.mantEnc.setAudFechaCreacion(new Date());
+        this.mantEnc.setAudNombreCreacion(this.directorio.getUsuario());
+        this.mantEnc.setAudStatus(true);
+        this.mantEnc.setIdSolicitud(solicitudS);
+        this.mantEnc.setIdDescripcionMantenimiento(descMant);
+        //crear Encargado
+        this.encargado.setIdEncargado(enfl.count()+1);
+        this.encargado.setIdDirectorio(d);
+        this.encargado.setIdMantenimientoEncargado(mantEnc);
+        this.encargado.setEstado(true);
+        this.encargado.setAudFechaCreacion(new Date());
+        this.encargado.setAudNombreCreacion(this.directorio.getUsuario());
+        this.encargado.setAudStatus(true);
+        
         solicitudS.setIdPrioridad(p);
         sfl.edit(solicitudS);
+        dmfl.create(descMant);
+        mefl.create(mantEnc);
+        enfl.create(encargado);
+        
+        }catch(Exception ex){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));
+        }
+        
+        
     }
 
     public List<Solicitud> ObtenerPorUsuario(int idDirectorio) {
@@ -414,6 +482,32 @@ public class ManejadorSolicitud implements Serializable {
     public void setIdPrioridad(int idPrioridad) {
         this.idPrioridad = idPrioridad;
     }
+
+    public List<Solicitud> getListaIT() {
+        return listaIT;
+    }
+
+    public void setListaIT(List<Solicitud> listaIT) {
+        this.listaIT = listaIT;
+    }
+
+    public List<Solicitud> getListaGen() {
+        return listaGen;
+    }
+
+    public void setListaGen(List<Solicitud> listaGen) {
+        this.listaGen = listaGen;
+    }
+
+    public int getIdDirectorio() {
+        return idDirectorio;
+    }
+
+    public void setIdDirectorio(int idDirectorio) {
+        this.idDirectorio = idDirectorio;
+    }
+    
+    
     //METODO PARA BUSCAR TODOS LOS ESTADOS CAMBIADOS PARA LA SOLICITUD BUSCADA
     public String DevolverEstado(Solicitud s) {
         listaEs = new ArrayList<>();
