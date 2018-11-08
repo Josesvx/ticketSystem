@@ -51,6 +51,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Solicitud.findByIdPrioridad", query = "SELECT S FROM Solicitud AS S WHERE S.idPrioridad.idPrioridad= :idPrioridad")
     , @NamedQuery(name = "Solicitud.findByIdCategoria", query= "SELECT S FROM Solicitud AS S WHERE S.idCategoria.idCategoria= :idCategoria")
     , @NamedQuery(name = "Solicitud.findByIdDirectorio", query= "SELECT S FROM Solicitud AS s WHERE S.idDirectorio.idDirectorio= :idDirectorio")
+    , @NamedQuery(name = "Solicitud.findByTecnic", query= "SELECT S FROM Solicitud AS S JOIN S.mantenimientoEncargadoList AS SM JOIN SM.encargadoList AS SME WHERE SME.idDirectorio.idDirectorio = :idDirectorio AND SME.estado = true")
     , @NamedQuery(name = "Solicitud.findByAudStatus", query = "SELECT s FROM Solicitud s WHERE s.audStatus = :audStatus")})
 public class Solicitud implements Serializable {
 
