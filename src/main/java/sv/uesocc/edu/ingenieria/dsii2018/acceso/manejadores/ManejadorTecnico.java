@@ -1,6 +1,7 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -9,7 +10,6 @@ import javax.inject.Named;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
-import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
 /**
  *
@@ -17,36 +17,31 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
  */
 @Named
 @ViewScoped
-public class ManejadorTecnico extends ManejadorSolicitud implements Serializable {
+public class ManejadorTecnico implements Serializable {
 
-    List<Directorio> listaTec, listaTecnicos;
+    List<Directorio> listaTec, listaTecnicos, listaFiltrada;
     private CookieInstance oreo;
     private Directorio dir;
+    protected int idDirectorio;
     @EJB
     private DirectorioFacadeLocal dfl;
 
     @PostConstruct
-    @Override
+//    @Override
     public void init() {
+        listaTec=new ArrayList<>();
         oreo = new CookieInstance();
         ObtenerTecnicos();
 
     }
 
     public List<Directorio> ObtenerTecnicos() {
-
         dir = dfl.find(oreo.UsuarioId());
-        if (dir.getIdDepartamento().getIdDepartamento() == 4) {
-            listaTec = dfl.findByTecFree(4);
+            listaTec = dfl.findByTecFree(dir.getIdDepartamento().getIdDepartamento());
             return listaTec;
-        } else {
-            listaTec = dfl.findByTecFree(7);
-            return listaTec;
-
-        }
 
     }
-
+    
     public List<Directorio> getListaTec() {
         return listaTec;
     }
@@ -62,5 +57,15 @@ public class ManejadorTecnico extends ManejadorSolicitud implements Serializable
     public void setListaTecnicos(List<Directorio> listaTecnicos) {
         this.listaTecnicos = listaTecnicos;
     }
+
+    public int getIdDirectorio() {
+        return idDirectorio;
+    }
+
+    public void setIdDirectorio(int idDirectorio) {
+        this.idDirectorio = idDirectorio;
+    }
+    
+    
 
 }
