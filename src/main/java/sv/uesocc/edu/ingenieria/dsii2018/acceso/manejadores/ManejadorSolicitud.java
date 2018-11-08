@@ -54,6 +54,7 @@ public class ManejadorSolicitud implements Serializable {
     private CookieInstance oreo;
     private String nombre, seguimiento, nombreDep;
     private int idCategoria, numero, id, id2, idPrioridad;
+
     private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
     private String redirecccion = null, finale = null;
     FacesMessage message = new FacesMessage();
@@ -117,6 +118,7 @@ public class ManejadorSolicitud implements Serializable {
         }
 
         llenarFiltro();
+        ObtenerSolicitudesXTec();
     }
 
     public List<Solicitud> llenarFiltro() {
@@ -369,9 +371,15 @@ public class ManejadorSolicitud implements Serializable {
     public List<Solicitud> ObtenerCreadas() {
         return null;
     }
-
-    public List<Solicitud> ObtenerSolicitudesXTec(int tec) {
-        return null;
+    
+    //METODO PARA OBTENER LAS SOLITUDES QUE SE HAN ASIGNADO A UN TECNICO
+    public Solicitud ObtenerSolicitudesXTec() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        if (listaSol == null || listaSol.isEmpty()) {
+            return null;
+        } else {
+            return listaSol.get(0);
+        }
     }
 
     public List<Solicitud> SolicitudePorCorrelativo(String correlativo) {
@@ -431,5 +439,8 @@ public class ManejadorSolicitud implements Serializable {
             return formateador.format(listaESOl.get(0).getFecha());
         }
 
+    }
+    public void Saludar(){
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "OK"));
     }
 }
