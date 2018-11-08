@@ -52,10 +52,17 @@ public class DirectorioFacade extends AbstractFacade<Directorio> implements Dire
 
     @Override
     public List<Directorio> findByTecFree(int idDepartamento) {
-        Query query = em.createNamedQuery("Directorio.findTecnico");
+        Query query = em.createNamedQuery("Directorio.findByEstado");
         query.setParameter("idDepartamento", idDepartamento);
         List<Directorio> lista = query.getResultList();
-        return lista;
+        if (lista != null && !lista.isEmpty()) {
+            return lista;
+        } else {
+            Query query2 = em.createNamedQuery("Directorio.findTecnico");
+            query2.setParameter("idDepartamento", idDepartamento);
+            List<Directorio> lista2 = query2.getResultList();
+            return lista2;
+        }
     }
 
     @Override
