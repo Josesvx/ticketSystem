@@ -104,6 +104,8 @@ public class ManejadorSolicitud implements Serializable {
         estadoSolicitud = new EstadoSolicitud();
 
         oreo = new CookieInstance();
+        
+        mail = new ManejadorCorreo();
 
         id2 = oreo.UsuarioId();
         Departamento = dfl.find(id2);
@@ -203,7 +205,6 @@ public class ManejadorSolicitud implements Serializable {
 
         directorio = new Directorio();
 
-        mail = new ManejadorCorreo();
 
         oreo = new CookieInstance();
 
@@ -304,7 +305,7 @@ public class ManejadorSolicitud implements Serializable {
     public void subirImagen(FileUploadEvent event) {
         String path = System.getProperty("user.home");
         String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
-        this.solicitud.setAdjunto(finalPath);
+        this.solicitud.setAdjunto(event.getFile().getFileName());
         if (event.getFile().getContents() != null && event.getFile().getContents().length > 0) {
             try (FileOutputStream fl = new FileOutputStream(finalPath)) {
                 fl.write(event.getFile().getContents());
@@ -333,7 +334,7 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
             sfl.create(this.solicitud);
-            mail.EnviarCorreo(this.solicitud, "katirox9@gmail.com");
+            mail.EnviarCorreo(this.solicitud, this.directorio);
             finale = CrearEstadoS();
         } catch (Exception e) {
         }
