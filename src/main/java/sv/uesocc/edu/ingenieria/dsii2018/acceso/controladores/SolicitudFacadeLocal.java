@@ -45,7 +45,7 @@ public interface SolicitudFacadeLocal {
 
     List<Solicitud> findByDate(Date fecha);
 
-    List<Solicitud> findByEstado(int idEstado);
+    List<Solicitud> findByEstado(int idSolicitud);
 
     List<Solicitud> findByPrioridad(int idPrioridad);
 

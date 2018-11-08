@@ -44,7 +44,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 public class ManejadorSolicitud implements Serializable {
 
     private List<Categoria> listaCat;
-    private List<Solicitud> listaSol, listaIT, listaGen;
+    private List<Solicitud> listaSol, listaIT, listaGen, listaSoli;
     private List<Prioridad> listaP;
     private DescripcionMantenimiento descMant;
     private MantenimientoEncargado mantEnc;
@@ -91,17 +91,32 @@ public class ManejadorSolicitud implements Serializable {
 
     @PostConstruct
     public void init() {
-      
+
         listaIT = new ArrayList<>();
         listaGen = new ArrayList<>();
         llenarDeps();
         llenarPrioridad();
         llenarCategoria();
-        numeroESol=esfl.count()+1;
+        numeroESol = esfl.count() + 1;
+        listaSol = new ArrayList<>();
+        listaSoli= new ArrayList<>();
 
-        List<Solicitud> listaS = sfl.findByEstado(1);
-        if (listaS != null && !listaS.isEmpty()) {
-            listaSol = listaS;
+
+        List<Solicitud> LS2 = new ArrayList<>();
+
+        
+        for (Solicitud solicitud1 : sfl.findAll()) {
+            LS2 =  sfl.findByEstado(solicitud1.getIdSolicitud());
+            if (LS2 != null && !LS2.isEmpty() ) {
+                listaSoli.add(LS2.get(0));
+            }
+            else{
+            LS2 =new ArrayList<>();
+            }
+        }
+                
+        if (listaSoli != null && !listaSoli.isEmpty()) {
+            listaSol = listaSoli;
         } else {
             listaSol = new ArrayList<>();
         }
@@ -123,7 +138,7 @@ public class ManejadorSolicitud implements Serializable {
         categoria = new Categoria();
 
         directorio = new Directorio();
-      
+
         descMant = new DescripcionMantenimiento();
 
         mantEnc = new MantenimientoEncargado();
@@ -393,7 +408,7 @@ public class ManejadorSolicitud implements Serializable {
     public List<Solicitud> ObtenerCreadas() {
         return null;
     }
-    
+
     //METODO PARA OBTENER LAS SOLITUDES QUE SE HAN ASIGNADO A UN TECNICO
     public Solicitud ObtenerSolicitudesXTec() {
         listaSol = sfl.findByTecnic(oreo.UsuarioId());
@@ -453,8 +468,7 @@ public class ManejadorSolicitud implements Serializable {
             this.estadoSolicitud.setAudStatus(true);
             this.estadoSolicitud.setFecha(new Date());
             this.estadoSolicitud.setIdSolicitud(solicitudS);
-            
-            
+
             solicitudS.setIdPrioridad(p);
             sfl.edit(solicitudS);
             dmfl.create(descMant);
@@ -532,7 +546,8 @@ public class ManejadorSolicitud implements Serializable {
         }
 
     }
-    public void Saludar(){
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "OK"));
+
+    public void Saludar() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "OK"));
     }
 }
