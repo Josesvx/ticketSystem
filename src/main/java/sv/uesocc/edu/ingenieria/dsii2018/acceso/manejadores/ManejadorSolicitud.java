@@ -44,6 +44,9 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 public class ManejadorSolicitud implements Serializable {
 
     private List<Categoria> listaCat;
+
+
+    private ManejadorCorreo mail;
     private List<Solicitud> listaSol, listaIT, listaGen, listaSoli;
     private List<Prioridad> listaP;
     private DescripcionMantenimiento descMant;
@@ -103,8 +106,6 @@ public class ManejadorSolicitud implements Serializable {
 
 
         List<Solicitud> LS2 = new ArrayList<>();
-
-        
         for (Solicitud solicitud1 : sfl.findAll()) {
             LS2 =  sfl.findByEstado(solicitud1.getIdSolicitud());
             if (LS2 != null && !LS2.isEmpty() ) {
@@ -149,6 +150,8 @@ public class ManejadorSolicitud implements Serializable {
 
         oreo = new CookieInstance();
 
+        mail = new ManejadorCorreo();
+
         id2 = oreo.UsuarioId();
         Departamento = dfl.find(id2);
         nombreDep = Departamento.getIdDepartamento().getNombre();
@@ -165,13 +168,13 @@ public class ManejadorSolicitud implements Serializable {
     public List<Solicitud> llenarFiltro() {
         Directorio dir = dfl.find(oreo.UsuarioId());
         if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
-            if (listaIT != null && !listaIT.isEmpty()) {
-                return listaIT;
+            if (listaGen != null && !listaGen.isEmpty()) {
+                return listaGen;
             } else {
                 return new ArrayList<>();
             }
-        } else if (listaGen != null && !listaGen.isEmpty()) {
-            return listaGen;
+        } else if (listaIT != null && !listaIT.isEmpty()) {
+            return listaIT;
         } else {
             return new ArrayList<>();
         }
@@ -475,6 +478,7 @@ public class ManejadorSolicitud implements Serializable {
             mefl.create(mantEnc);
             enfl.create(encargado);
             esfl.create(estadoSolicitud);
+            mail.EnviarCorreo(solicitudS, d);
 
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));

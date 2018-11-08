@@ -33,15 +33,15 @@
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
-                                     type="button" value="Estadisticas" title="Estadistica" onclick="location.href='Estadistica.jsf'" icon="ui-icon-print" disabled="#{manejadorLogin.usuariogerente()}" />
+                                     type="button" value="Estadisticas" title="Estadistica" onclick="location.href='Estadistica.jsf'" icon="ui-icon-print" rendered="#{manejadorLogin.usuariogerente()}" />
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
-                                     type="button" value="Asignar Prioridad" onclick="location.href='AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" disabled="#{manejadorLogin.usuariojefedepto()}" />
+                                     type="button" value="Asignar Prioridad" onclick="location.href='AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" rendered="#{manejadorLogin.usuariojefedepto()}" />
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
-                                     type="button" value="Mantenimiento" onclick="location.href='Resolucion.jsf'" title="Resolución" icon="ui-icon-check"  />
+                                     type="button" value="Mantenimiento" onclick="location.href='Resolucion.jsf'" title="Resolución" icon="ui-icon-check" rendered="#{manejadorLogin.usuariotecnico()}" />
                     <span class="ui-separator">
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
                     </span>
