@@ -84,11 +84,11 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
     }
 
     @Override
-    public List<Solicitud> findByEstado(int idEstado) {
+    public List<Solicitud> findByEstado(int idSolicitud) {
         List<Solicitud> listaS = null;
         try {
             Query consulta = em.createNamedQuery("Solicitud.findByEstado");
-            consulta.setParameter("idEstado", idEstado);
+            consulta.setParameter("idSolicitud", idSolicitud);
             listaS = consulta.getResultList();
         } catch (Exception ex) {
             throw ex;
