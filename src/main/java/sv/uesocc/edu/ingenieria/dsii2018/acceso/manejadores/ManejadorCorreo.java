@@ -1,5 +1,6 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
+import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,16 +23,19 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 public class ManejadorCorreo {
 
     private String mensaje;
-    private final String email="dsiiues@gmail.com";
-    private final String pass="dsii2018";
+    private final String email = "dsiiues@gmail.com";
+    private final String pass = "dsii2018";
 
     public void EnviarCorreo(Solicitud solicitud, Directorio correo) {
         try {
-            mensaje = "Buen dia " + correo.getNombre1() +" "+correo.getApellido1()+".\n\n"
-                    + "Se le ha asignado un nuevo ticket a resolver, codigo de solicitud: "+solicitud.getIdSolicitud()+", "
-                    +"con una prioridad "+ " Staaaapp "+", "+"creada el "+solicitud.getAudFechaCreacion()+", "
-                    +"resuelva a la brevedad posible, evitando acumulacion de trabajo."+"\n\n\n"
-                    +"Saludos cordiales desde el departamento de "+ correo.getIdDepartamento().getNombre()+".";
+            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
+            mensaje = "Buen día " + correo.getNombre1() + " "+correo.getNombre2()+" "+ correo.getApellido1() +" "+correo.getApellido2()+ ".\n\n"
+                    + "Se le ha asignado un nueva solicitud a resolver, código de solicitud: " + solicitud.getIdSolicitud() + ", "
+                    + "con una prioridad " + solicitud.getIdPrioridad().getNombre() + ", " + "creada el " 
+                    + formateador.format(solicitud.getAudFechaCreacion())+ ", "
+                    + "resuelva a la brevedad posible tomando en consideracion la prioridad de la solicitud, evite la acumulacion de su trabajo." + "\n\n\n"
+                    + "\n\nUna descripcion brindada por el solicitante para que avance en su diagnóstico: "+ solicitud.getDescripcion()
+                    + "\n\nSaludos cordiales desde el departamento de " + correo.getIdDepartamento().getNombre() + ".";
             Properties propiedades = new Properties();
             propiedades.put("mail.smtp.host", "smtp.gmail.com");
             propiedades.setProperty("mail.smtp.starttls.enable", "true");
@@ -47,7 +51,7 @@ public class ManejadorCorreo {
             m.addBodyPart(text);
             MimeMessage messege = new MimeMessage(session);
             messege.setFrom(new InternetAddress(email));
-            messege.addRecipient(Message.RecipientType.TO, new InternetAddress("jhvv22@gmail.com"));
+            messege.addRecipient(Message.RecipientType.TO, new InternetAddress(correo.getCorreo()));
             messege.setSubject(solicitud.getTitulo());
             messege.setContent(m);
 

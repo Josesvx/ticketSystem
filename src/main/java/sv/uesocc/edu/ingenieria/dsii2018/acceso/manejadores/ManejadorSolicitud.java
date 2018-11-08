@@ -93,13 +93,13 @@ public class ManejadorSolicitud implements Serializable {
 
     @PostConstruct
     public void init() {
-      
+
         listaIT = new ArrayList<>();
         listaGen = new ArrayList<>();
         llenarDeps();
         llenarPrioridad();
         llenarCategoria();
-        numeroESol=esfl.count()+1;
+        numeroESol = esfl.count() + 1;
 
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
@@ -125,7 +125,7 @@ public class ManejadorSolicitud implements Serializable {
         categoria = new Categoria();
 
         directorio = new Directorio();
-      
+
         descMant = new DescripcionMantenimiento();
 
         mantEnc = new MantenimientoEncargado();
@@ -135,7 +135,7 @@ public class ManejadorSolicitud implements Serializable {
         estadoSolicitud = new EstadoSolicitud();
 
         oreo = new CookieInstance();
-        
+
         mail = new ManejadorCorreo();
 
         id2 = oreo.UsuarioId();
@@ -154,13 +154,13 @@ public class ManejadorSolicitud implements Serializable {
     public List<Solicitud> llenarFiltro() {
         Directorio dir = dfl.find(oreo.UsuarioId());
         if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
-            if (listaIT != null && !listaIT.isEmpty()) {
-                return listaIT;
+            if (listaGen != null && !listaGen.isEmpty()) {
+                return listaGen;
             } else {
                 return new ArrayList<>();
             }
-        } else if (listaGen != null && !listaGen.isEmpty()) {
-            return listaGen;
+        } else if (listaIT != null && !listaIT.isEmpty()) {
+            return listaIT;
         } else {
             return new ArrayList<>();
         }
@@ -234,7 +234,6 @@ public class ManejadorSolicitud implements Serializable {
         categoria = new Categoria();
 
         directorio = new Directorio();
-
 
         oreo = new CookieInstance();
 
@@ -364,7 +363,6 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
             sfl.create(this.solicitud);
-            mail.EnviarCorreo(this.solicitud, this.directorio);
             finale = CrearEstadoS();
         } catch (Exception e) {
         }
@@ -399,7 +397,7 @@ public class ManejadorSolicitud implements Serializable {
     public List<Solicitud> ObtenerCreadas() {
         return null;
     }
-    
+
     //METODO PARA OBTENER LAS SOLITUDES QUE SE HAN ASIGNADO A UN TECNICO
     public Solicitud ObtenerSolicitudesXTec() {
         listaSol = sfl.findByTecnic(oreo.UsuarioId());
@@ -459,14 +457,14 @@ public class ManejadorSolicitud implements Serializable {
             this.estadoSolicitud.setAudStatus(true);
             this.estadoSolicitud.setFecha(new Date());
             this.estadoSolicitud.setIdSolicitud(solicitudS);
-            
-            
+
             solicitudS.setIdPrioridad(p);
             sfl.edit(solicitudS);
             dmfl.create(descMant);
             mefl.create(mantEnc);
             enfl.create(encargado);
             esfl.create(estadoSolicitud);
+            mail.EnviarCorreo(solicitudS, d);
 
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));
@@ -538,7 +536,8 @@ public class ManejadorSolicitud implements Serializable {
         }
 
     }
-    public void Saludar(){
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "OK"));
+
+    public void Saludar() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "OK"));
     }
 }

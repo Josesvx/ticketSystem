@@ -114,7 +114,7 @@ public class ManejadorLogin implements Serializable {
         id = oreo.UsuarioId();
         if (id > 0) {
             directorio = Dfl.find(id);
-            if (!(directorio.getIdRol().getIdRol() == 2)) {
+            if (!(directorio.getIdRol().getIdRol() == 2 || directorio.getIdRol().getIdRol()== 4)) {
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
                 } catch (IOException ex) {
@@ -134,7 +134,7 @@ public class ManejadorLogin implements Serializable {
         id = oreo.UsuarioId();
         if (id > 0) {
             directorio = Dfl.find(id);
-            if (!(directorio.getIdRol().getIdRol() == 3)) {
+            if (!(directorio.getIdRol().getIdRol() == 3 || directorio.getIdRol().getIdRol()== 4)) {
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
                 } catch (IOException ex) {
@@ -153,22 +153,33 @@ public class ManejadorLogin implements Serializable {
     public boolean usuariogerente() {
         idg = oreo.UsuarioId();
         direc= Dfl.find(idg);
-        if((direc.getIdRol().getIdRol()==4)){
-            return false;
+        if((direc.getIdRol().getIdRol()==4) || direc.getIdRol().getIdRol()==4){
+            return true;
         
         }else{
-        return true;
+        return false;
     }
     }
     
     public boolean usuariojefedepto() {
         idg = oreo.UsuarioId();
         direc= Dfl.find(idg);
-        if((direc.getIdRol().getIdRol()==3)){
-            return false;
+        if((direc.getIdRol().getIdRol()==3 || direc.getIdRol().getIdRol()==4)){
+            return true;
         
         }else{
-        return true;
+        return false;
+    }
+    }
+    
+     public boolean usuariotecnico() {
+        idg = oreo.UsuarioId();
+        direc= Dfl.find(idg);
+        if((direc.getIdRol().getIdRol()==2 || direc.getIdRol().getIdRol()==4)){
+            return true;
+        
+        }else{
+        return false;
     }
     }
 
