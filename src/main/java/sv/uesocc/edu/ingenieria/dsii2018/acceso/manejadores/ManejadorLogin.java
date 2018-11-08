@@ -30,7 +30,7 @@ public class ManejadorLogin implements Serializable {
     @EJB
     private DirectorioFacadeLocal Dfl;
     private Directorio directorio, Usuario, direc;
-    private String redireccionar = null, nombreUsuario;
+    private String redireccionar = null, nombreUsuario, rol;
     private CookieInstance oreo;
     private int id, id2, idg;
 
@@ -71,6 +71,14 @@ public class ManejadorLogin implements Serializable {
         Usuario = Dfl.find(id2);
         nombreUsuario = Usuario.getUsuario();
         return nombreUsuario;
+
+    }
+    
+    public String nombreRol() {
+        id2 = oreo.UsuarioId();
+        Usuario = Dfl.find(id2);
+        rol = Usuario.getIdRol().getNombre();
+        return rol;
 
     }
 
@@ -152,6 +160,7 @@ public class ManejadorLogin implements Serializable {
         return true;
     }
     }
+    
     public boolean usuariojefedepto() {
         idg = oreo.UsuarioId();
         direc= Dfl.find(idg);

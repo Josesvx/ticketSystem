@@ -65,6 +65,7 @@ public class ManejadorSolicitud implements Serializable {
     private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
             numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
             numeroSolicitudes7, numeroSolicitudes8, numeroESol;
+
     FacesMessage message = new FacesMessage();
 
     @EJB
@@ -90,6 +91,7 @@ public class ManejadorSolicitud implements Serializable {
 
     @PostConstruct
     public void init() {
+      
         listaIT = new ArrayList<>();
         listaGen = new ArrayList<>();
         llenarDeps();
@@ -121,12 +123,14 @@ public class ManejadorSolicitud implements Serializable {
         categoria = new Categoria();
 
         directorio = new Directorio();
-
+      
         descMant = new DescripcionMantenimiento();
 
         mantEnc = new MantenimientoEncargado();
 
         encargado = new Encargado();
+
+        estadoSolicitud = new EstadoSolicitud();
 
         oreo = new CookieInstance();
 
@@ -140,6 +144,7 @@ public class ManejadorSolicitud implements Serializable {
         }
 
         llenarFiltro();
+        ObtenerSolicitudesXTec();
     }
 
     public List<Solicitud> llenarFiltro() {
@@ -325,6 +330,7 @@ public class ManejadorSolicitud implements Serializable {
     public void subirImagen(FileUploadEvent event) {
         String path = System.getProperty("user.home");
         String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
+        this.solicitud.setAdjunto(event.getFile().getFileName());
         if (event.getFile().getContents() != null && event.getFile().getContents().length > 0) {
             try (FileOutputStream fl = new FileOutputStream(finalPath)) {
                 fl.write(event.getFile().getContents());
@@ -352,15 +358,6 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setNSeguimiento(CrearNumSeguimiento());
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
-            if (adjuntoProv != null) {
-                this.solicitud.setAdjunto(adjuntoProv);
-                sfl.create(this.solicitud);
-
-            } else {
-                sfl.create(this.solicitud);
-
-            }
-
             sfl.create(this.solicitud);
             finale = CrearEstadoS();
         } catch (Exception e) {
@@ -396,9 +393,15 @@ public class ManejadorSolicitud implements Serializable {
     public List<Solicitud> ObtenerCreadas() {
         return null;
     }
-
-    public List<Solicitud> ObtenerSolicitudesXTec(int tec) {
-        return null;
+    
+    //METODO PARA OBTENER LAS SOLITUDES QUE SE HAN ASIGNADO A UN TECNICO
+    public Solicitud ObtenerSolicitudesXTec() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        if (listaSol == null || listaSol.isEmpty()) {
+            return null;
+        } else {
+            return listaSol.get(0);
+        }
     }
 
     public List<Solicitud> SolicitudePorCorrelativo(String correlativo) {
@@ -528,5 +531,8 @@ public class ManejadorSolicitud implements Serializable {
             return formateador.format(listaESOl.get(0).getFecha());
         }
 
+    }
+    public void Saludar(){
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "OK"));
     }
 }

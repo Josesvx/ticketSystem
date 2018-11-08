@@ -33,6 +33,7 @@
                                  border-top-left-radius:25px; 
                                  border-top-right-radius:25px;">
 
+
                                 <h:outputLabel  value="Crear un ticket" 
                                                 style="
                                                 color: white;
@@ -136,6 +137,7 @@
                                             <p:message for="adjunto"/>
                                         </td>
 
+
                                     </tr> 
                                     <tr>
                                         <td colspan="2" align="center">
@@ -158,6 +160,7 @@
                         <p:dialog header="Numero de Seguimiento" resizable="false" position="center" widgetVar="dlg2" modal="true" width="300" height="250" footer="Con este numero podras identificar tu solicitud" >                
                             <h:outputText value="#{manejadorSolicitud.CrearNumSeguimiento()}"/>
                         </p:dialog> 
+
                     </div>
                 </ui:define>
     </ui:composition>    

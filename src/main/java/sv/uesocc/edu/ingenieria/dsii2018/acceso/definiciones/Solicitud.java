@@ -16,7 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Solicitud.findByIdSolicitud", query = "SELECT s FROM Solicitud s WHERE s.idSolicitud = :idSolicitud")
     , @NamedQuery(name = "Solicitud.findByTitulo", query = "SELECT s FROM Solicitud s WHERE s.titulo = :titulo")
     , @NamedQuery(name = "Solicitud.findByDescripcion", query = "SELECT s FROM Solicitud s WHERE s.descripcion = :descripcion")
+    , @NamedQuery(name = "Solicitud.findByAdjunto", query = "SELECT s FROM Solicitud s WHERE s.adjunto = :adjunto")
     , @NamedQuery(name = "Solicitud.findByNSeguimiento", query = "SELECT s FROM Solicitud s WHERE s.nSeguimiento = :nSeguimiento")
     , @NamedQuery(name = "Solicitud.findByFeedback", query = "SELECT s FROM Solicitud s WHERE s.feedback = :feedback")
     , @NamedQuery(name = "Solicitud.findByCorrelativo", query = "SELECT s FROM Solicitud s WHERE s.correlativo = :correlativo")
@@ -51,6 +51,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Solicitud.findByIdPrioridad", query = "SELECT S FROM Solicitud AS S WHERE S.idPrioridad.idPrioridad= :idPrioridad")
     , @NamedQuery(name = "Solicitud.findByIdCategoria", query= "SELECT S FROM Solicitud AS S WHERE S.idCategoria.idCategoria= :idCategoria")
     , @NamedQuery(name = "Solicitud.findByIdDirectorio", query= "SELECT S FROM Solicitud AS s WHERE S.idDirectorio.idDirectorio= :idDirectorio")
+    , @NamedQuery(name = "Solicitud.findByTecnic", query= "SELECT S FROM Solicitud AS S JOIN S.mantenimientoEncargadoList AS SM JOIN SM.encargadoList AS SME WHERE SME.idDirectorio.idDirectorio = :idDirectorio AND SME.estado = true")
+    , @NamedQuery(name = "Solicitud.findByIdCategoria", query = "SELECT S FROM Solicitud AS S WHERE S.idCategoria.idCategoria= :idCategoria")
+    , @NamedQuery(name = "Solicitud.findByIdDirectorio", query = "SELECT S FROM Solicitud AS s WHERE S.idDirectorio.idDirectorio= :idDirectorio")
     , @NamedQuery(name = "Solicitud.findByAudStatus", query = "SELECT s FROM Solicitud s WHERE s.audStatus = :audStatus")})
 public class Solicitud implements Serializable {
 
@@ -66,9 +69,8 @@ public class Solicitud implements Serializable {
     @Basic(optional = false)
     @Column(name = "descripcion", nullable = false, length = 250)
     private String descripcion;
-    @Lob
-    @Column(name = "adjunto")
-    private byte[] adjunto;
+    @Column(name = "adjunto", length = 500)
+    private String adjunto;
     @Basic(optional = false)
     @Column(name = "n_seguimiento", nullable = false, length = 25)
     private String nSeguimiento;
@@ -146,11 +148,11 @@ public class Solicitud implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public byte[] getAdjunto() {
+    public String getAdjunto() {
         return adjunto;
     }
 
-    public void setAdjunto(byte[] adjunto) {
+    public void setAdjunto(String adjunto) {
         this.adjunto = adjunto;
     }
 

@@ -44,7 +44,15 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public List<Solicitud> findByTecnic(int tec) {
-        return null;
+       List<Solicitud> lista = null;
+        try {
+            Query consulta = em.createNamedQuery("Solicitud.findByTecnic");
+            consulta.setParameter("idDirectorio", tec);
+            lista = consulta.getResultList();
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return lista;
     }
 
     @Override

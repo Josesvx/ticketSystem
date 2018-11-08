@@ -14,7 +14,7 @@
             <p:growl id="messages" showDetail="true" />
 
             <p:toolbar style="
-                       height:45px;">
+                       height:55px;">
                 <f:facet name="left">
                     <p:commandButton type="button" value="Inicio" onclick="location.href='principal.jsf'" icon="ui-icon-home" style="height: 35px;"/>
 
@@ -22,17 +22,35 @@
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
                     </span>
 
-                    <p:commandButton style="height: 35px;" type="button" value="Creación de ticket"  onclick="location.href='CrearTicket.jsf'" title="Crear" icon="ui-icon-disk" />
-                    <p:commandButton style="height: 35px;" type="button" value="Seguimiento" title="Seguimiento" icon="ui-icon-zoomin" />
-                    <p:commandButton style="height: 35px;" type="button" value="Estadisticas" title="Estadistica" onclick="location.href='Estadistica.jsf'" icon="ui-icon-print" disabled="#{manejadorLogin.usuariogerente()}" />
-                    <p:commandButton style="height: 35px;" type="button" value="Asignar Prioridad" onclick="location.href='AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" disabled="#{manejadorLogin.usuariojefedepto()}" />
+                    <p:commandButton style="
+                                     height: 50px; 
+                                     font-size: 17px;"  
+                                     type="button" value="Creación de ticket"  onclick="location.href='CrearTicket.jsf'" title="Crear" icon="ui-icon-disk" />
+                    <p:commandButton style="
+                                     height: 50px; 
+                                     font-size: 17px;" 
+                                     type="button" value="Seguimiento" title="Seguimiento" icon="ui-icon-zoomin" />
+                    <p:commandButton style="
+                                     height: 50px; 
+                                     font-size: 17px;" 
+                                     type="button" value="Estadisticas" title="Estadistica" onclick="location.href='Estadistica.jsf'" icon="ui-icon-print" disabled="#{manejadorLogin.usuariogerente()}" />
+                    <p:commandButton style="
+                                     height: 50px; 
+                                     font-size: 17px;" 
+                                     type="button" value="Asignar Prioridad" onclick="location.href='AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" disabled="#{manejadorLogin.usuariojefedepto()}" />
+                    <p:commandButton style="
+                                     height: 50px; 
+                                     font-size: 17px;" 
+                                     type="button" value="Mantenimiento" onclick="location.href='Resolucion.jsf'" title="Resolución" icon="ui-icon-check"  />
                     <span class="ui-separator">
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
                     </span>
                 </f:facet>
 
                 <f:facet name="right">
-                    <p:commandButton  value=" Logeado como: #{manejadorLogin.nombreUsuario}" title="Cerrar Sesion" icon="	ui-icon-person"/>
+                    <p:commandButton  value="#{manejadorLogin.nombreiniciar()}" title="#{manejadorLogin.nombreRol()}" icon="	ui-icon-person" style="
+                                     height: 50px; 
+                                     font-size: 15px;"/>
                 </f:facet>
 
             </p:toolbar>
