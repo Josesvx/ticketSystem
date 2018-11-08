@@ -43,6 +43,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 public class ManejadorSolicitud implements Serializable {
 
     private List<Categoria> listaCat;
+    private ManejadorCorreo mail;
     private List<Solicitud> listaSol;
     private List<Prioridad> listaP;
     private List<Estado> listaEs;
@@ -102,6 +103,8 @@ public class ManejadorSolicitud implements Serializable {
         estadoSolicitud = new EstadoSolicitud();
 
         directorio = new Directorio();
+        
+        mail =  new ManejadorCorreo();
 
         oreo = new CookieInstance();
 
@@ -230,6 +233,7 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
             sfl.create(this.solicitud);
+            mail.EnviarCorreo(this.solicitud, "katirox9@gmail.com");
             finale = CrearEstadoS();
         } catch (Exception e) {
         }
