@@ -1,10 +1,6 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +13,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 import org.primefaces.event.FileUploadEvent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
@@ -57,8 +52,7 @@ public class ManejadorSolicitud implements Serializable {
     private CookieInstance oreo;
     private String nombre, seguimiento, nombreDep;
     private int idCategoria, numero, id, id2, idPrioridad;
-    private String imagenAdjunto;
-    private byte[] adjuntoProv;
+
     private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
     private String redirecccion = null, finale = null;
     FacesMessage message = new FacesMessage();
@@ -308,6 +302,7 @@ public class ManejadorSolicitud implements Serializable {
     public void subirImagen(FileUploadEvent event) {
         String path = System.getProperty("user.home");
         String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
+        this.solicitud.setAdjunto(event.getFile().getFileName());
         if (event.getFile().getContents() != null && event.getFile().getContents().length > 0) {
             try (FileOutputStream fl = new FileOutputStream(finalPath)) {
                 fl.write(event.getFile().getContents());
@@ -335,14 +330,7 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setNSeguimiento(CrearNumSeguimiento());
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
-            if (adjuntoProv != null) {
-                this.solicitud.setAdjunto(adjuntoProv);
-                sfl.create(this.solicitud);
-
-            } else {
-                sfl.create(this.solicitud);
-
-            }
+            sfl.create(this.solicitud);
             finale = CrearEstadoS();
         } catch (Exception e) {
         }
