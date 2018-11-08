@@ -1,9 +1,6 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,7 +13,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 import org.primefaces.event.FileUploadEvent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
@@ -43,20 +39,23 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 public class ManejadorSolicitud implements Serializable {
 
     private List<Categoria> listaCat;
+
     private ManejadorCorreo mail;
-    private List<Solicitud> listaSol;
+    private List<Solicitud> listaSol, listaIT, listaGen;
     private List<Prioridad> listaP;
     private List<Estado> listaEs;
     private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
-    private Solicitud solicitudS;
+    protected Solicitud solicitudS;
     private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
     private Categoria categoria;
     private Directorio directorio, Departamento;
     private CookieInstance oreo;
-    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
+    private String nombre, seguimiento, nombreDep;
     private int idCategoria, numero, id, id2, idPrioridad;
+    private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
+    private String redirecccion = null, finale = null;
     FacesMessage message = new FacesMessage();
 
     @EJB
@@ -75,19 +74,119 @@ public class ManejadorSolicitud implements Serializable {
     @PostConstruct
     public void init() {
 
+        listaIT = new ArrayList<>();
+        listaGen = new ArrayList<>();
+        llenarDeps();
+        llenarPrioridad();
+        llenarCategoria();
+
+        List<Solicitud> listaS = sfl.findByEstado(1);
+        if (listaS != null && !listaS.isEmpty()) {
+            listaSol = listaS;
+        } else {
+            listaSol = new ArrayList<>();
+        }
+
+        for (Solicitud solicitud1 : listaSol) {
+            if (solicitud1.getIdCategoria().getIdCategoria() == 1 && solicitud1.getIdDirectorio().getIdRol().getIdRol() == 3) {
+                listaIT.add(solicitud1);
+            } else {
+                listaGen.add(solicitud1);
+            }
+        }
+
+        solicitud = new Solicitud();
+
+        categoria = new Categoria();
+
+        directorio = new Directorio();
+
+        estadoSolicitud = new EstadoSolicitud();
+
+        oreo = new CookieInstance();
+
+        id2 = oreo.UsuarioId();
+        Departamento = dfl.find(id2);
+        nombreDep = Departamento.getIdDepartamento().getNombre();
+        if (nombreDep != null && !nombreDep.isEmpty()) {
+            nombre = nombreDep;
+        } else {
+            nombre = "No Funciona";
+        }
+
+        llenarFiltro();
+    }
+
+    public List<Solicitud> llenarFiltro() {
+        Directorio dir = dfl.find(oreo.UsuarioId());
+        if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
+            if (listaIT != null && !listaIT.isEmpty()) {
+                return listaIT;
+            } else {
+                return new ArrayList<>();
+            }
+        } else if (listaGen != null && !listaGen.isEmpty()) {
+            return listaGen;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void llenarCategoria() {
         List<Categoria> listaC = cfl.findAll();
         if (listaC != null && !listaC.isEmpty()) {
             listaCat = listaC;
         } else {
             listaCat = new ArrayList<>();
         }
+    }
 
+    public void llenarPrioridad() {
         List<Prioridad> listaPri = pfl.findAll();
         if (listaPri != null && !listaPri.isEmpty()) {
             listaP = listaPri;
         } else {
             listaP = new ArrayList<>();
         }
+    }
+
+    public void llenarDeps() {
+        for (int i = 1; i <= 8; i++) {
+            switch (i) {
+                case 1:
+                    numeroSolicitudes1 = sfl.findByDepartamento(i);
+                    break;
+                case 2:
+                    numeroSolicitudes2 = sfl.findByDepartamento(i);
+                    break;
+                case 3:
+                    numeroSolicitudes3 = sfl.findByDepartamento(i);
+                    break;
+                case 4:
+                    numeroSolicitudes4 = sfl.findByDepartamento(i);
+                    break;
+                case 5:
+                    numeroSolicitudes5 = sfl.findByDepartamento(i);
+                    break;
+                case 6:
+                    numeroSolicitudes6 = sfl.findByDepartamento(i);
+                    break;
+                case 7:
+                    numeroSolicitudes7 = sfl.findByDepartamento(i);
+                    break;
+                case 8:
+                    numeroSolicitudes8 = sfl.findByDepartamento(i);
+                    break;
+            }
+        }
+    }
+
+    public EstadoSolicitud geteSol() {
+        return eSol;
+    }
+
+    public void seteSol(EstadoSolicitud eSol) {
+        this.eSol = eSol;
 
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
@@ -103,8 +202,8 @@ public class ManejadorSolicitud implements Serializable {
         estadoSolicitud = new EstadoSolicitud();
 
         directorio = new Directorio();
-        
-        mail =  new ManejadorCorreo();
+
+        mail = new ManejadorCorreo();
 
         oreo = new CookieInstance();
 
@@ -197,7 +296,7 @@ public class ManejadorSolicitud implements Serializable {
 
     public String CrearNumSeguimiento() {
         numero = (int) (Math.random() * 1000000) + 1;
-        seguimiento = "T"+"S"+String.valueOf(numero);
+        seguimiento = "T" + "S" + String.valueOf(numero);
 
         return seguimiento;
     }
@@ -205,6 +304,7 @@ public class ManejadorSolicitud implements Serializable {
     public void subirImagen(FileUploadEvent event) {
         String path = System.getProperty("user.home");
         String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
+        this.solicitud.setAdjunto(finalPath);
         if (event.getFile().getContents() != null && event.getFile().getContents().length > 0) {
             try (FileOutputStream fl = new FileOutputStream(finalPath)) {
                 fl.write(event.getFile().getContents());
@@ -306,23 +406,24 @@ public class ManejadorSolicitud implements Serializable {
     public void setIdPrioridad(int idPrioridad) {
         this.idPrioridad = idPrioridad;
     }
+
     //METODO PARA BUSCAR TODOS LOS ESTADOS CAMBIADOS PARA LA SOLICITUD BUSCADA
     public String DevolverEstado(Solicitud s) {
         listaEs = new ArrayList<>();
-        listaEs =  efl.findLastEstado(s.getIdSolicitud());                                
-        if (listaEs.isEmpty() ) {
+        listaEs = efl.findLastEstado(s.getIdSolicitud());
+        if (listaEs.isEmpty()) {
             return "Sin Estado";
         } else {
             return listaEs.get(0).getNombre();
         }
 
     }
-    
+
     //METODO PARA BUSCAR LAS FECHAS DE CREACION DE LAS SOLICITUDES EN LA TABLA ESTADO SOLICITUD
     public String DevolverFechaCreacion(Solicitud s) {
         listaESOl = new ArrayList<>();
-        listaESOl =  esfl.findByCreation(s.getIdSolicitud());
-        if (listaESOl.isEmpty() ) {
+        listaESOl = esfl.findByCreation(s.getIdSolicitud());
+        if (listaESOl.isEmpty()) {
             return "Sin fechaCreacion";
         } else {
             SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");

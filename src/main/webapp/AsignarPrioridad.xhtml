@@ -20,7 +20,7 @@
         <ui:define name="body">
             <h:form id="frmAsignar">
                 <center>
-                    <p:dataTable id="solicitudes" var="solicitud" value="#{manejadorSolicitud.listaSol}" 
+                    <p:dataTable id="solicitudes" var="solicitud" value="#{manejadorSolicitud.llenarFiltro()}" 
                                  rowKey="#{solicitud}" selection="#{manejadorSolicitud.solicitudS}"
                                  selectionMode="single"
                                  style="
@@ -37,10 +37,14 @@
                         <p:column headerText="Departamento">
                             <h:outputText value="#{solicitud.idDirectorio.idDepartamento.nombre}" />
                         </p:column>
+                        <p:column headerText="Categoria">
+                            <h:outputText value="#{solicitud.idCategoria.nombre}" />
+                        </p:column>
                     </p:dataTable>
 
                     <p:contextMenu for="solicitudes">
                         <p:menuitem value="Asignar Prioridad"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo').show()"/>
+                        <p:menuitem value="Asignar técnico"  update="tecni" icon="ui-icon-pencil" oncomplete="PF('dialotec').show()"/>
                     </p:contextMenu>
 
                     <p:dialog header="Asignaciones" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
@@ -54,6 +58,19 @@
                                 </p:selectOneMenu>
                             </p:panelGrid>
                             <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}"></p:commandButton>
+                        </p:outputPanel>
+                    </p:dialog>
+                    <p:dialog header="Asignaciones" widgetVar="dialotec" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="tecni" style="text-align:center;">
+                            <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
+
+                                <h:outputText value="Asignar técnico " />
+                                <p:selectOneMenu id="cmbTecnico" >
+                                    <f:selectItems value="#{manejadorTecnico.listaTec}" var="valor" itemValue="#{valor.idRol.idRol}" itemLabel="#{valor.nombre1}">
+                                    </f:selectItems>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                            <p:commandButton value="asignar" id="btnAsignarTecnico" icon="ui-icon-check" actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}"></p:commandButton>
                         </p:outputPanel>
                     </p:dialog>
                 </center>

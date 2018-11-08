@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Directorio.findAll", query = "SELECT d FROM Directorio d")
     , @NamedQuery(name = "Directorio.findByIdDirectorio", query = "SELECT d FROM Directorio d WHERE d.idDirectorio = :idDirectorio")
     , @NamedQuery(name = "Directorio.findByNombre1", query = "SELECT d FROM Directorio d WHERE d.nombre1 = :nombre1")
+    , @NamedQuery(name = "Directorio.findTecnico", query = "SELECT d FROM Directorio d WHERE d.idRol.idRol = 2 AND d.idDepartamento.idDepartamento= :idDepartamento")    
     , @NamedQuery(name = "Directorio.findByNombre2", query = "SELECT d FROM Directorio d WHERE d.nombre2 = :nombre2")
     , @NamedQuery(name = "Directorio.findByApellido1", query = "SELECT d FROM Directorio d WHERE d.apellido1 = :apellido1")
     , @NamedQuery(name = "Directorio.findByApellido2", query = "SELECT d FROM Directorio d WHERE d.apellido2 = :apellido2")
