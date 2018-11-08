@@ -46,7 +46,6 @@ public class ManejadorSolicitud implements Serializable {
     private List<Categoria> listaCat;
     private List<Solicitud> listaSol, listaIT, listaGen;
     private List<Prioridad> listaP;
-//    private List<Directorio> listaTec;
     private DescripcionMantenimiento descMant;
     private MantenimientoEncargado mantEnc;
     private Encargado encargado;
@@ -56,6 +55,7 @@ public class ManejadorSolicitud implements Serializable {
     protected Solicitud solicitudS;
     private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
+    private Estado estado;
     private Categoria categoria;
     private Directorio directorio, Departamento, dir;
     private CookieInstance oreo;
@@ -64,7 +64,7 @@ public class ManejadorSolicitud implements Serializable {
     private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
     private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
             numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
-            numeroSolicitudes7, numeroSolicitudes8;
+            numeroSolicitudes7, numeroSolicitudes8, numeroESol;
     FacesMessage message = new FacesMessage();
 
     @EJB
@@ -85,17 +85,17 @@ public class ManejadorSolicitud implements Serializable {
     private MantenimientoEncargadoFacadeLocal mefl;
     @EJB
     private EncargadoFacadeLocal enfl;
-    
+
     private ManejadorTecnico mantec;
-    
 
     @PostConstruct
     public void init() {
-        listaIT=new ArrayList<>();
-        listaGen=new ArrayList<>();
+        listaIT = new ArrayList<>();
+        listaGen = new ArrayList<>();
         llenarDeps();
         llenarPrioridad();
         llenarCategoria();
+        numeroESol=esfl.count()+1;
 
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
@@ -112,17 +112,20 @@ public class ManejadorSolicitud implements Serializable {
             }
         }
 
+        estado = new Estado();
+
+        estadoSolicitud = new EstadoSolicitud();
 
         solicitud = new Solicitud();
 
         categoria = new Categoria();
 
         directorio = new Directorio();
-        
+
         descMant = new DescripcionMantenimiento();
-        
+
         mantEnc = new MantenimientoEncargado();
-        
+
         encargado = new Encargado();
 
         oreo = new CookieInstance();
@@ -135,20 +138,12 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             nombre = "No Funciona";
         }
-        
+
         llenarFiltro();
-//        ObtenerTecnicos();
-   }
-    
-//    public List<Directorio> ObtenerTecnicos() {
-//        dir = dfl.find(oreo.UsuarioId());
-//            listaTec = dfl.findByTecFree(dir.getIdDepartamento().getIdDepartamento());
-//            return listaTec;
-//
-//    }
+    }
 
     public List<Solicitud> llenarFiltro() {
-        Directorio dir= dfl.find(oreo.UsuarioId());
+        Directorio dir = dfl.find(oreo.UsuarioId());
         if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
             if (listaIT != null && !listaIT.isEmpty()) {
                 return listaIT;
@@ -179,6 +174,7 @@ public class ManejadorSolicitud implements Serializable {
             listaP = new ArrayList<>();
         }
     }
+
     public void llenarDeps() {
         for (int i = 1; i <= 8; i++) {
             switch (i) {
@@ -216,7 +212,7 @@ public class ManejadorSolicitud implements Serializable {
 
     public void seteSol(EstadoSolicitud eSol) {
         this.eSol = eSol;
-      
+
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
             listaSol = listaS;
@@ -225,10 +221,8 @@ public class ManejadorSolicitud implements Serializable {
         }
 
         solicitud = new Solicitud();
-        
-        categoria = new Categoria();
 
-        estadoSolicitud = new EstadoSolicitud();
+        categoria = new Categoria();
 
         directorio = new Directorio();
 
@@ -264,14 +258,6 @@ public class ManejadorSolicitud implements Serializable {
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
-    
-//    public List<Directorio> getListaTec() {
-//        return listaTec;
-//    }
-//
-//    public void setListaTec(List<Directorio> listaTec) {
-//        this.listaTec = listaTec;
-//    }
 
     public String getNombre() {
         return nombre;
@@ -331,7 +317,7 @@ public class ManejadorSolicitud implements Serializable {
 
     public String CrearNumSeguimiento() {
         numero = (int) (Math.random() * 1000000) + 1;
-        seguimiento = "T"+"S"+String.valueOf(numero);
+        seguimiento = "T" + "S" + String.valueOf(numero);
 
         return seguimiento;
     }
@@ -429,42 +415,54 @@ public class ManejadorSolicitud implements Serializable {
 
     public void Actualizar(Solicitud solicitud) {
         Prioridad p = pfl.find(idPrioridad);
-        Directorio d= dfl.find(idDirectorio);
+        Directorio d = dfl.find(idDirectorio);
         this.directorio = dfl.find(oreo.UsuarioId());
-        
+
         //crear DescripcionMtto
-        try{
-        this.descMant.setIdDescripcionMantenimiento(dmfl.count()+1);
-        this.descMant.setAudFechaCreacion(new Date());
-        this.descMant.setAudNombreCreacion(this.directorio.getUsuario());
-        this.descMant.setAudStatus(true);
-        //crear MantEncargado
-        this.mantEnc.setIdMantenimientoEncargado(mefl.count()+1);
-        this.mantEnc.setAudFechaCreacion(new Date());
-        this.mantEnc.setAudNombreCreacion(this.directorio.getUsuario());
-        this.mantEnc.setAudStatus(true);
-        this.mantEnc.setIdSolicitud(solicitudS);
-        this.mantEnc.setIdDescripcionMantenimiento(descMant);
-        //crear Encargado
-        this.encargado.setIdEncargado(enfl.count()+1);
-        this.encargado.setIdDirectorio(d);
-        this.encargado.setIdMantenimientoEncargado(mantEnc);
-        this.encargado.setEstado(true);
-        this.encargado.setAudFechaCreacion(new Date());
-        this.encargado.setAudNombreCreacion(this.directorio.getUsuario());
-        this.encargado.setAudStatus(true);
-        
-        solicitudS.setIdPrioridad(p);
-        sfl.edit(solicitudS);
-        dmfl.create(descMant);
-        mefl.create(mantEnc);
-        enfl.create(encargado);
-        
-        }catch(Exception ex){
+        try {
+            this.descMant.setIdDescripcionMantenimiento(dmfl.count() + 1);
+            this.descMant.setAudFechaCreacion(new Date());
+            this.descMant.setAudNombreCreacion(this.directorio.getUsuario());
+            this.descMant.setAudStatus(true);
+            //crear MantEncargado
+            this.mantEnc.setIdMantenimientoEncargado(mefl.count() + 1);
+            this.mantEnc.setAudFechaCreacion(new Date());
+            this.mantEnc.setAudNombreCreacion(this.directorio.getUsuario());
+            this.mantEnc.setAudStatus(true);
+            this.mantEnc.setIdSolicitud(solicitudS);
+            this.mantEnc.setIdDescripcionMantenimiento(descMant);
+            //crear Encargado
+            this.encargado.setIdEncargado(enfl.count() + 1);
+            this.encargado.setIdDirectorio(d);
+            this.encargado.setIdMantenimientoEncargado(mantEnc);
+            this.encargado.setEstado(true);
+            this.encargado.setAudFechaCreacion(new Date());
+            this.encargado.setAudNombreCreacion(this.directorio.getUsuario());
+            this.encargado.setAudStatus(true);
+            //cambiar EstadoSolicitud
+            this.estadoSolicitud.setIdEstadoSolicitud(numeroESol);
+            this.estadoSolicitud.setIdEstado(efl.find(2));
+            this.estadoSolicitud.setJustificacion("Asignada");
+            id = oreo.UsuarioId();
+            this.directorio = dfl.find(id);
+            this.estadoSolicitud.setAudNombreCreacion(this.directorio.getUsuario());
+            this.estadoSolicitud.setAudFechaCreacion(new Date());
+            this.estadoSolicitud.setAudStatus(true);
+            this.estadoSolicitud.setFecha(new Date());
+            this.estadoSolicitud.setIdSolicitud(solicitudS);
+            
+            
+            solicitudS.setIdPrioridad(p);
+            sfl.edit(solicitudS);
+            dmfl.create(descMant);
+            mefl.create(mantEnc);
+            enfl.create(encargado);
+            esfl.create(estadoSolicitud);
+
+        } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));
         }
-        
-        
+
     }
 
     public List<Solicitud> ObtenerPorUsuario(int idDirectorio) {
@@ -506,25 +504,24 @@ public class ManejadorSolicitud implements Serializable {
     public void setIdDirectorio(int idDirectorio) {
         this.idDirectorio = idDirectorio;
     }
-    
-    
+
     //METODO PARA BUSCAR TODOS LOS ESTADOS CAMBIADOS PARA LA SOLICITUD BUSCADA
     public String DevolverEstado(Solicitud s) {
         listaEs = new ArrayList<>();
-        listaEs =  efl.findLastEstado(s.getIdSolicitud());                                
-        if (listaEs.isEmpty() ) {
+        listaEs = efl.findLastEstado(s.getIdSolicitud());
+        if (listaEs.isEmpty()) {
             return "Sin Estado";
         } else {
             return listaEs.get(0).getNombre();
         }
 
     }
-    
+
     //METODO PARA BUSCAR LAS FECHAS DE CREACION DE LAS SOLICITUDES EN LA TABLA ESTADO SOLICITUD
     public String DevolverFechaCreacion(Solicitud s) {
         listaESOl = new ArrayList<>();
-        listaESOl =  esfl.findByCreation(s.getIdSolicitud());
-        if (listaESOl.isEmpty() ) {
+        listaESOl = esfl.findByCreation(s.getIdSolicitud());
+        if (listaESOl.isEmpty()) {
             return "Sin fechaCreacion";
         } else {
             SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");

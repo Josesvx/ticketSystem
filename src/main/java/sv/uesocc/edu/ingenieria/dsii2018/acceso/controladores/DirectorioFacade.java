@@ -60,7 +60,7 @@ public class DirectorioFacade extends AbstractFacade<Directorio> implements Dire
         } else {
             Query query2 = em.createNamedQuery("Directorio.findTecnico");
             query2.setParameter("idDepartamento", idDepartamento);
-            List<Directorio> lista2 = query.getResultList();
+            List<Directorio> lista2 = query2.getResultList();
             return lista2;
         }
     }
