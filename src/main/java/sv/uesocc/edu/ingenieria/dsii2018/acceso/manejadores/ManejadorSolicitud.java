@@ -192,8 +192,8 @@ public class ManejadorSolicitud implements Serializable {
         }
 
     }
-    
-      public List<Solicitud> llenarFiltroITGerente() {
+
+    public List<Solicitud> llenarFiltroITGerente() {
         Directorio dir = dfl.find(oreo.UsuarioId());
 
         if (listaIT != null && !listaIT.isEmpty()) {
@@ -505,11 +505,10 @@ public class ManejadorSolicitud implements Serializable {
             esfl.create(estadoSolicitud);
 //            mail.EnviarCorreo(solicitudS, d);
             try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("AsignarPrioridad.jsf");
-                } catch (IOException ex) {
-                    Logger.getLogger(ManejadorSolicitud.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
+                FacesContext.getCurrentInstance().getExternalContext().redirect("AsignarPrioridad.jsf");
+            } catch (IOException ex) {
+                Logger.getLogger(ManejadorSolicitud.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));
         }
