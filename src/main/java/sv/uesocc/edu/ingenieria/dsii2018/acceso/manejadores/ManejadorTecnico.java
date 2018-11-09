@@ -19,7 +19,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 @ViewScoped
 public class ManejadorTecnico implements Serializable {
 
-    List<Directorio> listaTec, listaTecnicos, listaFiltrada;
+    List<Directorio> listaTec, listaTecIT, listaTecMA, listaTecnicos, listaFiltrada;
     private CookieInstance oreo;
     private Directorio dir;
     protected int idDirectorio;
@@ -29,19 +29,34 @@ public class ManejadorTecnico implements Serializable {
     @PostConstruct
 //    @Override
     public void init() {
-        listaTec=new ArrayList<>();
+        listaTec = new ArrayList<>();
         oreo = new CookieInstance();
         ObtenerTecnicos();
+        ObtenerTecnicosIT();
+        ObtenerTecnicosMA();
 
     }
 
     public List<Directorio> ObtenerTecnicos() {
         dir = dfl.find(oreo.UsuarioId());
-            listaTec = dfl.findByTecFree(dir.getIdDepartamento().getIdDepartamento());
-            return listaTec;
+
+        listaTec = dfl.findByTecFree(dir.getIdDepartamento().getIdDepartamento());
+        return listaTec;
 
     }
-    
+
+    public List<Directorio> ObtenerTecnicosIT() {
+        listaTecIT = dfl.findByTecFree(7);
+        return listaTecIT;
+
+    }
+
+    public List<Directorio> ObtenerTecnicosMA() {
+        listaTecMA = dfl.findByTecFree(4);
+        return listaTecMA;
+
+    }
+
     public List<Directorio> getListaTec() {
         return listaTec;
     }
@@ -65,7 +80,21 @@ public class ManejadorTecnico implements Serializable {
     public void setIdDirectorio(int idDirectorio) {
         this.idDirectorio = idDirectorio;
     }
-    
-    
+
+    public List<Directorio> getListaTecIT() {
+        return listaTecIT;
+    }
+
+    public void setListaTecIT(List<Directorio> listaTecIT) {
+        this.listaTecIT = listaTecIT;
+    }
+
+    public List<Directorio> getListaTecMA() {
+        return listaTecMA;
+    }
+
+    public void setListaTecMA(List<Directorio> listaTecMA) {
+        this.listaTecMA = listaTecMA;
+    }
 
 }
