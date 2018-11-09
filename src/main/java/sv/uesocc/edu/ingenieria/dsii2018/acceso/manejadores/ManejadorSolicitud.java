@@ -1,11 +1,14 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -189,8 +192,8 @@ public class ManejadorSolicitud implements Serializable {
         }
 
     }
-    
-      public List<Solicitud> llenarFiltroITGerente() {
+
+    public List<Solicitud> llenarFiltroITGerente() {
         Directorio dir = dfl.find(oreo.UsuarioId());
 
         if (listaIT != null && !listaIT.isEmpty()) {
@@ -459,6 +462,7 @@ public class ManejadorSolicitud implements Serializable {
         Prioridad p = pfl.find(idPrioridad);
         Directorio d = dfl.find(idDirectorio);
         this.directorio = dfl.find(oreo.UsuarioId());
+        //llenarFiltro();
 
         //crear DescripcionMtto
         try {
@@ -499,8 +503,12 @@ public class ManejadorSolicitud implements Serializable {
             mefl.create(mantEnc);
             enfl.create(encargado);
             esfl.create(estadoSolicitud);
-            //mail.EnviarCorreo(solicitudS, d);
-
+//            mail.EnviarCorreo(solicitudS, d);
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("AsignarPrioridad.jsf");
+            } catch (IOException ex) {
+                Logger.getLogger(ManejadorSolicitud.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));
         }

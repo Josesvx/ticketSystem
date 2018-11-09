@@ -21,9 +21,14 @@
         <ui:define name="body">
             <br></br><br></br><br></br>
             <center>
-                <p:dataTable id="solicitudes" var="solicitud" value="#{manejadorSolicitud.llenarPorDirectorio()}" 
+                <p:dataTable id="solicitudes" var="solicitud"
                              style="
-                             width: 70%;">
+                             width: 70%;"
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10, 15"
+                             value="#{manejadorSolicitud.llenarPorDirectorio()}">
                     <f:facet name="header" >
                         Mantenimientos Solicitados
                     </f:facet>
