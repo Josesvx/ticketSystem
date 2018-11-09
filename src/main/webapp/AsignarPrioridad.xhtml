@@ -18,7 +18,59 @@
             </style>
         </ui:define>
         <ui:define name="body">
-            <h:form id="frmAsignar">
+            <p:tabView rendered="#{manejadorLogin.GerenteGeneral()}">
+                <p:tab title="IT-Gerente">
+                    <center>
+                        <p:dataTable id="solicitudesIG" var="solicitudIG" value="#{manejadorSolicitud.llenarFiltroManGerente()}" 
+                                     rowKey="#{solicitudIG}" selection="#{manejadorSolicitud.solicitudS}"
+                                     selectionMode="single"
+                                     style="
+                                     width: 70%;">
+                            <f:facet name="header" >
+                                Mantenimientos Solicitados
+                            </f:facet>
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{solicitudIG.NSeguimiento}" />
+                            </p:column>
+                            <p:column headerText="Titulo">
+                                <h:outputText value="#{solicitudIG.titulo}" />
+                            </p:column>
+                            <p:column headerText="Departamento">
+                                <h:outputText value="#{solicitudIG.idDirectorio.idDepartamento.nombre}" />
+                            </p:column>
+                            <p:column headerText="Categoria">
+                                <h:outputText value="#{solicitudIG.idCategoria.nombre}" />
+                            </p:column>
+                        </p:dataTable> 
+                    </center>
+                </p:tab>
+                <p:tab title="Mantenimiento-Gerente">
+                    <center>
+                        <p:dataTable id="solicitudesMG" var="solicitudMG" value="#{manejadorSolicitud.llenarFiltroITGerente()}" 
+                                     rowKey="#{solicitudMG}" selection="#{manejadorSolicitud.solicitudS}"
+                                     selectionMode="single"
+                                     style="
+                                     width: 70%;">
+                            <f:facet name="header" >
+                                Mantenimientos Solicitados
+                            </f:facet>
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{solicitudMG.NSeguimiento}" />
+                            </p:column>
+                            <p:column headerText="Titulo">
+                                <h:outputText value="#{solicitudMG.titulo}" />
+                            </p:column>
+                            <p:column headerText="Departamento">
+                                <h:outputText value="#{solicitudMG.idDirectorio.idDepartamento.nombre}" />
+                            </p:column>
+                            <p:column headerText="Categoria">
+                                <h:outputText value="#{solicitudMG.idCategoria.nombre}" />
+                            </p:column>
+                        </p:dataTable> 
+                    </center>
+                </p:tab>
+            </p:tabView>
+            <h:form id="frmAsignar"  rendered="#{manejadorLogin.GerenteGeneralTabla()}">
                 <center>
                     <p:dataTable id="solicitudes" var="solicitud" value="#{manejadorSolicitud.llenarFiltro()}" 
                                  rowKey="#{solicitud}" selection="#{manejadorSolicitud.solicitudS}"

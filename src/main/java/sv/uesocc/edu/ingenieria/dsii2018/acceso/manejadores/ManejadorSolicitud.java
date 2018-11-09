@@ -45,7 +45,6 @@ public class ManejadorSolicitud implements Serializable {
 
     private List<Categoria> listaCat;
 
-
     private ManejadorCorreo mail;
     private List<Solicitud> listaSol, listaIT, listaGen, listaSoli;
     private List<Prioridad> listaP;
@@ -102,20 +101,18 @@ public class ManejadorSolicitud implements Serializable {
         llenarCategoria();
         numeroESol = esfl.count() + 1;
         listaSol = new ArrayList<>();
-        listaSoli= new ArrayList<>();
-
+        listaSoli = new ArrayList<>();
 
         List<Solicitud> LS2 = new ArrayList<>();
         for (Solicitud solicitud1 : sfl.findAll()) {
-            LS2 =  sfl.findByEstado(solicitud1.getIdSolicitud());
-            if (LS2 != null && !LS2.isEmpty() ) {
+            LS2 = sfl.findByEstado(solicitud1.getIdSolicitud());
+            if (LS2 != null && !LS2.isEmpty()) {
                 listaSoli.add(LS2.get(0));
-            }
-            else{
-            LS2 =new ArrayList<>();
+            } else {
+                LS2 = new ArrayList<>();
             }
         }
-                
+
         if (listaSoli != null && !listaSoli.isEmpty()) {
             listaSol = listaSoli;
         } else {
@@ -162,6 +159,8 @@ public class ManejadorSolicitud implements Serializable {
         }
 
         llenarFiltro();
+        llenarFiltroITGerente();
+        llenarFiltroManGerente();
         ObtenerSolicitudesXTec();
     }
 
@@ -178,6 +177,28 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public List<Solicitud> llenarFiltroManGerente() {
+        Directorio dir = dfl.find(oreo.UsuarioId());
+
+        if (listaGen != null && !listaGen.isEmpty()) {
+            return listaGen;
+        } else {
+            return new ArrayList<>();
+        }
+
+    }
+    
+      public List<Solicitud> llenarFiltroITGerente() {
+        Directorio dir = dfl.find(oreo.UsuarioId());
+
+        if (listaIT != null && !listaIT.isEmpty()) {
+            return listaIT;
+        } else {
+            return new ArrayList<>();
+        }
+
     }
 
     public void llenarCategoria() {
