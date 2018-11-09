@@ -35,66 +35,67 @@
                      top: 20%;
 
                      color: #585858;">
-                    <h3>On-Demand Loading</h3>
-                    <p:tabView dynamic="true" cache="true" effect="fold">
-                        <p:tab title="Informacion">
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <p:graphicImage name="" />
-                                <h:outputText
-                                    value="SITIO EN CONSTRUCCION" />
-                            </h:panelGrid>
-                        </p:tab>
-                        <p:tab title="Historial">
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <p:graphicImage name="" />
-                                <h:outputText value="SITIO EN CONSTRUCCION" />
-                            </h:panelGrid>
-                        </p:tab>
-                        <p:tab title="Mantenimiento">
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <p:graphicImage name="" />
-                                <h:outputText value="SITIO EN CONSTRUCCION" />
-                            </h:panelGrid>
-                        </p:tab>
-                    </p:tabView>
-                    <h1 onmouseover="focus()" onclick="#{manejadorSolicitud.Saludar()}" style="color: black" >
-                        Mantenimientos en espera
-                    </h1>
-                    <table>
-                        <tr>
-                            <td>
-                                <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().titulo}" style="
-                                               font-size: 15px;
-                                               font-family: sans-serif;" />
-                            </td>                            
-                        </tr>
-                        <tr>
-                            <td>
-                                <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idPrioridad.nombre}" style="
-                                               font-size: 15px;
-                                               font-family: sans-serif;" />
-                            </td>                            
-                        </tr>
-                        <tr>
-                            <td>
-                                <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idCategoria.nombre}" style="
-                                               font-size: 15px;
-                                               font-family: sans-serif;" />
-                            </td>                            
-                        </tr>
-                        <tr>
-                            <td>
-                                <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().descripcion}" style="
-                                               font-size: 15px;
-                                               font-family: sans-serif;" />
-                            </td>                            
-                        </tr>
-                        <tr>
-                            <td>
+                    <h2>Mantenimiento</h2>
+                    <center>
+                        <p:tabView dynamic="true" cache="true" effect="fold" style="width: 90%">
+                            <p:tab title="Informacion">
+                                <h:panelGrid columns="2" cellpadding="10">                                
+                                    <h:outputText
+                                        value="EN CONSTRUCCION" />
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Historial">
+                                <h:panelGrid columns="2" cellpadding="10">
 
-                            </td>                            
-                        </tr>
-                    </table>
+                                    <h:outputText value="EN CONSTRUCCION" />
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Mantenimiento">
+                                <h:panelGrid columns="2" cellpadding="10">
+
+                                    <h:outputText value="EN CONSTRUCCION" />
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+                    </center>
+                    <!-- <h1 style="color: black" >
+                         Mantenimientos en espera
+                     </h1>
+                     <table>
+                         <tr>
+                             <td>
+                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().titulo}" style="
+                                                font-size: 15px;
+                                                font-family: sans-serif;" />
+                             </td>                            
+                         </tr>
+                         <tr>
+                             <td>
+                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idPrioridad.nombre}" style="
+                                                font-size: 15px;
+                                                font-family: sans-serif;" />
+                             </td>                            
+                         </tr>
+                         <tr>
+                             <td>
+                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idCategoria.nombre}" style="
+                                                font-size: 15px;
+                                                font-family: sans-serif;" />
+                             </td>                            
+                         </tr>
+                         <tr>
+                             <td>
+                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().descripcion}" style="
+                                                font-size: 15px;
+                                                font-family: sans-serif;" />
+                             </td>                            
+                         </tr>
+                         <tr>
+                             <td>
+ 
+                             </td>                            
+                         </tr>
+                     </table>-->
                 </div>
             </center>
         </ui:define>

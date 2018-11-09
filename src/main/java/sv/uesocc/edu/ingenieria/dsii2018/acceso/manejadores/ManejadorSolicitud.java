@@ -17,6 +17,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DescripcionMantenimientoFacadeLocal;
@@ -57,6 +59,9 @@ public class ManejadorSolicitud implements Serializable {
     private List<Estado> listaEs;
     private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
+    private Solicitud solicitudSeleccionada;
+    private List<Solicitud> selectedSolicitud;
+    ;
     protected Solicitud solicitudS;
     private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
@@ -165,6 +170,7 @@ public class ManejadorSolicitud implements Serializable {
         llenarFiltroITGerente();
         llenarFiltroManGerente();
         ObtenerSolicitudesXTec();
+
     }
 
     public List<Solicitud> llenarFiltro() {
@@ -428,8 +434,9 @@ public class ManejadorSolicitud implements Serializable {
         return redirecccion;
     }
 
-    public Solicitud ObtenerSolicitud(String codigo) {
-        return null;
+    public Solicitud ObtenerSolicitud(int codigo) {
+        Solicitud s = sfl.find(codigo);
+        return s;
     }
 
     public List<Solicitud> ObtenerCreadas() {
@@ -503,7 +510,7 @@ public class ManejadorSolicitud implements Serializable {
             mefl.create(mantEnc);
             enfl.create(encargado);
             esfl.create(estadoSolicitud);
-//            mail.EnviarCorreo(solicitudS, d);
+            mail.EnviarCorreo(solicitudS, d);
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("AsignarPrioridad.jsf");
             } catch (IOException ex) {
@@ -558,11 +565,15 @@ public class ManejadorSolicitud implements Serializable {
     //METODO PARA BUSCAR TODOS LOS ESTADOS CAMBIADOS PARA LA SOLICITUD BUSCADA
     public String DevolverEstado(Solicitud s) {
         listaEs = new ArrayList<>();
-        listaEs = efl.findLastEstado(s.getIdSolicitud());
-        if (listaEs.isEmpty()) {
-            return "Sin Estado";
+        if (s == null) {
+            return "No envio Solicitud";
         } else {
-            return listaEs.get(0).getNombre();
+            listaEs = efl.findLastEstado(s.getIdSolicitud());
+            if (listaEs.isEmpty()) {
+                return "Sin Estado";
+            } else {
+                return listaEs.get(0).getNombre();
+            }
         }
 
     }
@@ -570,17 +581,43 @@ public class ManejadorSolicitud implements Serializable {
     //METODO PARA BUSCAR LAS FECHAS DE CREACION DE LAS SOLICITUDES EN LA TABLA ESTADO SOLICITUD
     public String DevolverFechaCreacion(Solicitud s) {
         listaESOl = new ArrayList<>();
-        listaESOl = esfl.findByCreation(s.getIdSolicitud());
-        if (listaESOl.isEmpty()) {
-            return "Sin fechaCreacion";
+        if (s == null) {
+            return "No envio Solicitud";
         } else {
-            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
-            return formateador.format(listaESOl.get(0).getFecha());
+            listaESOl = esfl.findByCreation(s.getIdSolicitud());
+            if (listaESOl.isEmpty()) {
+                return "Sin fechaCreacion";
+            } else {
+                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
+                return formateador.format(listaESOl.get(0).getFecha());
+            }
         }
-
     }
 
-    public void Saludar() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "OK"));
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Solicitud Seleccionada", ((Solicitud) event.getObject()).getIdSolicitud().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage("Solicitud deseleccionada", ((Solicitud) event.getObject()).getIdSolicitud().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public List<Solicitud> getSelectedSolicitud() {
+        return selectedSolicitud;
+    }
+
+    public void setSelectedSolicitud(List<Solicitud> selectedSolicitud) {
+        this.selectedSolicitud = selectedSolicitud;
+    }
+
+    public Solicitud getSolicitudSeleccionada() {
+        return solicitudSeleccionada;
+    }
+
+    public void setSolicitudSeleccionada(Solicitud solicitudSeleccionada) {
+        this.solicitudSeleccionada = solicitudSeleccionada;
+    }
+
 }

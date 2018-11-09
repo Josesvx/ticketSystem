@@ -25,7 +25,9 @@
             <p:toolbar style="
                        height:55px;">
                 <f:facet name="left">
-                    <p:commandButton type="button" value="Inicio" onclick="location.href = 'principal.jsf'" icon="ui-icon-home" style="height: 35px;"/>
+                    <p:commandButton type="button" value="Inicio" onclick="location.href = 'principal.jsf'" icon="ui-icon-home" style="
+                                     height: 50px; 
+                                     font-size: 17px;"/>
 
                     <span class="ui-separator">
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
@@ -34,11 +36,7 @@
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;"  
-                                     type="button" value="Creación de ticket"  onclick="location.href = 'CrearTicket.jsf'" title="Crear" icon="ui-icon-disk" />
-                    <p:commandButton style="
-                                     height: 50px; 
-                                     font-size: 17px;" 
-                                     type="button" value="Seguimiento" title="Seguimiento" icon="ui-icon-zoomin" />
+                                     type="button" value="Creación de ticket"  onclick="location.href = 'CrearTicket.jsf'" title="Crear" icon="ui-icon-disk" />                    
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
@@ -68,7 +66,7 @@
             <p:dialog header="¿Desea cerrar sesión?" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="100">
                 <center>
                     <p:commandButton value="SI" action="#{manejadorLogin.CerrarSesion()}"/>
-                    <p:commandButton value="NO"/>
+                    <p:commandButton value="NO" onclick="PF('dlg3').hide();$('#form').trigger('reset');" type="button"/>
                 </center>
             </p:dialog>
         </h:form>
