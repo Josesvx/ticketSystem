@@ -23,7 +23,12 @@
                     <h:form id="frmAsignarIG"  >
 
                         <center>
-                            <p:dataTable id="solicitudesIG" var="solicitudIG" value="#{manejadorSolicitud.llenarFiltroManGerente()}" 
+                            <p:dataTable id="solicitudesIG" var="solicitudIG" 
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10, 15"
+                                         value="#{manejadorSolicitud.llenarFiltroManGerente()}" 
                                          rowKey="#{solicitudIG}" selection="#{manejadorSolicitud.solicitudS}"
                                          selectionMode="single"
                                          style="
@@ -76,7 +81,12 @@
                     <h:form id="frmAsignarMG"  >
 
                         <center>
-                            <p:dataTable id="solicitudesMG" var="solicitudMG" value="#{manejadorSolicitud.llenarFiltroITGerente()}" 
+                            <p:dataTable id="solicitudesMG" var="solicitudMG" 
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10, 15"
+                                         value="#{manejadorSolicitud.llenarFiltroITGerente()}" 
                                          rowKey="#{solicitudMG}" selection="#{manejadorSolicitud.solicitudS}"
                                          selectionMode="single"
                                          style="
@@ -152,10 +162,6 @@
                             <h:outputText value="#{solicitud.idCategoria.nombre}" />
                         </p:column>
                     </p:dataTable>
-
-                    <p:commandButton value="tst" id="tst" icon="ui-icon-check">
-                        <p:ajax update="solicitudes" listener="#{manejadorSolicitud.init()}"/>
-                    </p:commandButton>
 
                     <p:contextMenu for="solicitudes">
                         <p:menuitem value="Asignar"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo').show()"/>
