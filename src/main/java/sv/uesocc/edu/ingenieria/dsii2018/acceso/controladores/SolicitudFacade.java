@@ -135,4 +135,18 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
         return lista;
     }
 
+    @Override
+    public int findByStatus(int idEstado) {
+        int numeroDeSolicitudes=0;
+        try{
+            Query q= em.createNamedQuery("Solicitud.findByStatus");
+            q.setParameter("idEstado", idEstado);
+            List<Solicitud> list= q.getResultList();
+            numeroDeSolicitudes=list.size();
+        }catch(Exception ex){
+            throw ex;
+        }
+        return numeroDeSolicitudes;
+    }
+
 }

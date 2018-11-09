@@ -14,7 +14,7 @@
             </h:head>
             <style>
                 body{
-                    background-color: #f2f2f2;                                       
+                    background-color: #00cc00;                                       
                 }
             </style>
 
@@ -27,8 +27,8 @@
                         <center>
                             <div id="cabCreate" 
                                  style="
-                                 background-color:#04B486; 
-                                 width:60%; 
+                                 background-color:#009900; 
+                                 width:75%; 
                                  height:80px; 
                                  border-top-left-radius:25px; 
                                  border-top-right-radius:25px;">
@@ -48,7 +48,7 @@
                             <div id="formCreate" 
                                  style="
                                  background-color: #585858 ; 
-                                 width:60%;
+                                 width:75%;
                                  border-bottom-left-radius: 25px;
                                  border-bottom-right-radius: 25px;
                                  color: gainsboro;">
@@ -73,7 +73,7 @@
                                         </td>
                                         <td>
                                             <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.idCategoria}" required="true" requiredMessage="Seleccione una categoria">
-                                                <f:selectItem itemLabel="Seleccione una categoria" noSelectionOption="true" itemDisabled="true" />
+                                                <f:selectItem itemLabel="Seleccione una categoria" noSelectionOption="true" itemDisabled="false" />
                                                 <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
                                                 </f:selectItems>
                                             </p:selectOneMenu>
@@ -146,7 +146,7 @@
                                                              icon="ui-icon-check" 
                                                              action="#{manejadorSolicitud.CrearSolicitud()}" 
                                                              update="mensaje,mensaje2"                                                     
-                                                             onclick="PF('dlg2').show();" />
+                                                             />
                                         </td>                                
                                     </tr>                                                            
                                 </table>
