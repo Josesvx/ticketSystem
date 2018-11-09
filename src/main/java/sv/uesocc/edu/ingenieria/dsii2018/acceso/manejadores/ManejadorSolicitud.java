@@ -499,7 +499,7 @@ public class ManejadorSolicitud implements Serializable {
             mefl.create(mantEnc);
             enfl.create(encargado);
             esfl.create(estadoSolicitud);
-            mail.EnviarCorreo(solicitudS, d);
+            //mail.EnviarCorreo(solicitudS, d);
 
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));

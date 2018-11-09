@@ -25,7 +25,7 @@
             <p:toolbar style="
                        height:55px;">
                 <f:facet name="left">
-                    <p:commandButton type="button" value="Inicio" onclick="location.href='principal.jsf'" icon="ui-icon-home" style="height: 35px;"/>
+                    <p:commandButton type="button" value="Inicio" onclick="location.href = 'principal.jsf'" icon="ui-icon-home" style="height: 35px;"/>
 
                     <span class="ui-separator">
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
@@ -34,7 +34,7 @@
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;"  
-                                     type="button" value="Creación de ticket"  onclick="location.href='CrearTicket.jsf'" title="Crear" icon="ui-icon-disk" />
+                                     type="button" value="Creación de ticket"  onclick="location.href = 'CrearTicket.jsf'" title="Crear" icon="ui-icon-disk" />
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
@@ -42,27 +42,35 @@
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
-                                     type="button" value="Estadisticas" title="Estadistica" onclick="location.href='Estadistica.jsf'" icon="ui-icon-print" rendered="#{manejadorLogin.usuariogerente()}" />
+                                     type="button" value="Estadisticas" title="Estadistica" onclick="location.href = 'Estadistica.jsf'" icon="ui-icon-print" rendered="#{manejadorLogin.usuariogerente()}" />
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
-                                     type="button" value="Asignar Prioridad" onclick="location.href='AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" rendered="#{manejadorLogin.usuariojefedepto()}" />
+                                     type="button" value="Asignar Prioridad" onclick="location.href = 'AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" rendered="#{manejadorLogin.usuariojefedepto()}" />
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
-                                     type="button" value="Mantenimiento" onclick="location.href='Resolucion.jsf'" title="Resolución" icon="ui-icon-check" rendered="#{manejadorLogin.usuariotecnico()}" />
+                                     type="button" value="Mantenimiento" onclick="location.href = 'Resolucion.jsf'" title="Resolución" icon="ui-icon-check" rendered="#{manejadorLogin.usuariotecnico()}" />
                     <span class="ui-separator">
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
                     </span>
                 </f:facet>
 
                 <f:facet name="right">
-                    <p:commandButton  value="#{manejadorLogin.nombreiniciar()}" title="#{manejadorLogin.nombreRol()}" icon="	ui-icon-person" style="
-                                     height: 50px; 
-                                     font-size: 15px;"/>
+                    <p:commandButton  value="#{manejadorLogin.nombreiniciar()}"  title="#{manejadorLogin.nombreRol()}" icon="ui-icon-person" style="
+                                      height: 50px; 
+                                      font-size: 15px;"
+                                      onclick="PF('dlg3').show();"/>
+
                 </f:facet>
 
             </p:toolbar>
+            <p:dialog header="¿Desea cerrar sesión?" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="100">
+                <center>
+                    <p:commandButton value="SI" action="#{manejadorLogin.CerrarSesion()}"/>
+                    <p:commandButton value="NO"/>
+                </center>
+            </p:dialog>
         </h:form>
         <ui:insert name="titulo"></ui:insert>
         <ui:insert name="body" >Sin contenido</ui:insert>

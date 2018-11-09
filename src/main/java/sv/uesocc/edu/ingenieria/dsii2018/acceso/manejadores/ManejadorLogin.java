@@ -204,6 +204,9 @@ public class ManejadorLogin implements Serializable {
             return true;
         }
     }
+    public void CerrarSesion(){
+        oreo.cerrarSesion();
+    }
 
     public String getNombreUsuario() {
         return nombreUsuario;
