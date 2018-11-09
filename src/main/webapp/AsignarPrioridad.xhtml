@@ -70,13 +70,17 @@
                     </center>
                 </p:tab>
             </p:tabView>
-            <h:form id="frmAsignar"  rendered="#{manejadorLogin.GerenteGeneralTabla()}">
+            <h:form id="frmAsignar" rendered="#{manejadorLogin.GerenteGeneralTabla()}">
                 <center>
                     <p:dataTable id="solicitudes" var="solicitud" value="#{manejadorSolicitud.llenarFiltro()}" 
                                  rowKey="#{solicitud}" selection="#{manejadorSolicitud.solicitudS}"
                                  selectionMode="single"
+                                 rows="10"
                                  style="
-                                 width: 70%;">
+                                 width: 70%;"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
                         <f:facet name="header" >
                             Mantenimientos Solicitados
                         </f:facet>
@@ -94,6 +98,10 @@
                         </p:column>
                     </p:dataTable>
 
+                    <p:commandButton value="tst" id="tst" icon="ui-icon-check">
+                        <p:ajax update="solicitudes" listener="#{manejadorSolicitud.init()}"/>
+                    </p:commandButton>
+
                     <p:contextMenu for="solicitudes">
                         <p:menuitem value="Asignar"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo').show()"/>
                     </p:contextMenu>
@@ -101,19 +109,20 @@
                     <p:dialog header="Asignaciones" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel id="asignar" style="text-align:center;">
                             <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
-
                                 <h:outputText value="Asignar Prioriodad: " />
                                 <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.idPrioridad}">
                                     <f:selectItems value="#{manejadorSolicitud.listaP}" var="valor" itemValue="#{valor.idPrioridad}" itemLabel="#{valor.nombre}">
                                     </f:selectItems>
                                 </p:selectOneMenu>
-                                <h:outputText value="Asignar técnico " />
+                                <h:outputText value="Asignar Técnico " />
                                 <p:selectOneMenu id="cmbTecnico" value="#{manejadorSolicitud.idDirectorio}">
                                     <f:selectItems value="#{manejadorTecnico.listaTec}" var="valorT" itemValue="#{valorT.idDirectorio}" itemLabel="#{valorT.nombre1}">
                                     </f:selectItems>
                                 </p:selectOneMenu>
                             </p:panelGrid>
-                            <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}"></p:commandButton>
+                            <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" update="frmAsignar:solicitudes"
+                                             actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}">
+                            </p:commandButton>
                         </p:outputPanel>
                     </p:dialog>
                 </center>

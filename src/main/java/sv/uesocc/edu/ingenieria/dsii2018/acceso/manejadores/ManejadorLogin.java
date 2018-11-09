@@ -21,7 +21,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 
 /**
  *
- * @author alexander
+ * @author katiro
  */
 @Named
 @ViewScoped
