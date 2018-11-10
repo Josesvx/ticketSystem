@@ -5,52 +5,89 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-     <ui:composition template="resources/layout.xhtml">
-        
-        <ui:define name="titulo"></ui:define>
-        <ui:define name="body">
+    <ui:composition template="resources/layout.xhtml">
 
-        <h1 style="color: white; background: blue; font-size: 75px;">SITIO EN CONSTRUCCION...</h1>
-        <f:metadata>
-            <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
-        </f:metadata>
-            
+        <ui:define name="titulo">
+            <h:head>
+                <title>Ticket System</title>
+            </h:head>
+            <style>
+                body{
+                    background-color: #f2f2f2;                                       
+                }
+            </style>
+
+        </ui:define>
+        <ui:define name="body">
+            <br></br><br></br><br></br>
+            <center>
+                <h:form id="form">
+                    <p:dataTable id="solicitudes" var="solicitud"
+                                 selectionMode="single" 
+                                 selection="#{manejadorSolicitud.solicitudSeleccionada}"
+                                 rowKey="#{solicitud.idSolicitud}"
+                                 style="
+                                 width: 70%;"
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10, 15"
+                                 value="#{manejadorSolicitud.llenarPorDirectorio()}">
+                        <f:facet name="header" >
+                            Mantenimientos Solicitados
+                        </f:facet>
+                        <p:column headerText="Seguimiento">
+                            <h:outputText value="#{solicitud.NSeguimiento}" />
+                        </p:column>
+                        <p:column headerText="Titulo">
+                            <h:outputText value="#{solicitud.titulo}" />
+                        </p:column>                    
+
+                        <p:column headerText="Fecha Creación">
+                            <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(solicitud)}" />
+                        </p:column> 
+                        <f:facet name="footer">
+                            <p:commandButton process="solicitudes" update=":form:carDetail" icon="fa-eye" value="Seguimiento" oncomplete="PF('carDialog').show()" />
+                        </f:facet>
+                    </p:dataTable>
+                    <p:dialog header="Informacion de la Solicitud" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="carDetail" style="text-align:center;">
+                            <p:panelGrid  columns="2"  columnClasses="label,value" rendered="#{not empty manejadorSolicitud.solicitudSeleccionada}">
+
+                                <h:outputText value="Numero de Seguimiento" />
+                                <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.NSeguimiento}" />
+
+                                <h:outputText value="Titulo" />
+                                <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.titulo}" />
+
+                                <h:outputText value="Descripcion:" />
+                                <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.descripcion}"/>
+
+                                <h:outputText value="Categoria:" />
+                                <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.idCategoria.nombre}"/>
+
+                                <h:outputText value="Prioridad Asignada" />
+                                <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.idPrioridad.nombre}"/>
+
+                                <h:outputText value="Estado" />
+                                <h:outputText value="#{manejadorSolicitud.DevolverEstado(manejadorSolicitud.solicitudSeleccionada)}"/>
+
+                                <h:outputText value="Fechade creacion" />
+                                <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(manejadorSolicitud.solicitudSeleccionada)}"/>
+
+                            </p:panelGrid>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
+            </center>
+
+
+            <f:metadata>
+                <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
+            </f:metadata>
+
         </ui:define>
     </ui:composition>
-    <!--  <h:head>
-        <title>EN CONSTRUCCION</title>
-    </h:head>
-    <body background="img/build.jpg">
-        <h:form>
-            <p:growl id="messages" showDetail="true" />
 
-            <p:toolbar>
-                <f:facet name="left">
-                    <p:commandButton type="button" value="Inicio" icon="ui-icon-home" />
-
-                    <span class="ui-separator">
-                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                    </span>
-
-                    <p:commandButton type="button" value="Creación de ticket"   title="Save" icon="ui-icon-disk" />
-                    <p:commandButton type="button" value="Seguimiento" title="Delete" icon="ui-icon-zoomin" />
-                    <p:commandButton type="button" value="Estadisticas" title="Print" icon="ui-icon-print" />
-                    <span class="ui-separator">
-                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
-                    </span>
-                </f:facet>
-
-                <f:facet name="right">
-                    <p:commandButton action="#{manejadorLogin.cerrarSesion()}" value="Cerrar Sesión" title="Cerrar Sesion" icon="	ui-icon-person"/>
-                </f:facet>
-
-            </p:toolbar>
-        </h:form>
-        <h1 style="color: white; background: blue; font-size: 75px;">SITIO EN CONSTRUCCION...</h1>
-        <f:metadata>
-            <f:viewAction action="#{manejadorLogin.loginPrincipal()}" />
-        </f:metadata>
-    </body>
-  -->
 </html>
 

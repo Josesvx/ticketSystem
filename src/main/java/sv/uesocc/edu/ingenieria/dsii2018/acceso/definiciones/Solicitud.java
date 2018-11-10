@@ -46,8 +46,15 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Solicitud.findByAudFechaCreacion", query = "SELECT s FROM Solicitud s WHERE s.audFechaCreacion = :audFechaCreacion")
     , @NamedQuery(name = "Solicitud.findByAudNombreModificacion", query = "SELECT s FROM Solicitud s WHERE s.audNombreModificacion = :audNombreModificacion")
     , @NamedQuery(name = "Solicitud.findByAudFechaModificacion", query = "SELECT s FROM Solicitud s WHERE s.audFechaModificacion = :audFechaModificacion")
-    , @NamedQuery(name = "Solicitud.findByEstado", query = "SELECT ES.idSolicitud FROM Solicitud S JOIN S.estadoSolicitudList AS ES WHERE ES.idEstado.idEstado = :idEstado")
+    , @NamedQuery(name = "Solicitud.findByEstado", query = "SELECT S FROM Solicitud AS S JOIN S.estadoSolicitudList AS ES WHERE ES.idEstado.idEstado=1 AND  es.idEstadoSolicitud = (SELECT MAX(ES.idEstadoSolicitud)  FROM EstadoSolicitud AS ES WHERE ES.idSolicitud.idSolicitud = :idSolicitud)")
     , @NamedQuery(name = "Solicitud.findByIdDepartamento", query = "SELECT COUNT(s) FROM Solicitud AS s JOIN s.idDirectorio AS ids JOIN ids.idDepartamento AS idp WHERE idp.idDepartamento= :idDepartamento")
+    , @NamedQuery(name = "Solicitud.findByIdPrioridad", query = "SELECT S FROM Solicitud AS S WHERE S.idPrioridad.idPrioridad= :idPrioridad")
+    , @NamedQuery(name = "Solicitud.findByIdCategoria", query= "SELECT S FROM Solicitud AS S WHERE S.idCategoria.idCategoria= :idCategoria")
+    , @NamedQuery(name = "Solicitud.findByIdDirectorio", query= "SELECT S FROM Solicitud AS s WHERE S.idDirectorio.idDirectorio= :idDirectorio")
+    , @NamedQuery(name = "Solicitud.findByTecnic", query= "SELECT S FROM Solicitud AS S JOIN S.mantenimientoEncargadoList AS SM JOIN SM.encargadoList AS SME WHERE SME.idDirectorio.idDirectorio = :idDirectorio AND SME.estado = true")
+    , @NamedQuery(name = "Solicitud.findByIdCategoria", query = "SELECT S FROM Solicitud AS S WHERE S.idCategoria.idCategoria= :idCategoria")
+    , @NamedQuery(name = "Solicitud.findByIdDirectorio", query = "SELECT S FROM Solicitud AS s WHERE S.idDirectorio.idDirectorio= :idDirectorio")
+    , @NamedQuery(name = "Solicitud.findByStatus", query = "SELECT s.idSolicitud FROM Solicitud AS s JOIN s.estadoSolicitudList AS es WHERE es.idEstado.idEstado= :idEstado")    
     , @NamedQuery(name = "Solicitud.findByAudStatus", query = "SELECT s FROM Solicitud s WHERE s.audStatus = :audStatus")})
 public class Solicitud implements Serializable {
 
@@ -63,7 +70,7 @@ public class Solicitud implements Serializable {
     @Basic(optional = false)
     @Column(name = "descripcion", nullable = false, length = 250)
     private String descripcion;
-    @Column(name = "adjunto", length = 250)
+    @Column(name = "adjunto", length = 500)
     private String adjunto;
     @Basic(optional = false)
     @Column(name = "n_seguimiento", nullable = false, length = 25)
@@ -280,5 +287,5 @@ public class Solicitud implements Serializable {
     public String toString() {
         return "sv.uesocc.edu.ingenieria.dsii2018.lacualquiera.Solicitud[ idSolicitud=" + idSolicitud + " ]";
     }
-    
+
 }

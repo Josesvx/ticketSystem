@@ -30,4 +30,6 @@ public interface EstadoSolicitudFacadeLocal {
 
     int count();
     
+    List<EstadoSolicitud> findByCreation(int idSolicitud);
+    
 }

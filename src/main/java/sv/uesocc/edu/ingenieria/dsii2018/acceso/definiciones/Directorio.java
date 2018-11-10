@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Directorio.findAll", query = "SELECT d FROM Directorio d")
     , @NamedQuery(name = "Directorio.findByIdDirectorio", query = "SELECT d FROM Directorio d WHERE d.idDirectorio = :idDirectorio")
     , @NamedQuery(name = "Directorio.findByNombre1", query = "SELECT d FROM Directorio d WHERE d.nombre1 = :nombre1")
+    , @NamedQuery(name = "Directorio.findTecnico", query = "SELECT d FROM Directorio d WHERE d.idRol.idRol = 2 AND d.idDepartamento.idDepartamento= :idDepartamento")    
     , @NamedQuery(name = "Directorio.findByNombre2", query = "SELECT d FROM Directorio d WHERE d.nombre2 = :nombre2")
     , @NamedQuery(name = "Directorio.findByApellido1", query = "SELECT d FROM Directorio d WHERE d.apellido1 = :apellido1")
     , @NamedQuery(name = "Directorio.findByApellido2", query = "SELECT d FROM Directorio d WHERE d.apellido2 = :apellido2")
@@ -48,6 +49,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Directorio.findByAudNombreModificacion", query = "SELECT d FROM Directorio d WHERE d.audNombreModificacion = :audNombreModificacion")
     , @NamedQuery(name = "Directorio.findByAudFechaModificacion", query = "SELECT d FROM Directorio d WHERE d.audFechaModificacion = :audFechaModificacion")
     , @NamedQuery(name = "Directorio.findByAudStatus", query = "SELECT d FROM Directorio d WHERE d.audStatus = :audStatus")
+    , @NamedQuery(name = "Directorio.findAllTecnicos", query = "SELECT  d FROM Directorio AS d WHERE d.idRol.idRol= 2 AND d.idDepartamento.idDepartamento= :idDepartamento")
+    , @NamedQuery(name = "Directorio.findByTecnicoOcupado", query = "SELECT DISTINCT d FROM Directorio AS d JOIN D.encargadoList AS e WHERE (e.estado='true' AND d.idRol.idRol= 2 )")    
+    , @NamedQuery(name = "Directorio.findByEstado", query = "SELECT DISTINCT d FROM Directorio AS d JOIN D.encargadoList AS e WHERE (e.estado='false' AND d.idRol.idRol= 2 AND d.idDepartamento.idDepartamento= :idDepartamento)")
     , @NamedQuery(name = "Directorio.autenticarse", query = "select d from Directorio d where d.usuario= :usuario and d.contrasenia= :contrasenia")})
 public class Directorio implements Serializable {
 

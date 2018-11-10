@@ -34,6 +34,6 @@ public interface DirectorioFacadeLocal {
 
     Directorio FindByEmail(String correo, String contrasenia);
 
-    List<Directorio> findByTecFree();
+    List<Directorio> findByTecFree(int idDirectorio);
 
 }

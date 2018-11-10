@@ -1,27 +1,41 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DescripcionMantenimientoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.PrioridadFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EncargadoFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.MantenimientoEncargadoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Encargado;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Estado;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.MantenimientoEncargado;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Prioridad;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
@@ -35,19 +49,35 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 public class ManejadorSolicitud implements Serializable {
 
     private List<Categoria> listaCat;
-    private List<Solicitud> listaSol;
+
+    private ManejadorCorreo mail;
+    private List<Solicitud> listaSol, listaIT, listaGen, listaSoli;
     private List<Prioridad> listaP;
+    private DescripcionMantenimiento descMant;
+    private MantenimientoEncargado mantEnc;
+    private Encargado encargado;
+    private List<Estado> listaEs;
+    private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
-    private Solicitud solicitudS;
+    private Solicitud solicitudSeleccionada;
+    private List<Solicitud> selectedSolicitud;
+    ;
+    protected Solicitud solicitudS;
+    private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
+    private Estado estado;
     private Categoria categoria;
-    private Directorio directorio,Departamento;
+    private Directorio directorio, Departamento, dir;
     private CookieInstance oreo;
-    private String nombre, seguimiento, nombreDep;
-    private int idCategoria, numero,id,id2;
-    private int numeroSolicitudes1, numeroSolicitudes2, numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5,
-            numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
-    private BarChartModel barModel;
+    private String imagenAdjunto;
+    private byte[] adjuntoProv;
+    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
+    private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
+            numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
+            numeroSolicitudes7, numeroSolicitudes8, numeroESol;
+
+    FacesMessage message = new FacesMessage();
+
     @EJB
     private SolicitudFacadeLocal sfl;
     @EJB
@@ -56,23 +86,185 @@ public class ManejadorSolicitud implements Serializable {
     private PrioridadFacadeLocal pfl;
     @EJB
     private DirectorioFacadeLocal dfl;
+    @EJB
+    private EstadoSolicitudFacadeLocal esfl;
+    @EJB
+    private EstadoFacadeLocal efl;
+    @EJB
+    private DescripcionMantenimientoFacadeLocal dmfl;
+    @EJB
+    private MantenimientoEncargadoFacadeLocal mefl;
+    @EJB
+    private EncargadoFacadeLocal enfl;
+
+    private ManejadorTecnico mantec;
 
     @PostConstruct
     public void init() {
-        
+
+        listaIT = new ArrayList<>();
+        listaGen = new ArrayList<>();
+        llenarDeps();
+        llenarPrioridad();
+        llenarCategoria();
+        numeroESol = esfl.count() + 1;
+        listaSol = new ArrayList<>();
+        listaSoli = new ArrayList<>();
+
+        List<Solicitud> LS2 = new ArrayList<>();
+        for (Solicitud solicitud1 : sfl.findAll()) {
+            LS2 = sfl.findByEstado(solicitud1.getIdSolicitud());
+            if (LS2 != null && !LS2.isEmpty()) {
+                listaSoli.add(LS2.get(0));
+            } else {
+                LS2 = new ArrayList<>();
+            }
+        }
+
+        if (listaSoli != null && !listaSoli.isEmpty()) {
+            listaSol = listaSoli;
+        } else {
+            listaSol = new ArrayList<>();
+        }
+
+        for (Solicitud solicitud1 : listaSol) {
+            if (solicitud1.getIdCategoria().getIdCategoria() == 1) {
+                listaIT.add(solicitud1);
+            } else {
+                listaGen.add(solicitud1);
+            }
+        }
+
+        estado = new Estado();
+
+        estadoSolicitud = new EstadoSolicitud();
+
+        solicitud = new Solicitud();
+
+        categoria = new Categoria();
+
+        directorio = new Directorio();
+
+        descMant = new DescripcionMantenimiento();
+
+        mantEnc = new MantenimientoEncargado();
+
+        encargado = new Encargado();
+
+        estadoSolicitud = new EstadoSolicitud();
+
+        oreo = new CookieInstance();
+
+        mail = new ManejadorCorreo();
+
+        id2 = oreo.UsuarioId();
+        Departamento = dfl.find(id2);
+        nombreDep = Departamento.getIdDepartamento().getNombre();
+        if (nombreDep != null && !nombreDep.isEmpty()) {
+            nombre = nombreDep;
+        } else {
+            nombre = "No Funciona";
+        }
+
+        llenarFiltro();
+        llenarFiltroITGerente();
+        llenarFiltroManGerente();
+        ObtenerSolicitudesXTec();
+
+    }
+
+    public List<Solicitud> llenarFiltro() {
+        Directorio dir = dfl.find(oreo.UsuarioId());
+        if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
+            if (listaGen != null && !listaGen.isEmpty()) {
+                return listaGen;
+            } else {
+                return new ArrayList<>();
+            }
+        } else if (listaIT != null && !listaIT.isEmpty()) {
+            return listaIT;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Solicitud> llenarFiltroManGerente() {
+        Directorio dir = dfl.find(oreo.UsuarioId());
+
+        if (listaGen != null && !listaGen.isEmpty()) {
+            return listaGen;
+        } else {
+            return new ArrayList<>();
+        }
+
+    }
+
+    public List<Solicitud> llenarFiltroITGerente() {
+        Directorio dir = dfl.find(oreo.UsuarioId());
+
+        if (listaIT != null && !listaIT.isEmpty()) {
+            return listaIT;
+        } else {
+            return new ArrayList<>();
+        }
+
+    }
+
+    public void llenarCategoria() {
         List<Categoria> listaC = cfl.findAll();
         if (listaC != null && !listaC.isEmpty()) {
             listaCat = listaC;
         } else {
             listaCat = new ArrayList<>();
         }
+    }
 
+    public void llenarPrioridad() {
         List<Prioridad> listaPri = pfl.findAll();
         if (listaPri != null && !listaPri.isEmpty()) {
             listaP = listaPri;
         } else {
             listaP = new ArrayList<>();
         }
+    }
+
+    public void llenarDeps() {
+        for (int i = 1; i <= 8; i++) {
+            switch (i) {
+                case 1:
+                    numeroSolicitudes1 = sfl.findByDepartamento(i);
+                    break;
+                case 2:
+                    numeroSolicitudes2 = sfl.findByDepartamento(i);
+                    break;
+                case 3:
+                    numeroSolicitudes3 = sfl.findByDepartamento(i);
+                    break;
+                case 4:
+                    numeroSolicitudes4 = sfl.findByDepartamento(i);
+                    break;
+                case 5:
+                    numeroSolicitudes5 = sfl.findByDepartamento(i);
+                    break;
+                case 6:
+                    numeroSolicitudes6 = sfl.findByDepartamento(i);
+                    break;
+                case 7:
+                    numeroSolicitudes7 = sfl.findByDepartamento(i);
+                    break;
+                case 8:
+                    numeroSolicitudes8 = sfl.findByDepartamento(i);
+                    break;
+            }
+        }
+    }
+
+    public EstadoSolicitud geteSol() {
+        return eSol;
+    }
+
+    public void seteSol(EstadoSolicitud eSol) {
+        this.eSol = eSol;
 
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
@@ -80,36 +272,7 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             listaSol = new ArrayList<>();
         }
-        
-        for(int i=1; i<=8; i++){
-            switch (i){
-                case 1:
-                    numeroSolicitudes1=sfl.findByDepartamento(i);
-                    break;
-                case 2:
-                    numeroSolicitudes2=sfl.findByDepartamento(i);
-                    break;
-                case 3:
-                    numeroSolicitudes3=sfl.findByDepartamento(i);
-                    break;
-                case 4:
-                    numeroSolicitudes4=sfl.findByDepartamento(i);
-                    break;
-                case 5:
-                    numeroSolicitudes5=sfl.findByDepartamento(i);
-                    break;
-                case 6:
-                    numeroSolicitudes6=sfl.findByDepartamento(i);
-                    break;
-                case 7:
-                    numeroSolicitudes7=sfl.findByDepartamento(i);
-                    break;
-                case 8:
-                    numeroSolicitudes8=sfl.findByDepartamento(i);
-                    break;  
-            }
-        }
-        
+
         solicitud = new Solicitud();
 
         categoria = new Categoria();
@@ -122,13 +285,23 @@ public class ManejadorSolicitud implements Serializable {
         Departamento = dfl.find(id2);
         nombreDep = Departamento.getIdDepartamento().getNombre();
         if (nombreDep != null && !nombreDep.isEmpty()) {
-          nombre = nombreDep;
+            nombre = nombreDep;
         } else {
-          nombre = "No Funciona";
+            nombre = "No Funciona";
         }
-        
-        createBarModel();
-        initBarModel();
+
+        llenarPorDirectorio();
+
+    }
+
+    public List<Solicitud> llenarPorDirectorio() {
+        List<Solicitud> listaSol = new ArrayList<>();
+        try {
+            listaSol = sfl.findByDirectory(oreo.UsuarioId());
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return listaSol;
     }
 
     public int getIdCategoria() {
@@ -196,16 +369,32 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public String CrearNumSeguimiento() {
-        //nombre = cache.ObtenerNombreDepartamento().toUpperCase();
-        nombre ="RECUERSOS HUMANOS";
+        numero = (int) (Math.random() * 1000000) + 1;
+        seguimiento = "T" + "S" + String.valueOf(numero);
 
-            numero = (int) (Math.random() * 1000000) + 1;
-            seguimiento = nombre.charAt(1) + nombre.charAt(2) +String.valueOf( numero);
-        
         return seguimiento;
     }
 
-    public void CrearSolicitud() {
+    public void subirImagen(FileUploadEvent event) {
+        String path = System.getProperty("user.home");
+        String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
+        this.solicitud.setAdjunto(event.getFile().getFileName());
+        if (event.getFile().getContents() != null && event.getFile().getContents().length > 0) {
+            try (FileOutputStream fl = new FileOutputStream(finalPath)) {
+                fl.write(event.getFile().getContents());
+                fl.close();
+                message.setSeverity(FacesMessage.SEVERITY_INFO);
+                message.setSummary("Adjunto guardado con exito ");
+            } catch (Exception e) {
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                message.setSummary("Se debe seleccionar un item  valido para adjuntar a su Solicitud");
+            }
+            FacesContext.getCurrentInstance().addMessage("Mensaje", message);
+        }
+
+    }
+
+    public String CrearSolicitud() {
         try {
             this.solicitud.setIdSolicitud(sfl.count() + 1);
             this.solicitud.setAudFechaCreacion(new Date());
@@ -218,26 +407,50 @@ public class ManejadorSolicitud implements Serializable {
             this.solicitud.setIdCategoria(cfl.find(idCategoria));
             this.solicitud.setIdDirectorio(directorio);
             sfl.create(this.solicitud);
-
+            finale = CrearEstadoS();
         } catch (Exception e) {
         }
-
+        return finale;
     }
 
-    public void CrearEstadoS(Solicitud solicitud) {
-
+    public String CrearEstadoS() {
+        try {
+            this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
+            this.estadoSolicitud.setFecha(new Date());
+            this.estadoSolicitud.setIdEstado(efl.find(1));
+            this.estadoSolicitud.setIdSolicitud(this.solicitud);
+            this.estadoSolicitud.setJustificacion("Creada");
+            id = oreo.UsuarioId();
+            this.directorio = dfl.find(id);
+            this.estadoSolicitud.setAudNombreCreacion(this.directorio.getUsuario());
+            this.estadoSolicitud.setAudFechaCreacion(new Date());
+            this.estadoSolicitud.setAudStatus(true);
+            esfl.create(this.estadoSolicitud);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Registro con exito"));
+            redirecccion = "principal.jsf?faces-redirect=true";
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error al crear el registro"));
+        }
+        return redirecccion;
     }
 
-    public Solicitud ObtenerSolicitud(String codigo) {
-        return null;
+    public Solicitud ObtenerSolicitud(int codigo) {
+        Solicitud s = sfl.find(codigo);
+        return s;
     }
 
     public List<Solicitud> ObtenerCreadas() {
         return null;
     }
 
-    public List<Solicitud> ObtenerSolicitudesXTec(int tec) {
-        return null;
+    //METODO PARA OBTENER LAS SOLITUDES QUE SE HAN ASIGNADO A UN TECNICO
+    public Solicitud ObtenerSolicitudesXTec() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        if (listaSol == null || listaSol.isEmpty()) {
+            return null;
+        } else {
+            return listaSol.get(0);
+        }
     }
 
     public List<Solicitud> SolicitudePorCorrelativo(String correlativo) {
@@ -253,6 +466,59 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public void Actualizar(Solicitud solicitud) {
+        Prioridad p = pfl.find(idPrioridad);
+        Directorio d = dfl.find(idDirectorio);
+        this.directorio = dfl.find(oreo.UsuarioId());
+        //llenarFiltro();
+
+        //crear DescripcionMtto
+        try {
+            this.descMant.setIdDescripcionMantenimiento(dmfl.count() + 1);
+            this.descMant.setAudFechaCreacion(new Date());
+            this.descMant.setAudNombreCreacion(this.directorio.getUsuario());
+            this.descMant.setAudStatus(true);
+            //crear MantEncargado
+            this.mantEnc.setIdMantenimientoEncargado(mefl.count() + 1);
+            this.mantEnc.setAudFechaCreacion(new Date());
+            this.mantEnc.setAudNombreCreacion(this.directorio.getUsuario());
+            this.mantEnc.setAudStatus(true);
+            this.mantEnc.setIdSolicitud(solicitudS);
+            this.mantEnc.setIdDescripcionMantenimiento(descMant);
+            //crear Encargado
+            this.encargado.setIdEncargado(enfl.count() + 1);
+            this.encargado.setIdDirectorio(d);
+            this.encargado.setIdMantenimientoEncargado(mantEnc);
+            this.encargado.setEstado(true);
+            this.encargado.setAudFechaCreacion(new Date());
+            this.encargado.setAudNombreCreacion(this.directorio.getUsuario());
+            this.encargado.setAudStatus(true);
+            //cambiar EstadoSolicitud
+            this.estadoSolicitud.setIdEstadoSolicitud(numeroESol);
+            this.estadoSolicitud.setIdEstado(efl.find(2));
+            this.estadoSolicitud.setJustificacion("Asignada");
+            id = oreo.UsuarioId();
+            this.directorio = dfl.find(id);
+            this.estadoSolicitud.setAudNombreCreacion(this.directorio.getUsuario());
+            this.estadoSolicitud.setAudFechaCreacion(new Date());
+            this.estadoSolicitud.setAudStatus(true);
+            this.estadoSolicitud.setFecha(new Date());
+            this.estadoSolicitud.setIdSolicitud(solicitudS);
+
+            solicitudS.setIdPrioridad(p);
+            sfl.edit(solicitudS);
+            dmfl.create(descMant);
+            mefl.create(mantEnc);
+            enfl.create(encargado);
+            esfl.create(estadoSolicitud);
+            mail.EnviarCorreo(solicitudS, d);
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("AsignarPrioridad.jsf");
+            } catch (IOException ex) {
+                Logger.getLogger(ManejadorSolicitud.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));
+        }
 
     }
 
@@ -263,107 +529,95 @@ public class ManejadorSolicitud implements Serializable {
     public void Actualizar(Solicitud solicitud, String comentario) {
 
     }
-    
-    private void createBarModel() {
-        barModel = initBarModel();
-         
-        barModel.setTitle("Solicitudes Por Departamento");
-        barModel.setLegendPosition("ne");
-         
-        Axis xAxis = barModel.getAxis(AxisType.X);
-        xAxis.setLabel("Departamento");
-         
-        Axis yAxis = barModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Numero Solicitudes");
-        yAxis.setMin(0);
-        yAxis.setMax(15);
-    }
-    
-    private BarChartModel initBarModel() {
-        BarChartModel model = new BarChartModel();
- 
-        ChartSeries solicitudes = new ChartSeries();
-        solicitudes.setLabel("Solicitudes");
-        solicitudes.set("Reclutamiento", numeroSolicitudes1);
-        solicitudes.set("Contabilidad", numeroSolicitudes2);
-        solicitudes.set("HR", numeroSolicitudes3);
-        solicitudes.set("IT", numeroSolicitudes4);
-        solicitudes.set("Mantenimiento", numeroSolicitudes5);
-        solicitudes.set("Seguridad", numeroSolicitudes6);
-        solicitudes.set("Teleoperadores", numeroSolicitudes7);
-        solicitudes.set("Gerencia", numeroSolicitudes8);
- 
-        model.addSeries(solicitudes);
-        return model;
-    }
-    
-    public BarChartModel getBarModel() {
-        return barModel;
+
+    public int getIdPrioridad() {
+        return idPrioridad;
     }
 
-    public int getNumeroSolicitudes1() {
-        return numeroSolicitudes1;
+    public void setIdPrioridad(int idPrioridad) {
+        this.idPrioridad = idPrioridad;
     }
 
-    public void setNumeroSolicitudes1(int numeroSolicitudes1) {
-        this.numeroSolicitudes1 = numeroSolicitudes1;
+    public List<Solicitud> getListaIT() {
+        return listaIT;
     }
 
-    public int getNumeroSolicitudes2() {
-        return numeroSolicitudes2;
+    public void setListaIT(List<Solicitud> listaIT) {
+        this.listaIT = listaIT;
     }
 
-    public void setNumeroSolicitudes2(int numeroSolicitudes2) {
-        this.numeroSolicitudes2 = numeroSolicitudes2;
+    public List<Solicitud> getListaGen() {
+        return listaGen;
     }
 
-    public int getNumeroSolicitudes3() {
-        return numeroSolicitudes3;
+    public void setListaGen(List<Solicitud> listaGen) {
+        this.listaGen = listaGen;
     }
 
-    public void setNumeroSolicitudes3(int numeroSolicitudes3) {
-        this.numeroSolicitudes3 = numeroSolicitudes3;
+    public int getIdDirectorio() {
+        return idDirectorio;
     }
 
-    public int getNumeroSolicitudes4() {
-        return numeroSolicitudes4;
+    public void setIdDirectorio(int idDirectorio) {
+        this.idDirectorio = idDirectorio;
     }
 
-    public void setNumeroSolicitudes4(int numeroSolicitudes4) {
-        this.numeroSolicitudes4 = numeroSolicitudes4;
+    //METODO PARA BUSCAR TODOS LOS ESTADOS CAMBIADOS PARA LA SOLICITUD BUSCADA
+    public String DevolverEstado(Solicitud s) {
+        listaEs = new ArrayList<>();
+        if (s == null) {
+            return "No envio Solicitud";
+        } else {
+            listaEs = efl.findLastEstado(s.getIdSolicitud());
+            if (listaEs.isEmpty()) {
+                return "Sin Estado";
+            } else {
+                return listaEs.get(0).getNombre();
+            }
+        }
+
     }
 
-    public int getNumeroSolicitudes5() {
-        return numeroSolicitudes5;
+    //METODO PARA BUSCAR LAS FECHAS DE CREACION DE LAS SOLICITUDES EN LA TABLA ESTADO SOLICITUD
+    public String DevolverFechaCreacion(Solicitud s) {
+        listaESOl = new ArrayList<>();
+        if (s == null) {
+            return "No envio Solicitud";
+        } else {
+            listaESOl = esfl.findByCreation(s.getIdSolicitud());
+            if (listaESOl.isEmpty()) {
+                return "Sin fechaCreacion";
+            } else {
+                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
+                return formateador.format(listaESOl.get(0).getFecha());
+            }
+        }
     }
 
-    public void setNumeroSolicitudes5(int numeroSolicitudes5) {
-        this.numeroSolicitudes5 = numeroSolicitudes5;
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Solicitud Seleccionada", ((Solicitud) event.getObject()).getIdSolicitud().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public int getNumeroSolicitudes6() {
-        return numeroSolicitudes6;
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage("Solicitud deseleccionada", ((Solicitud) event.getObject()).getIdSolicitud().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public void setNumeroSolicitudes6(int numeroSolicitudes6) {
-        this.numeroSolicitudes6 = numeroSolicitudes6;
+    public List<Solicitud> getSelectedSolicitud() {
+        return selectedSolicitud;
     }
 
-    public int getNumeroSolicitudes7() {
-        return numeroSolicitudes7;
+    public void setSelectedSolicitud(List<Solicitud> selectedSolicitud) {
+        this.selectedSolicitud = selectedSolicitud;
     }
 
-    public void setNumeroSolicitudes7(int numeroSolicitudes7) {
-        this.numeroSolicitudes7 = numeroSolicitudes7;
+    public Solicitud getSolicitudSeleccionada() {
+        return solicitudSeleccionada;
     }
 
-    public int getNumeroSolicitudes8() {
-        return numeroSolicitudes8;
+    public void setSolicitudSeleccionada(Solicitud solicitudSeleccionada) {
+        this.solicitudSeleccionada = solicitudSeleccionada;
     }
 
-    public void setNumeroSolicitudes8(int numeroSolicitudes8) {
-        this.numeroSolicitudes8 = numeroSolicitudes8;
-    }
-    
-    
 }

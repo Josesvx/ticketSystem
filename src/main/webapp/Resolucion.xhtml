@@ -2,15 +2,106 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>Resolución</title>
-    </h:head>
-    <h:body>
-        Página para la resolución de de ticket de parte del técnico.
-        <f:metadata>
-            <f:viewAction action="#{manejadorLogin.loginTecnico()}" />
-        </f:metadata>
-    </h:body>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="resources/layout.xhtml">
+
+        <ui:define name="titulo">
+            <h:head>
+                <title>Resolucion</title>
+                <style>
+                    body{
+                        background-image: url(img/FondoLogin.png);
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        background-attachment: fixed;
+                        background-size: cover;
+                    }
+                </style>
+            </h:head>
+
+
+        </ui:define>
+        <ui:define name="body">
+            <center>
+                <div style="
+                     background-color: rgb(255,255,255,0.7);
+
+
+                     border-radius: 20px;
+                     position:absolute;
+                     top: 20%;
+
+                     color: #585858;">
+                    <h2>Mantenimiento</h2>
+                    <center>
+                        <p:tabView dynamic="true" cache="true" effect="fold" style="width: 90%">
+                            <p:tab title="Informacion">
+                                <h:panelGrid columns="2" cellpadding="10">                                
+                                    <h:outputText
+                                        value="EN CONSTRUCCION" />
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Historial">
+                                <h:panelGrid columns="2" cellpadding="10">
+
+                                    <h:outputText value="EN CONSTRUCCION" />
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Mantenimiento">
+                                <h:panelGrid columns="2" cellpadding="10">
+
+                                    <h:outputText value="EN CONSTRUCCION" />
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+                    </center>
+                    <!-- <h1 style="color: black" >
+                         Mantenimientos en espera
+                     </h1>
+                     <table>
+                         <tr>
+                             <td>
+                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().titulo}" style="
+                                                font-size: 15px;
+                                                font-family: sans-serif;" />
+                             </td>                            
+                         </tr>
+                         <tr>
+                             <td>
+                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idPrioridad.nombre}" style="
+                                                font-size: 15px;
+                                                font-family: sans-serif;" />
+                             </td>                            
+                         </tr>
+                         <tr>
+                             <td>
+                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idCategoria.nombre}" style="
+                                                font-size: 15px;
+                                                font-family: sans-serif;" />
+                             </td>                            
+                         </tr>
+                         <tr>
+                             <td>
+                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().descripcion}" style="
+                                                font-size: 15px;
+                                                font-family: sans-serif;" />
+                             </td>                            
+                         </tr>
+                         <tr>
+                             <td>
+ 
+                             </td>                            
+                         </tr>
+                     </table>-->
+                </div>
+            </center>
+        </ui:define>
+    </ui:composition>   
+    <f:metadata>
+        <f:viewAction action="#{manejadorLogin.loginTecnico()}" />
+    </f:metadata>
 </html>
 

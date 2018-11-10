@@ -30,4 +30,6 @@ public interface EstadoFacadeLocal {
 
     int count();
     
+    List<Estado> findLastEstado(int idSolicitud);
+    
 }

@@ -5,10 +5,13 @@
  */
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Estado;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
 /**
  *
@@ -28,5 +31,19 @@ public class EstadoFacade extends AbstractFacade<Estado> implements EstadoFacade
     public EstadoFacade() {
         super(Estado.class);
     }
+    
+    @Override
+    public List<Estado> findLastEstado(int idSolicitud) {
+        List<Estado> lista = null;
+        try {
+            Query consulta = em.createNamedQuery("Estado.findLastEstado");
+            consulta.setParameter("idSolicitud", idSolicitud);
+            lista = consulta.getResultList();
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return lista;
+    }
+    
     
 }
