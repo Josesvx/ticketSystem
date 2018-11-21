@@ -8,8 +8,10 @@ import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
 /**
  *
@@ -20,16 +22,19 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 public class ManejadorTecnico implements Serializable {
 
     List<Directorio> listaTec, listaTecIT, listaTecMA, listaTecnicos, listaFiltrada;
+    List<Solicitud> lSolicitud;
     private CookieInstance oreo;
     private Directorio dir;
     protected int idDirectorio;
     @EJB
     private DirectorioFacadeLocal dfl;
+    private SolicitudFacadeLocal sfl;
 
     @PostConstruct
 //    @Override
     public void init() {
         listaTec = new ArrayList<>();
+
         oreo = new CookieInstance();
         ObtenerTecnicos();
         ObtenerTecnicosIT();
@@ -96,5 +101,7 @@ public class ManejadorTecnico implements Serializable {
     public void setListaTecMA(List<Directorio> listaTecMA) {
         this.listaTecMA = listaTecMA;
     }
+    
+   
 
 }

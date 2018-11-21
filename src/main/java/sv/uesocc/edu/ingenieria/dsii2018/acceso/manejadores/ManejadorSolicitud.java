@@ -71,7 +71,7 @@ public class ManejadorSolicitud implements Serializable {
     private CookieInstance oreo;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
-    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
+    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null, nombreC;
     private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
             numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
             numeroSolicitudes7, numeroSolicitudes8, numeroESol;
@@ -450,6 +450,37 @@ public class ManejadorSolicitud implements Serializable {
             return null;
         } else {
             return listaSol.get(0);
+        }
+    }
+
+    public String nombreC() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        if (listaSol == null || listaSol.isEmpty()) {
+            return null;
+        } else {
+            nombreC = listaSol.get(0).getIdDirectorio().getNombre1() + " " 
+                    + listaSol.get(0).getIdDirectorio().getNombre2() + " "
+                    + listaSol.get(0).getIdDirectorio().getApellido1() + " "
+                    + listaSol.get(0).getIdDirectorio().getApellido2();
+            return nombreC;
+        }
+    }
+
+    public String comprobar() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        if (listaSol == null || listaSol.isEmpty()) {
+            return "none";
+        } else {
+            return "block";
+        }
+    }
+
+    public String comprobar2() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        if (listaSol == null || listaSol.isEmpty()) {
+            return "block";
+        } else {
+            return "none";
         }
     }
 
