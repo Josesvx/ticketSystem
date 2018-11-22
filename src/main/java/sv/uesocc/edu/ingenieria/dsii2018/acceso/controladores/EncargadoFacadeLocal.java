@@ -27,6 +27,8 @@ public interface EncargadoFacadeLocal {
     List<Encargado> findAll();
 
     List<Encargado> findRange(int[] range);
+    
+    Encargado FindBySolicitudE(int idSolicitud, int idDirectorio);
 
     int count();
 
