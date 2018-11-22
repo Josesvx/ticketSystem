@@ -25,7 +25,7 @@
             <p:toolbar style="
                        height:55px;">
                 <f:facet name="left">
-                    <p:commandButton type="button" value="Inicio" onclick="location.href = 'principal.jsf'" icon="ui-icon-home" style="
+                    <p:commandButton type="button" value="#{Layout['layout.inicio']}" onclick="location.href = 'principal.jsf'" icon="ui-icon-home" style="
                                      height: 50px; 
                                      font-size: 17px;"/>
 
@@ -36,25 +36,37 @@
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;"  
-                                     type="button" value="Creación de ticket"  onclick="location.href = 'CrearTicket.jsf'" title="Crear" icon="ui-icon-disk" />                    
+                                     type="button" value="#{Layout['layout.crear']}"  onclick="location.href = 'CrearTicket.jsf'" title="#{Layout['layout.crear']}" icon="ui-icon-disk" />                    
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
-                                     type="button" value="Estadisticas" title="Estadistica" onclick="location.href = 'Estadistica.jsf'" icon="ui-icon-print" rendered="#{manejadorLogin.usuariogerente()}" />
+                                     type="button" value="#{Layout['layout.estadistica']}" title="#{Layout['layout.estadistica']}" onclick="location.href = 'Estadistica.jsf'" icon="ui-icon-print" rendered="#{manejadorLogin.usuariogerente()}" />
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
-                                     type="button" value="Asignar Prioridad" onclick="location.href = 'AsignarPrioridad.jsf'" title="Asignacion" icon="ui-icon-check" rendered="#{manejadorLogin.usuariojefedepto()}" />
+                                     type="button" value="#{Layout['layout.asignar']}" onclick="location.href = 'AsignarPrioridad.jsf'" title="#{Layout['layout.asignar']}" icon="ui-icon-check" rendered="#{manejadorLogin.usuariojefedepto()}" />
                     <p:commandButton style="
                                      height: 50px; 
                                      font-size: 17px;" 
-                                     type="button" value="Mantenimiento" onclick="location.href = 'Resolucion.jsf'" title="Resolución" icon="ui-icon-check" rendered="#{manejadorLogin.usuariotecnico()}" />
+                                     type="button" value="#{Layout['layout.mantenimiento']}" onclick="location.href = 'Resolucion.jsf'" title="#{Layout['layout.mantenimiento']}" icon="ui-icon-check" rendered="#{manejadorLogin.usuariotecnico()}" />
                     <span class="ui-separator">
                         <span class="ui-icon ui-icon-grip-dotted-vertical" />
                     </span>
                 </f:facet>
 
+
                 <f:facet name="right">
+                    <h:selectOneListbox id="listaIdiomas" value="#{sesionBean.codigoIdioma}" size="0"
+                                        valueChangeListener="#{sesionBean.cambioIdioma}"
+                                        onchange="submit()" >
+                        <f:selectItems value="#{sesionBean.paises}"/>
+                    </h:selectOneListbox>
+                    <span class="ui-separator">
+                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                    </span>
+                    <span class="ui-separator">
+                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                    </span>
                     <p:commandButton  value="#{manejadorLogin.nombreiniciar()}"  title="#{manejadorLogin.nombreRol()}" icon="ui-icon-person" style="
                                       height: 50px; 
                                       font-size: 15px;"
@@ -63,10 +75,10 @@
                 </f:facet>
 
             </p:toolbar>
-            <p:dialog header="¿Desea cerrar sesión?" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="100">
+            <p:dialog header="#{Layout['layout.cerrar']}" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="100">
                 <center>
-                    <p:commandButton value="SI" action="#{manejadorLogin.CerrarSesion()}"/>
-                    <p:commandButton value="NO" onclick="PF('dlg3').hide();$('#form').trigger('reset');" type="button"/>
+                    <p:commandButton value="#{Layout['layout.si']}" action="#{manejadorLogin.CerrarSesion()}"/>
+                    <p:commandButton value="#{Layout['layout.no']}" onclick="PF('dlg3').hide();$('#form').trigger('reset');" type="button"/>
                 </center>
             </p:dialog>
         </h:form>

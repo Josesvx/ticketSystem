@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Inicio de Sesión</title>
+        <title>#{Login['login.inicio']}</title>
         <style>
             body{
                 background-image: url(img/Fondo.png);
@@ -17,30 +17,37 @@
         </style>
     </h:head>
     <body>
+        <h:form>
+            <h:selectOneListbox id="listaIdiomas" value="#{sesionBean.codigoIdioma}" size="2"
+                                valueChangeListener="#{sesionBean.cambioIdioma}"
+                                onchange="submit()" >
+                <f:selectItems value="#{sesionBean.paises}"/>
+            </h:selectOneListbox>
+        </h:form>
         <center>
-            
+
             <h:form>
-                
+
                 <p:messages autoUpdate="true" showDetail="true"/>
-                
+
                 <div style="
                      background-color: rgb(255,255,255,0.7);
-      
+
                      width: 24%; 
                      border-radius: 20px;
                      position:absolute;
                      top: 20%;
                      left:38%;
                      color: #585858;">
-                    
+
                     <table align="center" style="opacity: 1;  font-family:sans-serif; margin-top: 30px;">                        
                         <tr>
                             <td colspan="2" align="center">
-                                
+
                                 <h2 style="                                    
                                     font-family: sans-serif;
                                     font-size: 25px;">
-                                    Inicio de sesion</h2>
+                                    #{Login['login.inicio']}</h2>
                                 <br></br>
                             </td>                            
                         </tr>
@@ -53,7 +60,7 @@
                                               height: 25px;  
                                               width:200px;
                                               border:0;"
-                                              required="true" requiredMessage="Usuario Requerido" placeholder="Usuario" value="#{manejadorLogin.directorio.usuario}" />
+                                              required="true" requiredMessage="#{Login['login.usuarioRequerido']}" placeholder="#{Login['login.usuario']}" value="#{manejadorLogin.directorio.usuario}" />
                                 <br></br><br></br>
                             </td>
                         </tr>                       
@@ -66,13 +73,13 @@
                                              height: 25px;  
                                              width:200px;
                                              border:0;"
-                                             requiredMessage="Contraseña Requerida" required="true" placeholder="Contraseña" value="#{manejadorLogin.directorio.contrasenia}"/>
+                                             requiredMessage="#{Login['login.contraseniaRequerida']}" required="true" placeholder="#{Login['login.contrasenia']}" value="#{manejadorLogin.directorio.contrasenia}"/>
                                 <br></br><br></br>
                             </td>
                         </tr>
                     </table>
                     <br></br>
-                    <p:commandButton value="Ingresar"  action ="#{manejadorLogin.autenticacion()}" style="width:150px; height:40px; font-size:18px; "/>
+                    <p:commandButton value="#{Login['login.ingresar']}"  action ="#{manejadorLogin.autenticacion()}" style="width:150px; height:40px; font-size:18px; "/>
                     <br></br><br></br><br></br><br></br>
                 </div>
 
