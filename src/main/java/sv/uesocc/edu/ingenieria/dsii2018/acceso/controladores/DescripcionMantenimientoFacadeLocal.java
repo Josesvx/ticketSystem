@@ -16,11 +16,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenim
 @Local
 public interface DescripcionMantenimientoFacadeLocal {
 
-    void create(DescripcionMantenimiento descripcionMantenimiento);
+    boolean create(DescripcionMantenimiento descripcionMantenimiento);
 
-    void edit(DescripcionMantenimiento descripcionMantenimiento);
+    boolean edit(DescripcionMantenimiento descripcionMantenimiento);
 
-    void remove(DescripcionMantenimiento descripcionMantenimiento);
+    boolean remove(DescripcionMantenimiento descripcionMantenimiento);
 
     DescripcionMantenimiento find(Object id);
 

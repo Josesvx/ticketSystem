@@ -16,11 +16,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 @Local
 public interface CategoriaFacadeLocal {
 
-    void create(Categoria categoria);
+    boolean create(Categoria categoria);
 
-    void edit(Categoria categoria);
+    boolean edit(Categoria categoria);
 
-    void remove(Categoria categoria);
+    boolean remove(Categoria categoria);
 
     Categoria find(Object id);
 

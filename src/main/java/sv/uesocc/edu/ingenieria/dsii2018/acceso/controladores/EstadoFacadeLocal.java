@@ -16,11 +16,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Estado;
 @Local
 public interface EstadoFacadeLocal {
 
-    void create(Estado estado);
+    boolean create(Estado estado);
 
-    void edit(Estado estado);
+    boolean edit(Estado estado);
 
-    void remove(Estado estado);
+    boolean remove(Estado estado);
 
     Estado find(Object id);
 

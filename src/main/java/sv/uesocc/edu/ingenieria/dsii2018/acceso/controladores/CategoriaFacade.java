@@ -28,5 +28,6 @@ public class CategoriaFacade extends AbstractFacade<Categoria> implements Catego
     public CategoriaFacade() {
         super(Categoria.class);
     }
+
     
 }
