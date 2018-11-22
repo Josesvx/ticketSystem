@@ -60,8 +60,8 @@ public class ManejadorSolicitud implements Serializable {
     private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
     private Solicitud solicitudSeleccionada;
+    private DescripcionMantenimiento descripcionM, tmp;
     private List<Solicitud> selectedSolicitud;
-    ;
     protected Solicitud solicitudS;
     private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
@@ -146,6 +146,8 @@ public class ManejadorSolicitud implements Serializable {
         directorio = new Directorio();
 
         descMant = new DescripcionMantenimiento();
+
+        descripcionM = new DescripcionMantenimiento();
 
         mantEnc = new MantenimientoEncargado();
 
@@ -458,7 +460,7 @@ public class ManejadorSolicitud implements Serializable {
         if (listaSol == null || listaSol.isEmpty()) {
             return null;
         } else {
-            nombreC = listaSol.get(0).getIdDirectorio().getNombre1() + " " 
+            nombreC = listaSol.get(0).getIdDirectorio().getNombre1() + " "
                     + listaSol.get(0).getIdDirectorio().getNombre2() + " "
                     + listaSol.get(0).getIdDirectorio().getApellido1() + " "
                     + listaSol.get(0).getIdDirectorio().getApellido2();
@@ -492,7 +494,36 @@ public class ManejadorSolicitud implements Serializable {
 
     }
 
-    public void ActualizarDatos(Solicitud solicitud, DescripcionMantenimiento mantenimientoDescripcion) {
+    public void ActualizarDatos() {
+        try {
+            listaSol = sfl.findByTecnic(oreo.UsuarioId());
+            tmp = dmfl.FindBySolicitudEncargado(listaSol.get(0).getIdSolicitud(), oreo.UsuarioId());
+            
+            tmp.setDescripcionProblema(this.descripcionM.getDescripcionProblema());
+            tmp.setDescripcionSolucion(this.descripcionM.getDescripcionSolucion());
+            tmp.setAudFechaCreacion(new Date());
+            id = oreo.UsuarioId();
+            this.directorio = dfl.find(id);
+            tmp.setAudNombreCreacion(this.directorio.getUsuario());
+            dmfl.edit(tmp);
+            
+            this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
+            this.estadoSolicitud.setFecha(new Date());
+            this.estadoSolicitud.setIdEstado(efl.find(4));
+            this.estadoSolicitud.setIdSolicitud(listaSol.get(0));
+            this.estadoSolicitud.setJustificacion("Terminada");
+            this.estadoSolicitud.setAudNombreCreacion(this.directorio.getUsuario());
+            this.estadoSolicitud.setAudFechaCreacion(new Date());
+            this.estadoSolicitud.setAudStatus(true);
+            esfl.create(this.estadoSolicitud);
+            
+            
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Ticket Terminado"));
+            FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error al terminar el ticket"));
+        }
 
     }
 
@@ -649,6 +680,14 @@ public class ManejadorSolicitud implements Serializable {
 
     public void setSolicitudSeleccionada(Solicitud solicitudSeleccionada) {
         this.solicitudSeleccionada = solicitudSeleccionada;
+    }
+
+    public DescripcionMantenimiento getDescripcionM() {
+        return descripcionM;
+    }
+
+    public void setDescripcionM(DescripcionMantenimiento descripcionM) {
+        this.descripcionM = descripcionM;
     }
 
 }

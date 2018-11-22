@@ -48,17 +48,17 @@
                     <div style="
                          background-color: rgb(255,255,255,0.7);
                          border-radius: 20px;
-                         width: 80%;
+                         width: 90%;
                          position:absolute;
                          top: 20%;
-                         left:10%;
+                         left:5%;
                          display:#{manejadorSolicitud.comprobar()};
                          color: #585858;">
                         <h2>Mantenimiento</h2>
                         <center>
                             <p:tabView dynamic="true" cache="true" effect="fold">
                                 <p:tab title="Informacion">                               
-                                        <table border="0">
+                                        <table cellspacing="10" cellpadding="10" border="0">
 
                                             <tr>
                                                 <td>
@@ -141,27 +141,23 @@
                                         <h:outputText value="EN CONSTRUCCION" />
                                     </h:panelGrid>
                                 </p:tab>
-                                <p:tab title="Mantenimiento">                                    
+                                <p:tab title="Mantenimiento">
+                                    
                                         <h:form>
                                             <p:messages  id="mensaje" autoUpdate="true"  />
-                                            <table align="center" style="opacity: 1; margin-top: 30px; font-family:Helvetica; ">
+                                            <table cellspacing="10" cellpadding="10" border="0" align="center" >
                                                 <tr>
-                                                    <td>
-                                                        <p:outputLabel value="Para " for="titulo" style="position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
+                                                    <td colspan="2" align="center">
+                                                        <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().titulo}" style=" font-size:30px; font-weight: bold;"/> 
                                                     </td>
-                                                    <td>
-                                                        <p:inputText id="titulo" disabled="true" value="#{manejadorSolicitud.ObtenerSolicitudesXTec().titulo}"/>
-                                                    </td>
-                                                    <td>
-                                                        <p:message for="titulo"/>
-                                                    </td>                                    
+                                    
                                                 </tr>                                                                                                                                                                     
                                                 <tr>
                                                     <td>
-                                                        <p:outputLabel value="Descripcion Problema: " for="descripcionP" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>
+                                                        <p:outputLabel value="Descripcion Problema: " for="descripcionP" />
                                                     </td>
                                                     <td>
-                                                        <p:inputTextarea rows="7" cols="35" id="descripcionP" required="true" requiredMessage="Descripcion del problema Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}" maxlength="250"/> 
+                                                        <p:inputTextarea rows="7" cols="35" id="descripcionP" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Problema" value="#{manejadorSolicitud.descripcionM.descripcionProblema}" maxlength="250"/> 
                                                     </td>
                                                     <td>
                                                         <p:message for="descripcionP"/>
@@ -169,10 +165,10 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <p:outputLabel value="Descripcion Solucion: " for="descripcionS" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>
+                                                        <p:outputLabel value="Descripcion Solucion: " for="descripcionS" />
                                                     </td>
                                                     <td>
-                                                        <p:inputTextarea rows="7" cols="35" id="descripcionS" required="true" requiredMessage="Descripcion de la solucion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}" maxlength="250"/> 
+                                                        <p:inputTextarea rows="7" cols="35" id="descripcionS" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Solución" value="#{manejadorSolicitud.descripcionM.descripcionSolucion}" maxlength="250"/> 
                                                     </td>
                                                     <td>
                                                         <p:message for="descripcionS"/>
@@ -181,8 +177,9 @@
 
                                                 <tr>
                                                     <td colspan="2" align="center">
-                                                        <p:commandButton value="Terminar Mantenimiento" 
-                                                                         id="ingresar" 
+                                                        <p:commandButton value="Terminar ticket" 
+                                                                         id="terminar"
+                                                                         action="#{manejadorSolicitud.ActualizarDatos()}"
                                                                          icon="ui-icon-check" 
                                                                          update="mensaje"                                                     
                                                                          />
