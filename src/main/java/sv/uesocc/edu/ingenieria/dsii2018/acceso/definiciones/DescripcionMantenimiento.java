@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "DescripcionMantenimiento.findByAudNombreModificacion", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.audNombreModificacion = :audNombreModificacion")
     , @NamedQuery(name = "DescripcionMantenimiento.findByAudFechaModificacion", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.audFechaModificacion = :audFechaModificacion")
     , @NamedQuery(name = "DescripcionMantenimiento.finBySolicitudEncargado", query = "SELECT  dm FROM DescripcionMantenimiento AS dm JOIN dm.mantenimientoEncargadoList as me JOIN me.encargadoList AS e WHERE e.idDirectorio.idDirectorio= :idDirectorio AND me.idSolicitud.idSolicitud= :idSolicitud")   
+    , @NamedQuery(name = "DescripcionMantenimiento.findByCorrelativo", query = "SELECT dm FROM DescripcionMantenimiento AS dm JOIN dm.mantenimientoEncargadoList AS me JOIN me.idSolicitud AS s WHERE s.correlativo = :correlativo")    
     , @NamedQuery(name = "DescripcionMantenimiento.findByAudStatus", query = "SELECT d FROM DescripcionMantenimiento d WHERE d.audStatus = :audStatus")})
 public class DescripcionMantenimiento implements Serializable {
 

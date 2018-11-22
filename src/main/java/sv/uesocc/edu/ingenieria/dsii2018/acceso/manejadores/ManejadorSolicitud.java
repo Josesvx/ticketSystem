@@ -53,6 +53,7 @@ public class ManejadorSolicitud implements Serializable {
     private ManejadorCorreo mail;
     private List<Solicitud> listaSol, listaIT, listaGen, listaSoli;
     private List<Prioridad> listaP;
+    private List<DescripcionMantenimiento> listaDM;
     private DescripcionMantenimiento descMant;
     private MantenimientoEncargado mantEnc;
     private Encargado encargado, tmpEnc;
@@ -60,7 +61,7 @@ public class ManejadorSolicitud implements Serializable {
     private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
     private Solicitud solicitudSeleccionada;
-    private DescripcionMantenimiento descripcionM, tmp;
+    private DescripcionMantenimiento descripcionM, tmp, DMSeleccionada;
     private List<Solicitud> selectedSolicitud;
     protected Solicitud solicitudS;
     private EstadoSolicitud estadoSolicitud;
@@ -110,6 +111,7 @@ public class ManejadorSolicitud implements Serializable {
         numeroESol = esfl.count() + 1;
         listaSol = new ArrayList<>();
         listaSoli = new ArrayList<>();
+        listaDM  =  new ArrayList<>();
         
         List<Solicitud> LS2 = new ArrayList<>();
         for (Solicitud solicitud1 : sfl.findAll()) {
@@ -283,6 +285,7 @@ public class ManejadorSolicitud implements Serializable {
         
         directorio = new Directorio();
         
+        
         oreo = new CookieInstance();
         
         id2 = oreo.UsuarioId();
@@ -306,6 +309,17 @@ public class ManejadorSolicitud implements Serializable {
             throw ex;
         }
         return listaSol;
+    }
+    
+    public List<DescripcionMantenimiento> llenarPorCorrelativo() {
+       
+        try {
+            listaSol = sfl.findByTecnic(oreo.UsuarioId());
+            listaDM = dmfl.FindByCorrelativo(listaSol.get(0).getCorrelativo()                                  );
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return listaDM;
     }
     
     public int getIdCategoria() {
@@ -710,5 +724,15 @@ public class ManejadorSolicitud implements Serializable {
     public void setDescripcionM(DescripcionMantenimiento descripcionM) {
         this.descripcionM = descripcionM;
     }
+
+    public DescripcionMantenimiento getDMSeleccionada() {
+        return DMSeleccionada;
+    }
+
+    public void setDMSeleccionada(DescripcionMantenimiento DMSeleccionada) {
+        this.DMSeleccionada = DMSeleccionada;
+    }
+    
+    
     
 }

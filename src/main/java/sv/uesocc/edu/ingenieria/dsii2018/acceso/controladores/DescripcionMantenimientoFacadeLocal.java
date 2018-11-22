@@ -29,9 +29,9 @@ public interface DescripcionMantenimientoFacadeLocal {
     List<DescripcionMantenimiento> findRange(int[] range);
 
     int count();
-
-    List<DescripcionMantenimiento> findByCorrelativo(int Correlativo);
     
     DescripcionMantenimiento FindBySolicitudEncargado(int idSolicitud, int idDirectorio);
+    
+    List<DescripcionMantenimiento> FindByCorrelativo(String correlativo);
 
 }
