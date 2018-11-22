@@ -6,6 +6,7 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores;
 
 import java.util.Date;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -39,9 +40,10 @@ public class EstadoSolicitudFacadeTest {
     static SolicitudFacade sf = new SolicitudFacade();
     static EstadoSolicitudFacade esf = new EstadoSolicitudFacade();
     static EstadoFacade ef = new EstadoFacade();
+    public EstadoSolicitud estadoSolicitud;
     
     @BeforeClass
-    public static void init() {
+    public static void init() { 
         Whitebox.setInternalState(df, "em", emp.em());
         Whitebox.setInternalState(rf, "em", emp.em());
         Whitebox.setInternalState(dif, "em", emp.em());
@@ -58,15 +60,31 @@ public class EstadoSolicitudFacadeTest {
     @Before
     public void start() {
         esf.getEntityManager().getTransaction().begin();
+        Arranque();
     }
     
     @After
     public void tearDown() {
         esf.getEntityManager().getTransaction().rollback();
     }
-
+    
     @Test
     public void TestCreateEstadoSolicitud() {
+        System.out.println("Test Crear Estado Solicitud");
+        boolean result = esf.create(estadoSolicitud);
+        assertTrue(result);
+    }
+    
+    
+    public void TestFindLastEstado(){
+        System.out.println("Test encontrar ultimo Estado");
+        List<Estado> estado = ef.findLastEstado(sf.count());
+        System.out.println("Lista: "+ estado.size());
+        assertEquals("test",estado.get(0).getNombre());
+    }
+    
+    
+    public void Arranque(){
         df.create(new Departamento(df.count() + 1, "test", "test", new Date(), true));
         rf.create(new Rol(rf.count() + 1, "test", "test", new Date(), true));
         Directorio directorio = new Directorio(dif.count() + 1, "test", "test", "test", "test", "test", "test", "test", "test", new Date(), true);
@@ -79,11 +97,9 @@ public class EstadoSolicitudFacadeTest {
         solicitud.setIdCategoria(cf.find(cf.count()));
         sf.create(solicitud);
         ef.create(new Estado(ef.count() + 1, "test", "test", new Date(), true));
-        EstadoSolicitud estadoSolicitud = new EstadoSolicitud(esf.count() + 1, new Date(), "test", new Date(), true);
+        estadoSolicitud = new EstadoSolicitud(esf.count() + 1, new Date(), "test", new Date(), true);
         estadoSolicitud.setIdEstado(ef.find(ef.count()));
-        estadoSolicitud.setIdSolicitud(sf.find(sf.count()));
-        boolean result = esf.create(estadoSolicitud);
-        assertTrue(result);
+        estadoSolicitud.setIdSolicitud(sf.find(sf.count()));  
     }
     
 }
