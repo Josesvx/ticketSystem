@@ -32,10 +32,6 @@ public class DescripcionMantenimientoFacade extends AbstractFacade<DescripcionMa
         super(DescripcionMantenimiento.class);
     }
 
-    @Override
-    public List<DescripcionMantenimiento> findByCorrelativo(int Correlativo) {
-        return null;
-    }
     
     @Override
     public DescripcionMantenimiento FindBySolicitudEncargado(int idSolicitud, int idDirectorio) {  
@@ -53,6 +49,25 @@ public class DescripcionMantenimientoFacade extends AbstractFacade<DescripcionMa
             throw ex;
         }
         return tmp;
+
+    }
+    
+    @Override
+    public List<DescripcionMantenimiento> FindByCorrelativo(String correlativo) {  
+        List<DescripcionMantenimiento> Bycorrelativo ;
+        
+        try {
+            Query query = em.createNamedQuery("DescripcionMantenimiento.findByCorrelativo");
+            query.setParameter("correlativo", correlativo);
+            
+
+            Bycorrelativo = query.getResultList();            
+            
+            
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return Bycorrelativo;
 
     }
 
