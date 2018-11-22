@@ -73,5 +73,6 @@ public class SolicitudFacadeTest {
         boolean result = sf.create(solicitud);
         assertTrue(result);
     }
+    
 
 }
