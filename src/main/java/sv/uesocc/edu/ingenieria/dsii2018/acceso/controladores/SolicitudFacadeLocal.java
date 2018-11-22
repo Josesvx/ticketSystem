@@ -52,4 +52,6 @@ public interface SolicitudFacadeLocal {
     int findByDepartamento(int idDepartemento);
 
     List<Solicitud> findByCategoria(int idCategoria);
+    
+    int findByStatus(int idEstado);
 }

@@ -182,12 +182,7 @@ public class ManejadorEstadistica implements Serializable {
     }
 
     public int llenarPorEstado(int id) {
-        List<Solicitud> lista = sfl.findByEstado(id);
-        if (lista != null || !lista.isEmpty()) {
-            numeroPorEstado = lista.size();
-        } else {
-            numeroPorEstado = 0;
-        }
+        numeroPorEstado = sfl.findByStatus(id);
         return numeroPorEstado;
     }
 
@@ -222,7 +217,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = barModel.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(15);
+        yAxis.setMax(sfl.count()+10);
     }
 
     private void createBarModelestado() {
@@ -236,7 +231,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = barModelEstado.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(15);
+        yAxis.setMax(sfl.count()+10);
     }
 
     private void createBarModelPrioridad() {
@@ -250,7 +245,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = barModelPrioridad.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(15);
+        yAxis.setMax(sfl.count()+10);
     }
     
     private void createBarModelCategoria() {
@@ -264,7 +259,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = barModelCategoria.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(15);
+        yAxis.setMax(sfl.count()+10);
     }
 
     private void createLineModel() {
@@ -276,7 +271,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Numero de Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(10);
+        yAxis.setMax(sfl.count()+10);
     }
 
     private void createLineModelEstado() {
@@ -288,7 +283,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = lineModelEstado.getAxis(AxisType.Y);
         yAxis.setLabel("Numero de Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(10);
+        yAxis.setMax(sfl.count()+10);
     }
 
     private void createLineModelPrioridad() {
@@ -300,7 +295,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = lineModelPrioridad.getAxis(AxisType.Y);
         yAxis.setLabel("Numero de Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(10);
+        yAxis.setMax(sfl.count()+10);
     }
     
     private void createLineModelCategoria() {
@@ -312,7 +307,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = lineModelCategoria.getAxis(AxisType.Y);
         yAxis.setLabel("Numero de Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(10);
+        yAxis.setMax(sfl.count()+10);
     }
 
     private void createPieModel() {

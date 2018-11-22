@@ -77,6 +77,31 @@ public class CookieInstance {
 
     }
 
+    public void cerrarSesion() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+        HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
+        try {
+            galletas = request.getCookies();
+            if (galleta != null && galletas.length > 0) {
+                for (Cookie cookies : galletas) {
+                    if (cookies.getName().equals(user)) {
+                        cookies.setValue("");
+                        cookies.setPath("/ticketSystem-1.0-SNAPSHOT");
+                        cookies.setMaxAge(0);
+                        response.addCookie(cookies);
+                        control = true;
+                        break;
+                    }
+                }
+                FacesContext.getCurrentInstance().getExternalContext().redirect("InicioSesion.jsf");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(CookieInstance.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     public void ComprobarLogin() {
         if (control == true) {
             try {

@@ -23,7 +23,12 @@
                     <h:form id="frmAsignarIG"  >
 
                         <center>
-                            <p:dataTable id="solicitudesIG" var="solicitudIG" value="#{manejadorSolicitud.llenarFiltroManGerente()}" 
+                            <p:dataTable id="solicitudesIG" var="solicitudIG" 
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10, 15"
+                                         value="#{manejadorSolicitud.llenarFiltroManGerente()}" 
                                          rowKey="#{solicitudIG}" selection="#{manejadorSolicitud.solicitudS}"
                                          selectionMode="single"
                                          style="
@@ -76,7 +81,12 @@
                     <h:form id="frmAsignarMG"  >
 
                         <center>
-                            <p:dataTable id="solicitudesMG" var="solicitudMG" value="#{manejadorSolicitud.llenarFiltroITGerente()}" 
+                            <p:dataTable id="solicitudesMG" var="solicitudMG" 
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10, 15"
+                                         value="#{manejadorSolicitud.llenarFiltroITGerente()}" 
                                          rowKey="#{solicitudMG}" selection="#{manejadorSolicitud.solicitudS}"
                                          selectionMode="single"
                                          style="
@@ -125,13 +135,17 @@
                     </h:form>
                 </p:tab>
             </p:tabView>
-            <h:form id="frmAsignar"  rendered="#{manejadorLogin.GerenteGeneralTabla()}">
+            <h:form id="frmAsignar" rendered="#{manejadorLogin.GerenteGeneralTabla()}">
                 <center>
                     <p:dataTable id="solicitudes" var="solicitud" value="#{manejadorSolicitud.llenarFiltro()}" 
                                  rowKey="#{solicitud}" selection="#{manejadorSolicitud.solicitudS}"
                                  selectionMode="single"
+                                 rows="10"
                                  style="
-                                 width: 70%;">
+                                 width: 70%;"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
                         <f:facet name="header" >
                             Mantenimientos Solicitados
                         </f:facet>
@@ -156,19 +170,20 @@
                     <p:dialog header="Asignaciones" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel id="asignar" style="text-align:center;">
                             <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
-
                                 <h:outputText value="Asignar Prioriodad: " />
                                 <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.idPrioridad}">
                                     <f:selectItems value="#{manejadorSolicitud.listaP}" var="valor" itemValue="#{valor.idPrioridad}" itemLabel="#{valor.nombre}">
                                     </f:selectItems>
                                 </p:selectOneMenu>
-                                <h:outputText value="Asignar técnico " />
+                                <h:outputText value="Asignar Técnico " />
                                 <p:selectOneMenu id="cmbTecnico" value="#{manejadorSolicitud.idDirectorio}">
                                     <f:selectItems value="#{manejadorTecnico.listaTec}" var="valorT" itemValue="#{valorT.idDirectorio}" itemLabel="#{valorT.nombre1}">
                                     </f:selectItems>
                                 </p:selectOneMenu>
                             </p:panelGrid>
-                            <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}"></p:commandButton>
+                            <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" update="frmAsignar:solicitudes"
+                                             actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}">
+                            </p:commandButton>
                         </p:outputPanel>
                     </p:dialog>
                 </center>

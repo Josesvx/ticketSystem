@@ -21,7 +21,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 
 /**
  *
- * @author alexander
+ * @author katiro
  */
 @Named
 @ViewScoped
@@ -203,6 +203,9 @@ public class ManejadorLogin implements Serializable {
         } else {
             return true;
         }
+    }
+    public void CerrarSesion(){
+        oreo.cerrarSesion();
     }
 
     public String getNombreUsuario() {

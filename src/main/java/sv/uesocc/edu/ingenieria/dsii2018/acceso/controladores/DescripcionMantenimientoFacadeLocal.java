@@ -31,5 +31,7 @@ public interface DescripcionMantenimientoFacadeLocal {
     int count();
 
     List<DescripcionMantenimiento> findByCorrelativo(int Correlativo);
+    
+    DescripcionMantenimiento FindBySolicitudEncargado(int idSolicitud, int idDirectorio);
 
 }
