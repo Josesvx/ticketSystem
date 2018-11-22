@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Encargado.findByAudFechaCreacion", query = "SELECT e FROM Encargado e WHERE e.audFechaCreacion = :audFechaCreacion")
     , @NamedQuery(name = "Encargado.findByAudNombreModificacion", query = "SELECT e FROM Encargado e WHERE e.audNombreModificacion = :audNombreModificacion")
     , @NamedQuery(name = "Encargado.findByAudFechaModificacion", query = "SELECT e FROM Encargado e WHERE e.audFechaModificacion = :audFechaModificacion")
+    , @NamedQuery(name = "Encargado.findBySolicitudE", query = "SELECT e FROM Encargado AS e JOIN e.idMantenimientoEncargado AS me WHERE me.idSolicitud.idSolicitud = :idSolicitud AND e.idDirectorio.idDirectorio = :idDirectorio")
     , @NamedQuery(name = "Encargado.findByAudStatus", query = "SELECT e FROM Encargado e WHERE e.audStatus = :audStatus")})
 public class Encargado implements Serializable {
 
@@ -182,5 +183,5 @@ public class Encargado implements Serializable {
     public String toString() {
         return "sv.uesocc.edu.ingenieria.dsii2018.lacualquiera.Encargado[ idEncargado=" + idEncargado + " ]";
     }
-    
+
 }

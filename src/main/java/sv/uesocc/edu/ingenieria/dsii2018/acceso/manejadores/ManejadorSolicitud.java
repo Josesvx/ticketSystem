@@ -47,15 +47,15 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 @Named
 @ViewScoped
 public class ManejadorSolicitud implements Serializable {
-
+    
     private List<Categoria> listaCat;
-
+    
     private ManejadorCorreo mail;
     private List<Solicitud> listaSol, listaIT, listaGen, listaSoli;
     private List<Prioridad> listaP;
     private DescripcionMantenimiento descMant;
     private MantenimientoEncargado mantEnc;
-    private Encargado encargado;
+    private Encargado encargado, tmpEnc;
     private List<Estado> listaEs;
     private List<EstadoSolicitud> listaESOl;
     private Solicitud solicitud;
@@ -75,9 +75,9 @@ public class ManejadorSolicitud implements Serializable {
     private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
             numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
             numeroSolicitudes7, numeroSolicitudes8, numeroESol;
-
+    
     FacesMessage message = new FacesMessage();
-
+    
     @EJB
     private SolicitudFacadeLocal sfl;
     @EJB
@@ -96,12 +96,12 @@ public class ManejadorSolicitud implements Serializable {
     private MantenimientoEncargadoFacadeLocal mefl;
     @EJB
     private EncargadoFacadeLocal enfl;
-
+    
     private ManejadorTecnico mantec;
-
+    
     @PostConstruct
     public void init() {
-
+        
         listaIT = new ArrayList<>();
         listaGen = new ArrayList<>();
         llenarDeps();
@@ -110,7 +110,7 @@ public class ManejadorSolicitud implements Serializable {
         numeroESol = esfl.count() + 1;
         listaSol = new ArrayList<>();
         listaSoli = new ArrayList<>();
-
+        
         List<Solicitud> LS2 = new ArrayList<>();
         for (Solicitud solicitud1 : sfl.findAll()) {
             LS2 = sfl.findByEstado(solicitud1.getIdSolicitud());
@@ -120,13 +120,13 @@ public class ManejadorSolicitud implements Serializable {
                 LS2 = new ArrayList<>();
             }
         }
-
+        
         if (listaSoli != null && !listaSoli.isEmpty()) {
             listaSol = listaSoli;
         } else {
             listaSol = new ArrayList<>();
         }
-
+        
         for (Solicitud solicitud1 : listaSol) {
             if (solicitud1.getIdCategoria().getIdCategoria() == 1) {
                 listaIT.add(solicitud1);
@@ -134,31 +134,33 @@ public class ManejadorSolicitud implements Serializable {
                 listaGen.add(solicitud1);
             }
         }
-
+        
         estado = new Estado();
-
+        
         estadoSolicitud = new EstadoSolicitud();
-
+        
         solicitud = new Solicitud();
-
+        
         categoria = new Categoria();
-
+        
         directorio = new Directorio();
-
+        
         descMant = new DescripcionMantenimiento();
-
+        
         descripcionM = new DescripcionMantenimiento();
-
+        
         mantEnc = new MantenimientoEncargado();
-
+        
         encargado = new Encargado();
-
+        
+        tmpEnc = new Encargado();
+        
         estadoSolicitud = new EstadoSolicitud();
-
+        
         oreo = new CookieInstance();
-
+        
         mail = new ManejadorCorreo();
-
+        
         id2 = oreo.UsuarioId();
         Departamento = dfl.find(id2);
         nombreDep = Departamento.getIdDepartamento().getNombre();
@@ -167,14 +169,14 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             nombre = "No Funciona";
         }
-
+        
         llenarFiltro();
         llenarFiltroITGerente();
         llenarFiltroManGerente();
         ObtenerSolicitudesXTec();
-
+        
     }
-
+    
     public List<Solicitud> llenarFiltro() {
         Directorio dir = dfl.find(oreo.UsuarioId());
         if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
@@ -189,29 +191,29 @@ public class ManejadorSolicitud implements Serializable {
             return new ArrayList<>();
         }
     }
-
+    
     public List<Solicitud> llenarFiltroManGerente() {
         Directorio dir = dfl.find(oreo.UsuarioId());
-
+        
         if (listaGen != null && !listaGen.isEmpty()) {
             return listaGen;
         } else {
             return new ArrayList<>();
         }
-
+        
     }
-
+    
     public List<Solicitud> llenarFiltroITGerente() {
         Directorio dir = dfl.find(oreo.UsuarioId());
-
+        
         if (listaIT != null && !listaIT.isEmpty()) {
             return listaIT;
         } else {
             return new ArrayList<>();
         }
-
+        
     }
-
+    
     public void llenarCategoria() {
         List<Categoria> listaC = cfl.findAll();
         if (listaC != null && !listaC.isEmpty()) {
@@ -220,7 +222,7 @@ public class ManejadorSolicitud implements Serializable {
             listaCat = new ArrayList<>();
         }
     }
-
+    
     public void llenarPrioridad() {
         List<Prioridad> listaPri = pfl.findAll();
         if (listaPri != null && !listaPri.isEmpty()) {
@@ -229,7 +231,7 @@ public class ManejadorSolicitud implements Serializable {
             listaP = new ArrayList<>();
         }
     }
-
+    
     public void llenarDeps() {
         for (int i = 1; i <= 8; i++) {
             switch (i) {
@@ -260,29 +262,29 @@ public class ManejadorSolicitud implements Serializable {
             }
         }
     }
-
+    
     public EstadoSolicitud geteSol() {
         return eSol;
     }
-
+    
     public void seteSol(EstadoSolicitud eSol) {
         this.eSol = eSol;
-
+        
         List<Solicitud> listaS = sfl.findByEstado(1);
         if (listaS != null && !listaS.isEmpty()) {
             listaSol = listaS;
         } else {
             listaSol = new ArrayList<>();
         }
-
+        
         solicitud = new Solicitud();
-
+        
         categoria = new Categoria();
-
+        
         directorio = new Directorio();
-
+        
         oreo = new CookieInstance();
-
+        
         id2 = oreo.UsuarioId();
         Departamento = dfl.find(id2);
         nombreDep = Departamento.getIdDepartamento().getNombre();
@@ -291,11 +293,11 @@ public class ManejadorSolicitud implements Serializable {
         } else {
             nombre = "No Funciona";
         }
-
+        
         llenarPorDirectorio();
-
+        
     }
-
+    
     public List<Solicitud> llenarPorDirectorio() {
         List<Solicitud> listaSol = new ArrayList<>();
         try {
@@ -305,78 +307,78 @@ public class ManejadorSolicitud implements Serializable {
         }
         return listaSol;
     }
-
+    
     public int getIdCategoria() {
         return idCategoria;
     }
-
+    
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
-
+    
     public String getNombre() {
         return nombre;
     }
-
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    
     public List<Prioridad> getListaP() {
         return listaP;
     }
-
+    
     public void setListaP(List<Prioridad> listaP) {
         this.listaP = listaP;
     }
-
+    
     public List<Categoria> getListaCat() {
         return listaCat;
     }
-
+    
     public void setListaCat(List<Categoria> listaCat) {
         this.listaCat = listaCat;
     }
-
+    
     public List<Solicitud> getListaSol() {
         return listaSol;
     }
-
+    
     public void setListaSol(List<Solicitud> listaSol) {
         this.listaSol = listaSol;
     }
-
+    
     public Solicitud getSolicitudS() {
         return solicitudS;
     }
-
+    
     public void setSolicitudS(Solicitud solicitudS) {
         this.solicitudS = solicitudS;
     }
-
+    
     public Categoria getCategoria() {
         return categoria;
     }
-
+    
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
-
+    
     public Solicitud getSolicitud() {
         return solicitud;
     }
-
+    
     public void setSolicitud(Solicitud solicitud) {
         this.solicitud = solicitud;
     }
-
+    
     public String CrearNumSeguimiento() {
         numero = (int) (Math.random() * 1000000) + 1;
         seguimiento = "T" + "S" + String.valueOf(numero);
-
+        
         return seguimiento;
     }
-
+    
     public void subirImagen(FileUploadEvent event) {
         String path = System.getProperty("user.home");
         String finalPath = path + "/img/tmp/" + event.getFile().getFileName();
@@ -393,9 +395,9 @@ public class ManejadorSolicitud implements Serializable {
             }
             FacesContext.getCurrentInstance().addMessage("Mensaje", message);
         }
-
+        
     }
-
+    
     public String CrearSolicitud() {
         try {
             this.solicitud.setIdSolicitud(sfl.count() + 1);
@@ -414,7 +416,7 @@ public class ManejadorSolicitud implements Serializable {
         }
         return finale;
     }
-
+    
     public String CrearEstadoS() {
         try {
             this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
@@ -435,12 +437,12 @@ public class ManejadorSolicitud implements Serializable {
         }
         return redirecccion;
     }
-
+    
     public Solicitud ObtenerSolicitud(int codigo) {
         Solicitud s = sfl.find(codigo);
         return s;
     }
-
+    
     public List<Solicitud> ObtenerCreadas() {
         return null;
     }
@@ -454,7 +456,7 @@ public class ManejadorSolicitud implements Serializable {
             return listaSol.get(0);
         }
     }
-
+    
     public String nombreC() {
         listaSol = sfl.findByTecnic(oreo.UsuarioId());
         if (listaSol == null || listaSol.isEmpty()) {
@@ -467,7 +469,7 @@ public class ManejadorSolicitud implements Serializable {
             return nombreC;
         }
     }
-
+    
     public String comprobar() {
         listaSol = sfl.findByTecnic(oreo.UsuarioId());
         if (listaSol == null || listaSol.isEmpty()) {
@@ -476,7 +478,7 @@ public class ManejadorSolicitud implements Serializable {
             return "block";
         }
     }
-
+    
     public String comprobar2() {
         listaSol = sfl.findByTecnic(oreo.UsuarioId());
         if (listaSol == null || listaSol.isEmpty()) {
@@ -485,20 +487,22 @@ public class ManejadorSolicitud implements Serializable {
             return "none";
         }
     }
-
+    
     public List<Solicitud> SolicitudePorCorrelativo(String correlativo) {
         return null;
     }
-
+    
     public void BuscarHistorial(int idSolicitud) {
-
+        
     }
-
+    
     public void ActualizarDatos() {
         try {
+            //OBTENIENDO LA SOLICITUD ASIGNADA AL TECNICO LOGEADO
             listaSol = sfl.findByTecnic(oreo.UsuarioId());
             tmp = dmfl.FindBySolicitudEncargado(listaSol.get(0).getIdSolicitud(), oreo.UsuarioId());
             
+            //AGREGANDO LAS DESCRIPCIONES AL MANTENIMIENTO
             tmp.setDescripcionProblema(this.descripcionM.getDescripcionProblema());
             tmp.setDescripcionSolucion(this.descripcionM.getDescripcionSolucion());
             tmp.setAudFechaCreacion(new Date());
@@ -507,6 +511,7 @@ public class ManejadorSolicitud implements Serializable {
             tmp.setAudNombreCreacion(this.directorio.getUsuario());
             dmfl.edit(tmp);
             
+            //CAMBIANDO EL ESTADO DEL TICKET A TERMINADO            
             this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
             this.estadoSolicitud.setFecha(new Date());
             this.estadoSolicitud.setIdEstado(efl.find(4));
@@ -517,16 +522,20 @@ public class ManejadorSolicitud implements Serializable {
             this.estadoSolicitud.setAudStatus(true);
             esfl.create(this.estadoSolicitud);
             
-            
+            //CAMBIANDO EL ESTADO DEL TECNICO A LIBRE PARA PODER SER ASIGNADO A OTRAS SOLICITUDES
+            tmpEnc = enfl.FindBySolicitudE(listaSol.get(0).getIdSolicitud(), this.directorio.getIdDirectorio());
+            tmpEnc.setEstado(false);
+            tmpEnc.setAudFechaModificacion(new Date());
+            enfl.edit(tmpEnc);
             
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Ticket Terminado"));
             FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error al terminar el ticket"));
         }
-
+        
     }
-
+    
     public void Actualizar(Solicitud solicitud) {
         Prioridad p = pfl.find(idPrioridad);
         Directorio d = dfl.find(idDirectorio);
@@ -565,7 +574,7 @@ public class ManejadorSolicitud implements Serializable {
             this.estadoSolicitud.setAudStatus(true);
             this.estadoSolicitud.setFecha(new Date());
             this.estadoSolicitud.setIdSolicitud(solicitudS);
-
+            
             solicitudS.setIdPrioridad(p);
             sfl.edit(solicitudS);
             dmfl.create(descMant);
@@ -581,45 +590,45 @@ public class ManejadorSolicitud implements Serializable {
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));
         }
-
+        
     }
-
+    
     public List<Solicitud> ObtenerPorUsuario(int idDirectorio) {
         return null;
     }
-
+    
     public void Actualizar(Solicitud solicitud, String comentario) {
-
+        
     }
-
+    
     public int getIdPrioridad() {
         return idPrioridad;
     }
-
+    
     public void setIdPrioridad(int idPrioridad) {
         this.idPrioridad = idPrioridad;
     }
-
+    
     public List<Solicitud> getListaIT() {
         return listaIT;
     }
-
+    
     public void setListaIT(List<Solicitud> listaIT) {
         this.listaIT = listaIT;
     }
-
+    
     public List<Solicitud> getListaGen() {
         return listaGen;
     }
-
+    
     public void setListaGen(List<Solicitud> listaGen) {
         this.listaGen = listaGen;
     }
-
+    
     public int getIdDirectorio() {
         return idDirectorio;
     }
-
+    
     public void setIdDirectorio(int idDirectorio) {
         this.idDirectorio = idDirectorio;
     }
@@ -637,7 +646,7 @@ public class ManejadorSolicitud implements Serializable {
                 return listaEs.get(0).getNombre();
             }
         }
-
+        
     }
 
     //METODO PARA BUSCAR LAS FECHAS DE CREACION DE LAS SOLICITUDES EN LA TABLA ESTADO SOLICITUD
@@ -655,39 +664,39 @@ public class ManejadorSolicitud implements Serializable {
             }
         }
     }
-
+    
     public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage("Solicitud Seleccionada", ((Solicitud) event.getObject()).getIdSolicitud().toString());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage("Solicitud deseleccionada", ((Solicitud) event.getObject()).getIdSolicitud().toString());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
     public List<Solicitud> getSelectedSolicitud() {
         return selectedSolicitud;
     }
-
+    
     public void setSelectedSolicitud(List<Solicitud> selectedSolicitud) {
         this.selectedSolicitud = selectedSolicitud;
     }
-
+    
     public Solicitud getSolicitudSeleccionada() {
         return solicitudSeleccionada;
     }
-
+    
     public void setSolicitudSeleccionada(Solicitud solicitudSeleccionada) {
         this.solicitudSeleccionada = solicitudSeleccionada;
     }
-
+    
     public DescripcionMantenimiento getDescripcionM() {
         return descripcionM;
     }
-
+    
     public void setDescripcionM(DescripcionMantenimiento descripcionM) {
         this.descripcionM = descripcionM;
     }
-
+    
 }
