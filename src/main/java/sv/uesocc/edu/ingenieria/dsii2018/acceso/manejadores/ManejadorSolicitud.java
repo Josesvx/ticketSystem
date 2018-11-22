@@ -72,11 +72,7 @@ public class ManejadorSolicitud implements Serializable {
     private CookieInstance oreo;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
-<<<<<<< HEAD
-    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null, retorno;
-=======
-    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null, nombreC;
->>>>>>> c5d959d4dc7263c3ad72e488a50c3f12cab44615
+    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null, nombreC, retorno;
     private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
             numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
             numeroSolicitudes7, numeroSolicitudes8, numeroESol;
@@ -208,11 +204,7 @@ public class ManejadorSolicitud implements Serializable {
         }
         
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> c5d959d4dc7263c3ad72e488a50c3f12cab44615
     public List<Solicitud> llenarFiltroITGerente() {
         Directorio dir = dfl.find(oreo.UsuarioId());
         
@@ -692,12 +684,11 @@ public class ManejadorSolicitud implements Serializable {
             }
         }
     }
-<<<<<<< HEAD
+
 
     public String Dialogo() {
         return retorno;
-=======
-    
+    }
     public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage("Solicitud Seleccionada", ((Solicitud) event.getObject()).getIdSolicitud().toString());
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -726,7 +717,7 @@ public class ManejadorSolicitud implements Serializable {
     
     public DescripcionMantenimiento getDescripcionM() {
         return descripcionM;
->>>>>>> c5d959d4dc7263c3ad72e488a50c3f12cab44615
+
     }
     
     public void setDescripcionM(DescripcionMantenimiento descripcionM) {
