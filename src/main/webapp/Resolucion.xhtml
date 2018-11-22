@@ -148,12 +148,12 @@
                                                          paginator="true"
                                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                          rowsPerPageTemplate="5,10, 15"
-                                                         value="#{manejadorSolicitud.llenarPorCorrelativo()}">
+                                                         value="#{manejadorSolicitud.llenarPorCorrelativo()}">/C
 
                                                 <f:facet name="header" >
                                                     <div style="float:right;padding-top: 5px;">
                                                         <h:commandLink>
-                                                            <p:graphicImage name="/img/pdf.png" value="Exportar" title="exportar a PDF" alt="Exportar"/>
+                                                            <p:graphicImage name="/img/pdf.png" value="Exportar" title="exportar a PDF" />
                                                             <p:dataExporter type="pdf" target="mantenimientos" fileName="Historial"/>
                                                         </h:commandLink>
                                                     </div>
