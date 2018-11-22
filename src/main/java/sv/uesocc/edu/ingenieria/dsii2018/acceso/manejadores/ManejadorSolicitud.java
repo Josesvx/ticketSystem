@@ -63,7 +63,7 @@ public class ManejadorSolicitud implements Serializable {
     private CookieInstance oreo;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
-    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
+    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null, retorno;
     private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
             numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
             numeroSolicitudes7, numeroSolicitudes8, numeroESol;
@@ -189,8 +189,8 @@ public class ManejadorSolicitud implements Serializable {
         }
 
     }
-    
-      public List<Solicitud> llenarFiltroITGerente() {
+
+    public List<Solicitud> llenarFiltroITGerente() {
         Directorio dir = dfl.find(oreo.UsuarioId());
 
         if (listaIT != null && !listaIT.isEmpty()) {
@@ -418,9 +418,15 @@ public class ManejadorSolicitud implements Serializable {
             this.estadoSolicitud.setAudStatus(true);
             esfl.create(this.estadoSolicitud);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Registro con exito"));
-            redirecccion = "principal.jsf?faces-redirect=true";
+            retorno = "PF('dlg2').show();";
+            Dialogo();
+            //redirecccion = "PF('dlg2').show();";
+            //redirecccion = "principal.jsf?faces-redirect=true";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error al crear el registro"));
+            retorno = "";
+            Dialogo();
+
         }
         return redirecccion;
     }
@@ -572,7 +578,7 @@ public class ManejadorSolicitud implements Serializable {
 
     }
 
-    public void Saludar() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "OK"));
+    public String Dialogo() {
+        return retorno;
     }
 }
