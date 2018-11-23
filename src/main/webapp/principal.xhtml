@@ -75,7 +75,18 @@
                                 <h:outputText value="Fechade creacion" />
                                 <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(manejadorSolicitud.solicitudSeleccionada)}"/>
 
+                                <h:outputText value="Adjunto" />
+                                <p:commandButton process="solicitudes" update=":form:adjuntoI" icon="fa-eye" value="Vista previa" oncomplete="PF('adjunto').show()"/>
+
                             </p:panelGrid>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                    <p:dialog header="Vista Previa" widgetVar="adjunto" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="adjuntoI" style="text-align:center;">
+                            <img src="#{manejadorSolicitud.imagen(manejadorSolicitud.solicitudSeleccionada.adjunto)}" alt="Haga ">
+                            <h:outputLink value="#{manejadorSolicitud.archivo(manejadorSolicitud.solicitudSeleccionada.adjunto)} ">click</h:outputLink> para descargar.
+                            </img>
                         </p:outputPanel>
                     </p:dialog>
                 </h:form>

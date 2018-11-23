@@ -44,7 +44,7 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public List<Solicitud> findByTecnic(int tec) {
-       List<Solicitud> lista = null;
+        List<Solicitud> lista = null;
         try {
             Query consulta = em.createNamedQuery("Solicitud.findByTecnic");
             consulta.setParameter("idDirectorio", tec);
@@ -137,13 +137,13 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public int findByStatus(int idEstado) {
-        int numeroDeSolicitudes=0;
-        try{
-            Query q= em.createNamedQuery("Solicitud.findByStatus");
+        int numeroDeSolicitudes = 0;
+        try {
+            Query q = em.createNamedQuery("Solicitud.findByStatus");
             q.setParameter("idEstado", idEstado);
-            List<Solicitud> list= q.getResultList();
-            numeroDeSolicitudes=list.size();
-        }catch(Exception ex){
+            List<Solicitud> list = q.getResultList();
+            numeroDeSolicitudes = list.size();
+        } catch (Exception ex) {
             throw ex;
         }
         return numeroDeSolicitudes;

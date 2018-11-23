@@ -153,7 +153,7 @@
                                                 <f:facet name="header" >
                                                     <div style="float:right;padding-top: 5px;">
                                                         <h:commandLink>
-                                                            <p:graphicImage name="/img/pdf.png" value="Exportar" title="exportar a PDF" />
+                                                            <p:graphicImage url="img/pdf.png" width="24" title="exportar a PDF" />
                                                             <p:dataExporter type="pdf" target="mantenimientos" fileName="Historial"/>
                                                         </h:commandLink>
                                                     </div>
@@ -193,7 +193,9 @@
                                                     <p:outputLabel value="Descripcion Problema: " for="descripcionP" />
                                                 </td>
                                                 <td>
-                                                    <p:inputTextarea rows="7" cols="35" id="descripcionP" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Problema" value="#{manejadorSolicitud.descripcionM.descripcionProblema}" maxlength="250"/> 
+                                                    <p:inputTextarea rows="7" cols="35" id="descripcionP" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Problema" value="#{manejadorSolicitud.descripcionM.descripcionProblema}">
+                                                        <f:validateLength minimum="100" maximum="500"/>
+                                                    </p:inputTextarea> 
                                                 </td>
                                                 <td>
                                                     <p:message for="descripcionP"/>
@@ -204,7 +206,9 @@
                                                     <p:outputLabel value="Descripcion Solucion: " for="descripcionS" />
                                                 </td>
                                                 <td>
-                                                    <p:inputTextarea rows="7" cols="35" id="descripcionS" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Solución" value="#{manejadorSolicitud.descripcionM.descripcionSolucion}" maxlength="250"/> 
+                                                    <p:inputTextarea rows="7" cols="35" id="descripcionS" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Solución" value="#{manejadorSolicitud.descripcionM.descripcionSolucion}" maxlength="250">
+                                                        <f:validateLength minimum="200" maximum="500" />
+                                                    </p:inputTextarea> 
                                                 </td>
                                                 <td>
                                                     <p:message for="descripcionS"/>
