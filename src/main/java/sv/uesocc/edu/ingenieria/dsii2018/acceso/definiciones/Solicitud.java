@@ -52,6 +52,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Solicitud.findByIdCategoria", query= "SELECT S FROM Solicitud AS S WHERE S.idCategoria.idCategoria= :idCategoria")
     , @NamedQuery(name = "Solicitud.findByIdDirectorio", query= "SELECT S FROM Solicitud AS s WHERE S.idDirectorio.idDirectorio= :idDirectorio")
     , @NamedQuery(name = "Solicitud.findByTecnic", query= "SELECT S FROM Solicitud AS S JOIN S.mantenimientoEncargadoList AS SM JOIN SM.encargadoList AS SME WHERE SME.idDirectorio.idDirectorio = :idDirectorio AND SME.estado = true")
+    , @NamedQuery(name = "Solicitud.findByFecha", query= "Select s from Solicitud as s join s.estadoSolicitudList as stl where stl.idEstado.idEstado=1 AND stl.fecha BETWEEN :date1 AND :date2")
     , @NamedQuery(name = "Solicitud.findByIdCategoria", query = "SELECT S FROM Solicitud AS S WHERE S.idCategoria.idCategoria= :idCategoria")
     , @NamedQuery(name = "Solicitud.findByIdDirectorio", query = "SELECT S FROM Solicitud AS s WHERE S.idDirectorio.idDirectorio= :idDirectorio")
     , @NamedQuery(name = "Solicitud.findByStatus", query = "SELECT s.idSolicitud FROM Solicitud AS s JOIN s.estadoSolicitudList AS es WHERE es.idEstado.idEstado= :idEstado")    

@@ -76,6 +76,75 @@
                         </p:tab>
                     </p:tabView>
                 </p:tab>
+                <p:tab title="Por Fechas">
+                    <center>
+                        <h:form>
+                            <p:calendar id="popup" value="#{manejadorEstadistica.fecha1}"/>
+                            <p:calendar id="popup1" value="#{manejadorEstadistica.fecha2}"/>
+                            <p:commandButton value="Buscar" actionListener="#{manejadorEstadistica.llenarPorFecha()}"
+                                             update="solicitudes">
+                                <p:ajax event="click" listener="#{manejadorEstadistica.llenarPorFecha()}"  />
+                            </p:commandButton>
+                            <br></br>
+                            <p:dataTable id="solicitudes" var="solicitud"
+                                         style="
+                                         width: 70%;"
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10, 15"
+                                         value="#{manejadorEstadistica.llenarPorFecha()}">
+                                <f:facet name="header" >
+                                    #{Inicio['inicio.mantenimientosSolicitados']}
+                                </f:facet>
+                                <p:column headerText="#{Inicio['inicio.seguimiento']}">
+                                    <h:outputText value="#{solicitud.NSeguimiento}" />
+                                </p:column>
+                                <p:column headerText="#{Inicio['inicio.titulo']}">
+                                    <h:outputText value="#{solicitud.titulo}" />
+                                </p:column>                    
+
+                                <p:column headerText="#{Inicio['inicio.fecha']}">
+                                    <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(solicitud)}" />
+                                </p:column> 
+                            </p:dataTable>
+                        </h:form>
+                    </center>
+                </p:tab>
+                <p:tab title="Desde Fecha">
+                    <center>
+                        <h:form>
+                            <p:calendar id="popup" value="#{manejadorEstadistica.fecha1}"/>
+                            <p:commandButton value="Buscar" actionListener="#{manejadorEstadistica.llenarDesdeFecha()}"
+                                             update="solicitudes">
+                                <p:ajax event="click" listener="#{manejadorEstadistica.llenarDesdeFecha()}"  />
+                            </p:commandButton>
+                            <br></br>
+                            <p:dataTable id="solicitudes" var="solicitud"
+                                         style="
+                                         width: 70%;"
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10, 15"
+                                         value="#{manejadorEstadistica.llenarDesdeFecha()}">
+                                <f:facet name="header" >
+                                    #{Inicio['inicio.mantenimientosSolicitados']}
+                                </f:facet>
+                                <p:column headerText="#{Inicio['inicio.seguimiento']}">
+                                    <h:outputText value="#{solicitud.NSeguimiento}" />
+                                </p:column>
+                                <p:column headerText="#{Inicio['inicio.titulo']}">
+                                    <h:outputText value="#{solicitud.titulo}" />
+                                </p:column>                    
+
+                                <p:column headerText="#{Inicio['inicio.fecha']}">
+                                    <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(solicitud)}" />
+                                </p:column> 
+                            </p:dataTable>
+                        </h:form>
+                    </center>
+                </p:tab>
 
             </p:tabView>
 
