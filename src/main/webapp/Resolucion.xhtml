@@ -127,10 +127,14 @@
                                         <tr>
                                             <td>
                                                 <h:outputText value="Adjunto" />
+
                                             </td>
                                             <td>
-                                                <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().adjunto}" />
-                                            </td>
+                                                <h:form>
+                                                    <p:commandButton value="Descargar" ajax="false" icon="ui-icon-circle-arrow-s" onclick="PF('dlg3').hide();$('#form').trigger('reset');" >
+                                                        <p:fileDownload value="#{manejadorSolicitud.archivo(manejadorSolicitud.ObtenerSolicitudesXTec.adjunto)}"> </p:fileDownload>
+                                                    </p:commandButton>
+                                                </h:form>                                            </td>
                                         </tr>
                                     </table>
 
