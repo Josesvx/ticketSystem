@@ -30,5 +30,9 @@
             <base-name>/Crear</base-name>
             <var>Crear</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>/Estadisticas</base-name>
+            <var>Estadisticas</var>
+        </resource-bundle>
     </application>
 </faces-config>
