@@ -19,6 +19,7 @@ import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.Idiomas.ws.SesionDeUsuarioBean;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DescripcionMantenimientoFacadeLocal;
@@ -29,6 +30,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.MantenimientoEncargadoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieLenguage;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
@@ -69,6 +71,8 @@ public class ManejadorSolicitud implements Serializable {
     private Categoria categoria;
     private Directorio directorio, Departamento, dir;
     private CookieInstance oreo;
+    private CookieLenguage canCan;
+    private SesionDeUsuarioBean bean;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
     private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
@@ -156,6 +160,12 @@ public class ManejadorSolicitud implements Serializable {
         oreo = new CookieInstance();
 
         mail = new ManejadorCorreo();
+        
+        canCan = new CookieLenguage();
+        
+        bean = new SesionDeUsuarioBean();
+        
+        bean.cambioIdioma(canCan.getIdioma());
 
         id2 = oreo.UsuarioId();
         Departamento = dfl.find(id2);
