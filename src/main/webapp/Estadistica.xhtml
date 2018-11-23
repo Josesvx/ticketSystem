@@ -76,6 +76,55 @@
                         </p:tab>
                     </p:tabView>
                 </p:tab>
+                <p:tab title="Por Fechas">
+                    <p:tabView id="idfechas">
+                        <p:tab id="fechasEst" title="Grafico de Barras">
+                            <center>
+                                <h:form>
+                                    <p:calendar id="popup" value="#{manejadorEstadistica.date1}">
+                                        <p:ajax event="dateSelect" listener="#{manejoEstadistica.onDateSelect}"  />
+                                    </p:calendar>
+
+                                    <h:outputText id="msgs" value="#{manejoEstadistica.date1}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </h:outputText>
+                                    <p:calendar id="popup1" value="#{manejadorEstadistica.date2}"/>
+                                    <p:commandButton value="Buscar" actionListener="#{manejadorEstadistica.llenarPorFecha(date1, date2)}"/>
+                                    <br></br>
+                                </h:form>
+                            </center>
+                            <p:chart  type="bar" model="#{manejadorEstadistica.barModelCategoria}" style="height:300px; background-color: black;"/>
+                        </p:tab>
+
+                        <p:tab title="Grafico de Lineas">
+                            <center>
+                                <h:form>
+                                    <p:calendar id="popup" value="#{manejadorEstadistica.date1}"/>
+                                    <h:outputText id="msgs" value="#{manejoEstadistica.date1}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </h:outputText>
+                                    <p:calendar id="popup1" value="#{manejadorEstadistica.date2}"/>
+                                    <br></br>
+                                </h:form>
+                            </center>
+                            <p:chart type="line" model="#{manejadorEstadistica.lineModelCategoria}" style="height:300px; background-color: black;"/> 
+                        </p:tab>
+
+                        <p:tab title="Grafico Circular">
+                            <center>
+                                <h:form>
+                                    <p:calendar id="popup" value="#{manejadorEstadistica.date1}"/>
+                                    <h:outputText id="msgs" value="#{manejoEstadistica.date1}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </h:outputText>
+                                    <p:calendar id="popup1" value="#{manejadorEstadistica.date2}"/>
+                                    <br></br>
+                                </h:form>
+                            </center>
+                            <p:chart type="pie" model="#{manejadorEstadistica.pieModelCategoria}" style="width:400px;height:300px; background-color: black;" />
+                        </p:tab>
+                    </p:tabView>
+                </p:tab>
 
             </p:tabView>
 
