@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -38,7 +39,7 @@ public class ManejadorEstadistica implements Serializable {
             numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
     private int numeroPorEstado, numeroPorEstado1, numeroPorEstado2, numeroPorEstado3, numeroPorEstado4, numeroPorEstado5;
     private int numeroPorPrioridad, numeroPorPrioridad1, numeroPorPrioridad2, numeroPorPrioridad3;
-    private int numeroPorCat, numeroPorCat1, numeroPorCat2, numeroPorCat3;
+    private int numeroPorCat, numeroPorCat1, numeroPorCat2, numeroPorCat3, numeroPorFecha;
     private List<Solicitud> listaSol;
     private BarChartModel barModel;
     private BarChartModel barModelEstado;
@@ -54,9 +55,9 @@ public class ManejadorEstadistica implements Serializable {
     private PieChartModel pieModelCategoria;
     private Date date1, date2;
     private Date fecha1;
-    private Date fecha2;
+    private Date fecha2, d1, d2;
     String fechaSeleccionada;
-    private List<Solicitud> solicitudFecha;
+    private List<Solicitud> solicitudFecha, listaTabla;
 
     @EJB
     private SolicitudFacadeLocal sfl;
@@ -147,8 +148,26 @@ public class ManejadorEstadistica implements Serializable {
         llenarEstado();
         llenarPrioridad();
         llenarCategoria();
+        llenarPorFecha();
 
     }
+
+    public Date getFecha1() {
+        return fecha1;
+    }
+
+    public void setFecha1(Date fecha1) {
+        this.fecha1 = fecha1;
+    }
+
+    public Date getFecha2() {
+        return fecha2;
+    }
+
+    public void setFecha2(Date fecha2) {
+        this.fecha2 = fecha2;
+    }
+    
 
     public void llenarDepartamento() {
         createBarModel();
@@ -197,9 +216,14 @@ public class ManejadorEstadistica implements Serializable {
         return numeroPorEstado;
     }
 
-    public int llenarPorFecha(Date fecha1, Date fecha2) {
+    public List<Solicitud> llenarPorFecha() {
         solicitudFecha = sfl.findByDates(fecha1, fecha2);
-        return solicitudFecha.size();
+        return solicitudFecha;
+    }
+    
+    public List<Solicitud> llenarDesdeFecha(){
+        solicitudFecha=sfl.findByDates(fecha1, new Date());
+        return solicitudFecha;
     }
 
     public int llenarPorPrioridad(int id) {
@@ -433,8 +457,8 @@ public class ManejadorEstadistica implements Serializable {
         model.addSeries(solicitudes);
         return model;
     }
-    
-       private BarChartModel initBarModelfecha() {
+
+    private BarChartModel initBarModelfecha() {
         BarChartModel model = new BarChartModel();
 
         ChartSeries solicitudes = new ChartSeries();
