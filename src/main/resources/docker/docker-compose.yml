@@ -14,7 +14,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-        - $HOME/img:/opt/payara/img/tmp/
+        - $HOME/img/tmp:/opt/payara/img/tmp/
     depends_on:
       - db
 volumes:

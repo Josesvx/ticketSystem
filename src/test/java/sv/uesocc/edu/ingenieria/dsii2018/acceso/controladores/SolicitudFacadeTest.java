@@ -34,6 +34,7 @@ public class SolicitudFacadeTest {
     static DirectorioFacade dif = new DirectorioFacade();
     static CategoriaFacade cf = new CategoriaFacade();
     static SolicitudFacade sf = new SolicitudFacade();
+    public Solicitud solicitud;
 
     @BeforeClass
     public static void init() {
@@ -50,6 +51,7 @@ public class SolicitudFacadeTest {
 
     @Before
     public void start() {
+        Arranque();
         sf.getEntityManager().getTransaction().begin();
     }
 
@@ -57,9 +59,7 @@ public class SolicitudFacadeTest {
     public void tearDown() {
         sf.getEntityManager().getTransaction().rollback();
     }
-
-    @Test
-    public void TestCreateSolicitud() {
+    public void Arranque(){
         df.create(new Departamento(df.count() + 1, "test", "test", new Date(), true));
         rf.create(new Rol(rf.count() + 1, "test", "test", new Date(), true));
         Directorio directorio = new Directorio(dif.count() + 1, "test", "test", "test", "test", "test", "test", "test", "test", new Date(), true);
@@ -67,11 +67,19 @@ public class SolicitudFacadeTest {
         directorio.setIdRol(rf.find(rf.count()));
         dif.create(directorio);
         cf.create(new Categoria(cf.count() + 1, "test", "test", new Date(), true));
-        Solicitud solicitud = new Solicitud(sf.count() + 1, "test", "test", "test", "test", new Date(), true);
+        solicitud = new Solicitud(sf.count() + 1, "test", "test", "test", "test", new Date(), true);
         solicitud.setIdDirectorio(dif.find(dif.count()));
         solicitud.setIdCategoria(cf.find(cf.count()));
+    }
+
+    @Test
+    public void TestCreateSolicitud() {
         boolean result = sf.create(solicitud);
         assertTrue(result);
+    }
+    @Test
+    public void TestFindByEstado(){
+        
     }
     
 

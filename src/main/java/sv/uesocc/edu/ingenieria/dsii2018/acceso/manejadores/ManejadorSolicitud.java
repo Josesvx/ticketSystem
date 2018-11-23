@@ -1,5 +1,7 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -20,6 +22,8 @@ import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DescripcionMantenimientoFacadeLocal;
@@ -727,21 +731,31 @@ public class ManejadorSolicitud implements Serializable {
     }
 
     public String imagen(String ruta) {
-        String path = System.getProperty("user.home");
+        String path = System.getProperty("user.home") + "/img/tmp/" + ruta;
+        String contenType = FacesContext.getCurrentInstance().getExternalContext().getMimeType(path);
         int en = ruta.indexOf(".") + 1;
         int fi = ruta.length();
         String re = ruta.substring(en, fi);
         if (re.equals("png") || re.equals("jpg") || re.equals("jpeg")) {
-            
-            return path +"/img/tmp/" + ruta;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "mess" + contenType));
+            return contenType;
         } else {
             return "";
 
         }
     }
 
-    public String archivo(String ruta) {
-        String path = System.getProperty("user.home");
-        return path + "/img/tmp/" + ruta;
+    public StreamedContent archivo(String ruta) throws FileNotFoundException, IOException {
+        StreamedContent files = null;
+        String path = System.getProperty("user.home") + "/img/tmp/" + ruta;
+        String contenType = FacesContext.getCurrentInstance().getExternalContext().getMimeType(path);
+        try {
+            StreamedContent sc = new DefaultStreamedContent(new FileInputStream(path), contenType, ruta);
+            files = sc;
+            //FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
+        } catch (FileNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "No contiene adjunto"));
+        }
+        return files;
     }
 }
