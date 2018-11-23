@@ -26,5 +26,9 @@
             <base-name>/Login</base-name>
             <var>Login</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>/Crear</base-name>
+            <var>Crear</var>
+        </resource-bundle>
     </application>
 </faces-config>

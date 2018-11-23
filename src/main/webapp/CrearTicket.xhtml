@@ -10,19 +10,13 @@
 
         <ui:define name="titulo">
             <h:head>
-                <title>#{TraduccionesGenerales['crud.new.title']}</title>
+                <title>#{Crear['crear.ingresarTicket']}</title>
             </h:head>
             <style>
                 body{
                     background-color: #00cc00;                                       
                 }
             </style>
-            <h:form>
-                <h:selectOneListbox id="lstIdiomas" value="#{sesionDeUsuarioBean.codigoIdioma}"
-                                    size="2" valueChangeListener="#{sesionDeUsuarioBean.cambioDeIdiomaHandler}" onchange="submit()">
-                    <f:selectItems value="#{sesionDeUsuarioBean.paises}"/>
-                </h:selectOneListbox>
-            </h:form>
         </ui:define>
         <ui:define name="body">
             <br></br><br></br><br></br>
@@ -39,7 +33,7 @@
                          border-top-right-radius:25px;">
 
 
-                        <h:outputLabel  value="#{TraduccionesGenerales['crud.new.title']}" 
+                        <h:outputLabel  value="#{Crear['crear.ingresarTicket']}" 
                                         style="
                                         color: white;
                                         font-size:35px;
@@ -62,10 +56,10 @@
 
                             <tr>
                                 <td>
-                                    <p:outputLabel value="Titulo:" for="titulo" style=" font-size:16px; font-weight: bold; position: relative; left: -20px;" />
+                                    <p:outputLabel value="#{Inicio['inicio.titulo']}" for="titulo" style=" font-size:16px; font-weight: bold; position: relative; left: -20px;" />
                                 </td>
                                 <td>
-                                    <p:inputText id="titulo" required="true" requiredMessage="Titulo Requerido" placeholder="titulo" value="#{manejadorSolicitud.solicitud.titulo}" maxlength="50"/>
+                                    <p:inputText id="titulo" required="true" requiredMessage="#{Crear['crear.tituloRequerido']}" placeholder="#{Inicio['inicio.titulo']}" value="#{manejadorSolicitud.solicitud.titulo}" maxlength="50"/>
                                 </td>
                                 <td>
                                     <p:message for="titulo"/>  
@@ -74,11 +68,11 @@
 
                             <tr>
                                 <td>
-                                    <p:outputLabel value="Categoria:" for="idCategoria" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>                                                    
+                                    <p:outputLabel value="#{Inicio['inicio.categoria']}" for="idCategoria" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>                                                    
                                 </td>
                                 <td>
-                                    <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.idCategoria}" required="true" requiredMessage="Seleccione una categoria">
-                                        <f:selectItem itemLabel="Seleccione una categoria" noSelectionOption="true" itemDisabled="false" />
+                                    <p:selectOneMenu id="idCategoria" value="#{manejadorSolicitud.idCategoria}" required="true" requiredMessage="#{Crear['crear.seleccioneCategoria']}">
+                                        <f:selectItem itemLabel="#{Crear['crear.seleccioneCategoria']}" noSelectionOption="true" itemDisabled="false" />
                                         <f:selectItems value="#{manejadorSolicitud.listaCat}" var="valor" itemValue="#{valor.idCategoria}" itemLabel="#{valor.nombre}">
                                         </f:selectItems>
                                     </p:selectOneMenu>
@@ -90,7 +84,7 @@
 
                             <tr>
                                 <td>
-                                    <p:outputLabel value="Departamento " for="departamento" style="position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
+                                    <p:outputLabel value="#{Crear['crear.departamento']} " for="departamento" style="position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
                                 </td>
                                 <td>
                                     <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"/>
@@ -102,10 +96,10 @@
 
                             <tr>
                                 <td>
-                                    <p:outputLabel value="Correlativo: " style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
+                                    <p:outputLabel value="#{Crear['crear.correlativo']}" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
                                 </td>
                                 <td>
-                                    <p:inputText id="correlativo"  placeholder="correlativo"  value="#{manejadorSolicitud.solicitud.correlativo}" maxlength="10" />    
+                                    <p:inputText id="correlativo"  placeholder="#{Crear['crear.correlativo']}"  value="#{manejadorSolicitud.solicitud.correlativo}" maxlength="10" />    
                                 </td>
                                 <td>                                    
                                     <p:message for="correlativo"/>
@@ -115,10 +109,10 @@
 
                             <tr>
                                 <td>
-                                    <p:outputLabel value="Descripcion: " for="descripcion" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>
+                                    <p:outputLabel value="#{Inicio['inicio.descripcion']}" for="descripcion" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/>
                                 </td>
                                 <td>
-                                    <p:inputTextarea rows="7" cols="35" id="descripcion" required="true" requiredMessage="Descripcion Requerida" placeholder="descripcion" value="#{manejadorSolicitud.solicitud.descripcion}" maxlength="250"/> 
+                                    <p:inputTextarea rows="7" cols="35" id="descripcion" required="true" requiredMessage="#{Crear['crear.descripcionRequerida']}" placeholder="#{Inicio['inicio.descripcion']}" value="#{manejadorSolicitud.solicitud.descripcion}" maxlength="250"/> 
                                 </td>
                                 <td>
                                     <p:message for="descripcion"/>
@@ -127,14 +121,14 @@
                             </tr>                            
                             <tr>
                                 <td>
-                                    <p:outputLabel value="Adjunto: " style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
+                                    <p:outputLabel value="#{Crear['crear.adjunto']}" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
                                 </td>
                                 <td>
                                     <p:fileUpload id = "adjunto" fileUploadListener="#{manejadorSolicitud.subirImagen}" 
                                                   mode="advanced" dragDropSupport="true"
                                                   update="messages" sizeLimit="512000" 
                                                   fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
-                                                  uploadLabel="Guardar" label="Buscar" cancelLabel="Cancelar" />
+                                                  uploadLabel="#{Crear['crear.guardar']}" label="#{Crear['crear.buscar']}" cancelLabel="#{Crear['crear.cancelar']}" />
 
                                     <p:growl id="messages" showDetail="true" />
                                 </td>
@@ -146,7 +140,7 @@
                             </tr> 
                             <tr>
                                 <td colspan="2" align="center">
-                                    <p:commandButton value="Ingresar Ticket" 
+                                    <p:commandButton value="#{Crear['crear.ingresarTicket']}" 
                                                      id="ingresar" 
                                                      icon="ui-icon-check" 
                                                      action="#{manejadorSolicitud.CrearSolicitud()}" 
