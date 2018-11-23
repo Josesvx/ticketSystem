@@ -23,7 +23,9 @@ import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.PieChartModel;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.Idiomas.ws.SesionDeUsuarioBean;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieLenguage;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
 /**
@@ -58,12 +60,19 @@ public class ManejadorEstadistica implements Serializable {
     private Date fecha2, d1, d2;
     String fechaSeleccionada;
     private List<Solicitud> solicitudFecha, listaTabla;
+    private CookieLenguage canCan;
+    private SesionDeUsuarioBean bean;
 
     @EJB
     private SolicitudFacadeLocal sfl;
 
     @PostConstruct
     public void init() {
+        canCan = new CookieLenguage();
+        
+        bean = new SesionDeUsuarioBean();
+        
+        bean.cambioIdioma(canCan.getIdioma());
 
         llenarLista();
 

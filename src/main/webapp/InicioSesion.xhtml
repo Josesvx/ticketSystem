@@ -17,13 +17,7 @@
         </style>
     </h:head>
     <body>
-        <h:form>
-            <h:selectOneListbox id="listaIdiomas" value="#{sesionBean.codigoIdioma}" size="2"
-                                valueChangeListener="#{sesionBean.cambioIdioma}"
-                                onchange="submit()" >
-                <f:selectItems value="#{sesionBean.paises}"/>
-            </h:selectOneListbox>
-        </h:form>
+
         <center>
 
             <h:form>
@@ -84,6 +78,7 @@
                 </div>
 
             </h:form>
+
             <img src="img/logueo2.png" width="80" height="80" alt="Imagen de logueo2" 
                  style="
                  position: absolute;
@@ -91,6 +86,13 @@
                  left:47%;
                  "/>
         </center>
+        <h:form>
+            <p:selectOneListbox id="cmbIdioma" value="#{manejadorLogin.codigo}">
+                <f:selectItem itemLabel="Español" itemValue="en_CA" />
+                <f:selectItem itemLabel="English" itemValue="en_US" />
+            </p:selectOneListbox>
+            <p:commandButton value="#{Login['login.cambiar']}" actionListener="#{manejadorLogin.actualizarIdioma()}" icon="pi pi-check" />
+        </h:form>
         <f:metadata>
             <f:viewAction action="#{manejadorLogin.login()}" />
         </f:metadata>

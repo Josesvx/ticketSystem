@@ -49,10 +49,10 @@ public class SesionDeUsuarioBean implements Serializable {
         this.codigoIdioma = codigoIdioma;
     }
 
-    public void cambioIdioma(ValueChangeEvent cambio) {
-        if (cambio.getNewValue() != null) {
+    public void cambioIdioma(String cambio) {
+        if (cambio != null) {
             try {
-                String nuevoCodigo = cambio.getNewValue().toString();
+                String nuevoCodigo = cambio;
                 for (Map.Entry<String, Object> entryset : paises.entrySet()) {
                     Locale value = (Locale) entryset.getValue();
                     if (value.toString().compareTo(nuevoCodigo) == 0) {
