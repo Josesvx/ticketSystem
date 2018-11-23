@@ -52,6 +52,8 @@ public interface SolicitudFacadeLocal {
     int findByDepartamento(int idDepartemento);
 
     List<Solicitud> findByCategoria(int idCategoria);
-    
+
+    List<Solicitud> findByPausadas();
+
     int findByStatus(int idEstado);
 }

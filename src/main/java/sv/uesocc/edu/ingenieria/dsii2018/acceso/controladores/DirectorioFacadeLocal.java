@@ -35,5 +35,7 @@ public interface DirectorioFacadeLocal {
     Directorio FindByEmail(String correo, String contrasenia);
 
     List<Directorio> findByTecFree(int idDirectorio);
+    
+    List<Directorio> findByAuditor(String auditor);
 
 }

@@ -99,4 +99,17 @@ public class DirectorioFacade extends AbstractFacade<Directorio> implements Dire
         }
         return user;
     }
+    
+    @Override
+    public List<Directorio> findByAuditor(String auditor) {
+        List<Directorio> listaD= null;
+        try {
+            Query consulta = em.createNamedQuery("Directorio.findByAuditor");
+            consulta.setParameter("auditor", auditor);
+            listaD = consulta.getResultList();
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return listaD;
+    }
 }

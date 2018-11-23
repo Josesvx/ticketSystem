@@ -135,19 +135,52 @@
                     </h:form>
                 </p:tab>
                 <p:tab title="Ticket Asignados IT">
-
+                    <p:dataTable id="solicitudesMG" var="audIT" 
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10, 15"
+                                 value="#{manejadorSolicitud.llenarAudIT()}" 
+                                 
+                                 style="
+                                 width: 70%;">
+                        <f:facet name="header" >
+                            Mantenimientos Solicitados
+                        </f:facet>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{audIT.nombre1}" />
+                        </p:column>
+                        <p:column headerText="Apellido">
+                            <h:outputText value="#{audIT.apellido1}" />
+                        </p:column>
+                        <p:column headerText="Departamento">
+                            <h:outputText value="#{audIT.idDepartamento.nombre}" />
+                        </p:column>
+                        <p:column headerText="Categoria">
+                            <h:outputText value="#{audIT.correo}" />
+                        </p:column>
+                    </p:dataTable>
                 </p:tab>
                 <p:tab title="Ticket Asignados Infraestructura">
 
                 </p:tab>
                 <p:tab title="Mantenimientos pausados IT">
-                    
+
                 </p:tab>
                 <p:tab title="Mantenimientos pausados Infraestructura">
-                    
+
                 </p:tab>
             </p:tabView>
 
+            
+            
+            
+            
+            
+            
+            
+            
+            
             <p:tabView rendered="#{manejadorLogin.GerenteGeneralTabla()}">
                 <p:tab title="Mantenimientos">
                     <h:form id="frmAsignar" rendered="#{manejadorLogin.GerenteGeneralTabla()}">
@@ -207,10 +240,65 @@
                     </h:form>
                 </p:tab>
                 <p:tab title="Tecnicos asignados">
-                    
+                    <p:dataTable id="idAud" var="aud" value="#{manejadorSolicitud.findxAud()}" 
+
+                                 rows="10"
+                                 style="
+                                 width: 70%;"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <f:facet name="header" >
+                            Mantenimientos Solicitados
+                        </f:facet>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{aud.nombre1}" />
+                        </p:column>
+                        <p:column headerText="Apellido">
+                            <h:outputText value="#{aud.apellido1}" />
+                        </p:column>
+                        <p:column headerText="Departamento">
+                            <h:outputText value="#{aud.idDepartamento.nombre}" />
+                        </p:column>
+                        <p:column headerText="Categoria">
+                            <h:outputText value="#{aud.correo}" />
+                        </p:column>
+                    </p:dataTable>
                 </p:tab>
                 <p:tab title="Mantenimientos pausados">
-                    
+                    <h:form id="frmAsignarP" rendered="#{manejadorLogin.GerenteGeneralTabla()}">
+
+                        <center>
+                            <p:dataTable id="pausados" var="solicitud" value="#{manejadorSolicitud.llenarFiltroPAUSADOS()}" 
+                                         rowKey="#{solicitud}" selection="#{manejadorSolicitud.solicitudS}"
+                                         selectionMode="single"
+                                         rows="10"
+                                         style="
+                                         width: 70%;"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10,15">
+                                <f:facet name="header" >
+                                    Mantenimientos Solicitados
+                                </f:facet>
+                                <p:column headerText="Codigo">
+                                    <h:outputText value="#{solicitud.NSeguimiento}" />
+                                </p:column>
+                                <p:column headerText="Titulo">
+                                    <h:outputText value="#{solicitud.titulo}" />
+                                </p:column>
+                                <p:column headerText="Departamento">
+                                    <h:outputText value="#{solicitud.idDirectorio.idDepartamento.nombre}" />
+                                </p:column>
+                                <p:column headerText="Categoria">
+                                    <h:outputText value="#{solicitud.idCategoria.nombre}" />
+                                </p:column>
+                            </p:dataTable>
+
+                            
+                        </center>
+
+                    </h:form>
                 </p:tab>
             </p:tabView>
             <f:metadata>

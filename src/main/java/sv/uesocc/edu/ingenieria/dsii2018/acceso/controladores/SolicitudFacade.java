@@ -143,5 +143,17 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
         }
         return numeroDeSolicitudes;
     }
+    
+      @Override
+    public List<Solicitud> findByPausadas() {
+        List<Solicitud> listaD= null;
+        try {
+            Query consulta = em.createNamedQuery("Solicitud.findByPausadas");
+            listaD = consulta.getResultList();
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return listaD;
+    }
 
 }
