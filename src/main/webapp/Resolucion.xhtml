@@ -221,12 +221,16 @@
                                                                      id="terminar"
                                                                      action="#{manejadorSolicitud.ActualizarDatos()}"
                                                                      icon="ui-icon-check" 
-                                                                     update="mensaje"                                                     
+                                                                     update="mensaje"                                                    
                                                                      />
+
                                                 </td>                                
                                             </tr>                                                            
                                         </table>
-                                    </h:form>                                    
+                                    </h:form>  
+                                    <h:form>
+                                        <p:commandButton value="Pausar ticket" id="pausarticket" icon="ui-icon-pause"  onclick="PF('dlg4').show();"/>
+                                    </h:form>
                                 </p:tab>
                             </p:tabView>
                         </center>
@@ -234,6 +238,27 @@
                     </div>
                 </center>
             </center>
+            <p:dialog header="Justificación" widgetVar="dlg4"  height="100">
+                <h:form>
+                    <table>
+                        <tr>
+                            <td>
+                                <p:outputLabel value="Justificación:"/>
+                            </td>
+                            <td>
+                                <p:inputTextarea id="IdJustificacionP" value="#{manejadorSolicitud.justificacion}" required="true"></p:inputTextarea>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <p:commandButton value="P Ticket" 
+                                     id="pausar"
+                                     action="#{manejadorSolicitud.pausar()}"
+                                     icon="ui-icon-check" 
+                                                                                         
+                                     />
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>   
     <f:metadata>

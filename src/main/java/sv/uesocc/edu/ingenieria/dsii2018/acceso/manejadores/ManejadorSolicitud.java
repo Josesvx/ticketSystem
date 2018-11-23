@@ -77,7 +77,7 @@ public class ManejadorSolicitud implements Serializable {
     private CookieInstance oreo;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
-    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null, nombreC, retorno;
+    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null, nombreC, retorno, justificacion;
     private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
             numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
             numeroSolicitudes7, numeroSolicitudes8, numeroESol;
@@ -472,7 +472,13 @@ public class ManejadorSolicitud implements Serializable {
         if (listaSol == null || listaSol.isEmpty()) {
             return null;
         } else {
-            return listaSol.get(0);
+            listaEs = new ArrayList<>();
+            listaEs = efl.findLastEstado(listaSol.get(0).getIdSolicitud());
+            if (listaEs.get(0).getIdEstado().equals(2)) {
+                return listaSol.get(0);
+            } else {
+                return null;
+            }
         }
     }
 
@@ -758,4 +764,35 @@ public class ManejadorSolicitud implements Serializable {
         }
         return files;
     }
+
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
+    }
+
+    public void pausar() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        id = oreo.UsuarioId();
+
+        this.directorio = dfl.find(id);
+        this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
+        this.estadoSolicitud.setFecha(new Date());
+        this.estadoSolicitud.setIdEstado(efl.find(3));
+        this.estadoSolicitud.setIdSolicitud(listaSol.get(0));
+        this.estadoSolicitud.setJustificacion(justificacion);
+        this.estadoSolicitud.setAudNombreCreacion(this.directorio.getUsuario());
+        this.estadoSolicitud.setAudFechaCreacion(new Date());
+        this.estadoSolicitud.setAudStatus(true);
+        esfl.create(this.estadoSolicitud);
+
+        tmpEnc = enfl.FindBySolicitudE(listaSol.get(0).getIdSolicitud(), this.directorio.getIdDirectorio());
+        tmpEnc.setEstado(false);
+        tmpEnc.setAudFechaModificacion(new Date());
+        enfl.edit(tmpEnc);
+
+    }
+
 }

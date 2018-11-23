@@ -76,7 +76,7 @@
                                 <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(manejadorSolicitud.solicitudSeleccionada)}"/>
 
                                 <h:outputText value="Adjunto" />
-                                <p:commandButton value="Descargar" ajax="false" icon="ui-icon-circle-arrow-s" onclick="PF('dlg3').hide();$('#form').trigger('reset');"type="button" >
+                                <p:commandButton value="Descargar" ajax="false" icon="ui-icon-circle-arrow-s" onclick="PF('dlg3').hide();$('#form').trigger('reset');">
                                     <p:fileDownload value="#{manejadorSolicitud.archivo(manejadorSolicitud.solicitudSeleccionada.adjunto)}"> </p:fileDownload>
                                 </p:commandButton>
 
