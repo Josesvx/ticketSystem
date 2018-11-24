@@ -16,11 +16,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.MantenimientoEncarg
 @Local
 public interface MantenimientoEncargadoFacadeLocal {
 
-    void create(MantenimientoEncargado mantenimientoEncargado);
+    boolean create(MantenimientoEncargado mantenimientoEncargado);
 
-    void edit(MantenimientoEncargado mantenimientoEncargado);
+    boolean edit(MantenimientoEncargado mantenimientoEncargado);
 
-    void remove(MantenimientoEncargado mantenimientoEncargado);
+    boolean remove(MantenimientoEncargado mantenimientoEncargado);
 
     MantenimientoEncargado find(Object id);
 

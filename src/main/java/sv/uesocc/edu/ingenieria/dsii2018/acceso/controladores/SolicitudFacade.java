@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores;
 
 import java.util.Date;
@@ -157,6 +152,18 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
             throw ex;
         }
         return numeroDeSolicitudes;
+    }
+    
+      @Override
+    public List<Solicitud> findByPausadas() {
+        List<Solicitud> listaD= null;
+        try {
+            Query consulta = em.createNamedQuery("Solicitud.findByPausadas");
+            listaD = consulta.getResultList();
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return listaD;
     }
 
 }

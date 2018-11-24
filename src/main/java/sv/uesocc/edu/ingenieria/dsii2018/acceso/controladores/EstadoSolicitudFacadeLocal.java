@@ -16,11 +16,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
 @Local
 public interface EstadoSolicitudFacadeLocal {
 
-    void create(EstadoSolicitud estadoSolicitud);
+    boolean create(EstadoSolicitud estadoSolicitud);
 
-    void edit(EstadoSolicitud estadoSolicitud);
+    boolean edit(EstadoSolicitud estadoSolicitud);
 
-    void remove(EstadoSolicitud estadoSolicitud);
+    boolean remove(EstadoSolicitud estadoSolicitud);
 
     EstadoSolicitud find(Object id);
 
@@ -31,5 +31,7 @@ public interface EstadoSolicitudFacadeLocal {
     int count();
     
     List<EstadoSolicitud> findByCreation(int idSolicitud);
+    
+    List<EstadoSolicitud> findByLastEStado(int idSolicitud);
     
 }

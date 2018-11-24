@@ -17,11 +17,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 @Local
 public interface SolicitudFacadeLocal {
 
-    void create(Solicitud solicitud);
+    boolean create(Solicitud solicitud);
 
-    void edit(Solicitud solicitud);
+    boolean edit(Solicitud solicitud);
 
-    void remove(Solicitud solicitud);
+    boolean remove(Solicitud solicitud);
 
     Solicitud find(Object id);
 
@@ -52,6 +52,8 @@ public interface SolicitudFacadeLocal {
     int findByDepartamento(int idDepartemento);
 
     List<Solicitud> findByCategoria(int idCategoria);
-    
+
+    List<Solicitud> findByPausadas();
+
     int findByStatus(int idEstado);
 }

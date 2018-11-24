@@ -26,78 +26,243 @@
         </ui:define>
         <ui:define name="body">
             <center>
-                <div style="
-                     background-color: rgb(255,255,255,0.7);
+                <center>
+                    <div>
+                        <center>
+                            <h1 style="
+                                background-color: rgb(255,255,255,0.7);
+                                border-radius: 20px;
+                                height: 50px;
+                                width: 60%;
+                                position:absolute;
+                                top: 20%;
+                                left:20%;
+                                display:#{manejadorSolicitud.comprobar2()};
+                                color: #585858;">
+                                No tienes mantenimientos asignados
+                            </h1>
+                        </center>
+                    </div>
+                </center>
+                <center>
+                    <div style="
+                         background-color: rgb(255,255,255,0.7);
+                         border-radius: 20px;
+                         width: 80%;
+                         position:absolute;
+                         top: 20%;
+                         left:10%;
+                         display:#{manejadorSolicitud.comprobar()};
+                         color: #585858;">
+                        <h2>Mantenimiento</h2>
+                        <center>
+                            <p:tabView dynamic="true" cache="true" effect="fold">
+                                <p:tab title="Informacion">                               
+                                    <table cellspacing="10" cellpadding="10" border="0">
 
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="Titulo: " /> 
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().titulo}" /> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="Descripcion: " /> 
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().descripcion}" /> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="Prioridad: " />
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idPrioridad.nombre}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="Categoria: " />
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idCategoria.nombre}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="Numero de Seguimiento: " />
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().NSeguimiento}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="Correlativo: " />
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().correlativo}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="Solicitante: " />
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{manejadorSolicitud.nombreC()}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="Departamento" />
+                                            </td>
+                                            <td>
+                                                <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idDirectorio.idDepartamento.nombre}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="Adjunto" />
 
-                     border-radius: 20px;
-                     position:absolute;
-                     top: 20%;
+                                            </td>
+                                            <td>
+                                                <h:form>
+                                                    <p:commandButton value="Descargar" ajax="false" icon="ui-icon-circle-arrow-s" onclick="PF('dlg3').hide();$('#form').trigger('reset');" >
+                                                        <p:fileDownload value="#{manejadorSolicitud.archivo(manejadorSolicitud.ObtenerSolicitudesXTec.adjunto)}"> </p:fileDownload>
+                                                    </p:commandButton>
+                                                </h:form>                                            </td>
+                                        </tr>
+                                    </table>
 
-                     color: #585858;">
-                    <h2>Mantenimiento</h2>
-                    <center>
-                        <p:tabView dynamic="true" cache="true" effect="fold" style="width: 90%">
-                            <p:tab title="Informacion">
-                                <h:panelGrid columns="2" cellpadding="10">                                
-                                    <h:outputText
-                                        value="EN CONSTRUCCION" />
-                                </h:panelGrid>
-                            </p:tab>
-                            <p:tab title="Historial">
-                                <h:panelGrid columns="2" cellpadding="10">
+                                </p:tab>
+                                <p:tab title="Historial">
+                                    <center>
+                                        <h:form id="form">
+                                            <p:dataTable id="mantenimientos" var="Dmantenimiento"
+                                                         selectionMode="single" 
+                                                         selection="#{manejadorSolicitud.DMSeleccionada}"
+                                                         rowKey="#{Dmantenimiento.idDescripcionMantenimiento}"
+                                                         style="
+                                                         width: 70%;"
+                                                         rows="10"
+                                                         paginator="true"
+                                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                         rowsPerPageTemplate="5,10, 15"
+                                                         value="#{manejadorSolicitud.llenarPorCorrelativo()}">/C
 
-                                    <h:outputText value="EN CONSTRUCCION" />
-                                </h:panelGrid>
-                            </p:tab>
-                            <p:tab title="Mantenimiento">
-                                <h:panelGrid columns="2" cellpadding="10">
+                                                <f:facet name="header" >
+                                                    <div style="float:right;padding-top: 5px;">
+                                                        <h:commandLink>
+                                                            <p:graphicImage url="img/pdf.png" width="24" title="exportar a PDF" />
+                                                            <p:dataExporter type="pdf" target="mantenimientos" fileName="Historial"/>
+                                                        </h:commandLink>
+                                                    </div>
+                                                </f:facet>
+                                                <p:column headerText="ID">
+                                                    <h:outputText value="#{Dmantenimiento.idDescripcionMantenimiento}" />
+                                                </p:column>
+                                                <p:column headerText="Descripcion Problema">
+                                                    <h:outputText value="#{Dmantenimiento.descripcionProblema}" />
+                                                </p:column>                    
 
-                                    <h:outputText value="EN CONSTRUCCION" />
-                                </h:panelGrid>
-                            </p:tab>
-                        </p:tabView>
-                    </center>
-                    <!-- <h1 style="color: black" >
-                         Mantenimientos en espera
-                     </h1>
-                     <table>
-                         <tr>
-                             <td>
-                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().titulo}" style="
-                                                font-size: 15px;
-                                                font-family: sans-serif;" />
-                             </td>                            
-                         </tr>
-                         <tr>
-                             <td>
-                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idPrioridad.nombre}" style="
-                                                font-size: 15px;
-                                                font-family: sans-serif;" />
-                             </td>                            
-                         </tr>
-                         <tr>
-                             <td>
-                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idCategoria.nombre}" style="
-                                                font-size: 15px;
-                                                font-family: sans-serif;" />
-                             </td>                            
-                         </tr>
-                         <tr>
-                             <td>
-                                 <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().descripcion}" style="
-                                                font-size: 15px;
-                                                font-family: sans-serif;" />
-                             </td>                            
-                         </tr>
-                         <tr>
-                             <td>
- 
-                             </td>                            
-                         </tr>
-                     </table>-->
-                </div>
+                                                <p:column headerText="Descripcion Solucion">
+                                                    <h:outputText value="#{Dmantenimiento.descripcionSolucion}" />
+                                                </p:column> 
+                                                <f:facet name="footer">
+                                                    <p:commandButton process="mantenimientos"  icon="fa-eye" value="Seguimiento"  />
+                                                </f:facet>
+                                            </p:dataTable>
+
+                                        </h:form>
+                                    </center>
+
+                                </p:tab>
+                                <p:tab title="Mantenimiento">
+
+                                    <h:form>
+                                        <p:messages  id="mensaje" autoUpdate="true"  />
+                                        <table cellspacing="10" cellpadding="10" border="0" align="center" >
+                                            <tr>
+                                                <td colspan="2" align="center">
+                                                    <p:outputLabel value="#{manejadorSolicitud.ObtenerSolicitudesXTec().titulo}" style=" font-size:30px; font-weight: bold;"/> 
+                                                </td>
+
+                                            </tr>                                                                                                                                                                     
+                                            <tr>
+                                                <td>
+                                                    <p:outputLabel value="Descripcion Problema: " for="descripcionP" />
+                                                </td>
+                                                <td>
+                                                    <p:inputTextarea rows="7" cols="35" id="descripcionP" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Problema" value="#{manejadorSolicitud.descripcionM.descripcionProblema}">
+                                                        <f:validateLength minimum="100" maximum="500"/>
+                                                    </p:inputTextarea> 
+                                                </td>
+                                                <td>
+                                                    <p:message for="descripcionP"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p:outputLabel value="Descripcion Solucion: " for="descripcionS" />
+                                                </td>
+                                                <td>
+                                                    <p:inputTextarea rows="7" cols="35" id="descripcionS" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Solución" value="#{manejadorSolicitud.descripcionM.descripcionSolucion}" maxlength="250">
+                                                        <f:validateLength minimum="200" maximum="500" />
+                                                    </p:inputTextarea> 
+                                                </td>
+                                                <td>
+                                                    <p:message for="descripcionS"/>
+                                                </td>
+                                            </tr>  
+
+                                            <tr>
+                                                <td colspan="2" align="center">
+                                                    <p:commandButton value="Terminar ticket" 
+                                                                     id="terminar"
+                                                                     action="#{manejadorSolicitud.ActualizarDatos()}"
+                                                                     icon="ui-icon-check" 
+                                                                     update="mensaje"                                                    
+                                                                     />
+
+                                                </td>                                
+                                            </tr>                                                            
+                                        </table>
+                                    </h:form>  
+                                    <h:form>
+                                        <p:commandButton value="Pausar ticket" id="pausarticket" icon="ui-icon-pause"  onclick="PF('dlg4').show();"/>
+                                    </h:form>
+                                </p:tab>
+                            </p:tabView>
+                        </center>
+
+                    </div>
+                </center>
             </center>
+            <p:dialog header="Justificación" widgetVar="dlg4"  height="100">
+                <h:form>
+                    <table>
+                        <tr>
+                            <td>
+                                <p:outputLabel value="Justificación:"/>
+                            </td>
+                            <td>
+                                <p:inputTextarea id="IdJustificacionP" value="#{manejadorSolicitud.justificacion}" required="true"></p:inputTextarea>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <p:commandButton value="P Ticket" 
+                                     id="pausar"
+                                     action="#{manejadorSolicitud.pausar()}"
+                                     icon="ui-icon-check" 
+                                                                                         
+                                     />
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>   
     <f:metadata>

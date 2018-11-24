@@ -55,7 +55,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Solicitud.findByFecha", query= "Select s from Solicitud as s join s.estadoSolicitudList as stl where stl.idEstado.idEstado=1 AND stl.fecha BETWEEN :date1 AND :date2")
     , @NamedQuery(name = "Solicitud.findByIdCategoria", query = "SELECT S FROM Solicitud AS S WHERE S.idCategoria.idCategoria= :idCategoria")
     , @NamedQuery(name = "Solicitud.findByIdDirectorio", query = "SELECT S FROM Solicitud AS s WHERE S.idDirectorio.idDirectorio= :idDirectorio")
-    , @NamedQuery(name = "Solicitud.findByStatus", query = "SELECT s.idSolicitud FROM Solicitud AS s JOIN s.estadoSolicitudList AS es WHERE es.idEstado.idEstado= :idEstado")    
+    , @NamedQuery(name = "Solicitud.findByStatus", query = "SELECT s.idSolicitud FROM Solicitud AS s JOIN s.estadoSolicitudList AS es WHERE es.idEstado.idEstado= :idEstado")
+    , @NamedQuery(name = "Solicitud.findByPausadas", query = "SELECT DISTINCT s from Solicitud as s join s.estadoSolicitudList as esl join esl.idEstado as ide where ide.idEstado='3' AND esl.audStatus=true")
     , @NamedQuery(name = "Solicitud.findByAudStatus", query = "SELECT s FROM Solicitud s WHERE s.audStatus = :audStatus")})
 public class Solicitud implements Serializable {
 

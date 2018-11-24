@@ -16,17 +16,19 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Encargado;
 @Local
 public interface EncargadoFacadeLocal {
 
-    void create(Encargado encargado);
+    boolean create(Encargado encargado);
 
-    void edit(Encargado encargado);
+    boolean edit(Encargado encargado);
 
-    void remove(Encargado encargado);
+    boolean remove(Encargado encargado);
 
     Encargado find(Object id);
 
     List<Encargado> findAll();
 
     List<Encargado> findRange(int[] range);
+    
+    Encargado FindBySolicitudE(int idSolicitud, int idDirectorio);
 
     int count();
 

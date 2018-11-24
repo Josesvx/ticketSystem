@@ -16,11 +16,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Rol;
 @Local
 public interface RolFacadeLocal {
 
-    void create(Rol rol);
+    boolean create(Rol rol);
 
-    void edit(Rol rol);
+    boolean edit(Rol rol);
 
-    void remove(Rol rol);
+    boolean remove(Rol rol);
 
     Rol find(Object id);
 

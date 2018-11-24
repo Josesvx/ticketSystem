@@ -16,11 +16,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Prioridad;
 @Local
 public interface PrioridadFacadeLocal {
 
-    void create(Prioridad prioridad);
+    boolean create(Prioridad prioridad);
 
-    void edit(Prioridad prioridad);
+    boolean edit(Prioridad prioridad);
 
-    void remove(Prioridad prioridad);
+    boolean remove(Prioridad prioridad);
 
     Prioridad find(Object id);
 

@@ -16,11 +16,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Departamento;
 @Local
 public interface DepartamentoFacadeLocal {
 
-    void create(Departamento departamento);
+    boolean create(Departamento departamento);
 
-    void edit(Departamento departamento);
+    boolean edit(Departamento departamento);
 
-    void remove(Departamento departamento);
+    boolean remove(Departamento departamento);
 
     Departamento find(Object id);
 

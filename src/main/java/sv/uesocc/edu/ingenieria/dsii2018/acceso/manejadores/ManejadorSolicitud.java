@@ -1,9 +1,12 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +23,8 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.Idiomas.ws.SesionDeUsuarioBean;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.CategoriaFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DescripcionMantenimientoFacadeLocal;
@@ -53,15 +58,19 @@ public class ManejadorSolicitud implements Serializable {
     private List<Categoria> listaCat;
 
     private ManejadorCorreo mail;
-    private List<Solicitud> listaSol, listaIT, listaGen, listaSoli;
+    private List<Solicitud> listaSol, listaIT, listaGen, listaSoli, listaSlc;
+    private List<Solicitud>  listaITP, listaGenP, listaSoliP, listaSolP;
     private List<Prioridad> listaP;
+    private List<DescripcionMantenimiento> listaDM;
     private DescripcionMantenimiento descMant;
     private MantenimientoEncargado mantEnc;
-    private Encargado encargado;
+    private Encargado encargado, tmpEnc;
     private List<Estado> listaEs;
     private List<EstadoSolicitud> listaESOl;
+    private List<Directorio> creadas, creadasIT, creadasIF;
     private Solicitud solicitud;
     private Solicitud solicitudSeleccionada;
+    private DescripcionMantenimiento descripcionM, tmp, DMSeleccionada;
     private List<Solicitud> selectedSolicitud;
     private Boolean disabled = true;
     protected Solicitud solicitudS;
@@ -75,7 +84,7 @@ public class ManejadorSolicitud implements Serializable {
     private SesionDeUsuarioBean bean;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
-    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null;
+    private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null, nombreC, retorno, justificacion;
     private int idCategoria, numero, id, id2, idPrioridad, idDirectorio, numeroSolicitudes1, numeroSolicitudes2,
             numeroSolicitudes3, numeroSolicitudes4, numeroSolicitudes5, numeroSolicitudes6,
             numeroSolicitudes7, numeroSolicitudes8, numeroESol;
@@ -108,13 +117,22 @@ public class ManejadorSolicitud implements Serializable {
 
         listaIT = new ArrayList<>();
         listaGen = new ArrayList<>();
+        
+        listaITP = new ArrayList<>();
+        listaGenP = new ArrayList<>();
+        
         llenarDeps();
         llenarPrioridad();
         llenarCategoria();
+        creadas = new ArrayList<>();
         numeroESol = esfl.count() + 1;
         listaSol = new ArrayList<>();
         listaSoli = new ArrayList<>();
+        listaDM = new ArrayList<>();
+        creadasIT = new ArrayList<>();
+        creadasIF = new ArrayList<>();
 
+        //listaSlc = new ArrayList<>();
         List<Solicitud> LS2 = new ArrayList<>();
         for (Solicitud solicitud1 : sfl.findAll()) {
             LS2 = sfl.findByEstado(solicitud1.getIdSolicitud());
@@ -124,7 +142,7 @@ public class ManejadorSolicitud implements Serializable {
                 LS2 = new ArrayList<>();
             }
         }
-
+      
         if (listaSoli != null && !listaSoli.isEmpty()) {
             listaSol = listaSoli;
         } else {
@@ -138,6 +156,52 @@ public class ManejadorSolicitud implements Serializable {
                 listaGen.add(solicitud1);
             }
         }
+        for (Directorio directorio1 : findxAud()) {
+            if (directorio1.getIdDepartamento().getIdDepartamento()==7) {
+                creadasIT.add(directorio1);
+            } else {
+                creadasIF.add(directorio1);
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        listaSoliP = sfl.findByPausadas();
+      
+        if (listaSoliP != null && !listaSoliP.isEmpty()) {
+            listaSolP = listaSoliP;
+        } else {
+            listaSolP = new ArrayList<>();
+        }
+
+        for (Solicitud solicitud1 : listaSolP) {
+            if (solicitud1.getIdCategoria().getIdCategoria() == 1 ) {
+                
+                    
+                       listaITP.add(solicitud1); 
+                    
+                
+                
+            } else {
+                listaGenP.add(solicitud1);
+            }
+        }
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         estado = new Estado();
 
@@ -151,9 +215,13 @@ public class ManejadorSolicitud implements Serializable {
 
         descMant = new DescripcionMantenimiento();
 
+        descripcionM = new DescripcionMantenimiento();
+
         mantEnc = new MantenimientoEncargado();
 
         encargado = new Encargado();
+
+        tmpEnc = new Encargado();
 
         estadoSolicitud = new EstadoSolicitud();
 
@@ -180,6 +248,8 @@ public class ManejadorSolicitud implements Serializable {
         llenarFiltroITGerente();
         llenarFiltroManGerente();
         ObtenerSolicitudesXTec();
+        findxAud();
+        llenarAudIT();
 
     }
 
@@ -215,6 +285,16 @@ public class ManejadorSolicitud implements Serializable {
 
         if (listaGen != null && !listaGen.isEmpty()) {
             return listaGen;
+        } else {
+            return new ArrayList<>();
+        }
+
+    }
+     public List<Directorio> llenarAudIT() {
+        Directorio dir = dfl.find(oreo.UsuarioId());
+
+        if (creadasIT != null && !creadasIT.isEmpty()) {
+            return creadasIT;
         } else {
             return new ArrayList<>();
         }
@@ -324,6 +404,17 @@ public class ManejadorSolicitud implements Serializable {
             throw ex;
         }
         return listaSol;
+    }
+
+    public List<DescripcionMantenimiento> llenarPorCorrelativo() {
+
+        try {
+            listaSol = sfl.findByTecnic(oreo.UsuarioId());
+            listaDM = dmfl.FindByCorrelativo(listaSol.get(0).getCorrelativo());
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return listaDM;
     }
 
     public int getIdCategoria() {
@@ -461,8 +552,14 @@ public class ManejadorSolicitud implements Serializable {
         return s;
     }
 
-    public List<Solicitud> ObtenerCreadas() {
-        return null;
+    public List<Directorio> findxAud() {
+        try {
+            creadas = dfl.findByAuditor(dfl.find(oreo.UsuarioId()).getUsuario());
+
+        } catch (Exception e) {
+        }
+
+        return creadas;
     }
 
     //METODO PARA OBTENER LAS SOLITUDES QUE SE HAN ASIGNADO A UN TECNICO
@@ -471,7 +568,44 @@ public class ManejadorSolicitud implements Serializable {
         if (listaSol == null || listaSol.isEmpty()) {
             return null;
         } else {
-            return listaSol.get(0);
+            listaEs = new ArrayList<>();
+            listaEs = efl.findLastEstado(listaSol.get(0).getIdSolicitud());
+            if (listaEs.get(0).getIdEstado().equals(2)) {
+                return listaSol.get(0);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public String nombreC() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        if (listaSol == null || listaSol.isEmpty()) {
+            return null;
+        } else {
+            nombreC = listaSol.get(0).getIdDirectorio().getNombre1() + " "
+                    + listaSol.get(0).getIdDirectorio().getNombre2() + " "
+                    + listaSol.get(0).getIdDirectorio().getApellido1() + " "
+                    + listaSol.get(0).getIdDirectorio().getApellido2();
+            return nombreC;
+        }
+    }
+
+    public String comprobar() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        if (listaSol == null || listaSol.isEmpty()) {
+            return "none";
+        } else {
+            return "block";
+        }
+    }
+
+    public String comprobar2() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        if (listaSol == null || listaSol.isEmpty()) {
+            return "block";
+        } else {
+            return "none";
         }
     }
 
@@ -483,7 +617,43 @@ public class ManejadorSolicitud implements Serializable {
 
     }
 
-    public void ActualizarDatos(Solicitud solicitud, DescripcionMantenimiento mantenimientoDescripcion) {
+    public void ActualizarDatos() {
+        try {
+            //OBTENIENDO LA SOLICITUD ASIGNADA AL TECNICO LOGEADO
+            listaSol = sfl.findByTecnic(oreo.UsuarioId());
+            tmp = dmfl.FindBySolicitudEncargado(listaSol.get(0).getIdSolicitud(), oreo.UsuarioId());
+
+            //AGREGANDO LAS DESCRIPCIONES AL MANTENIMIENTO
+            tmp.setDescripcionProblema(this.descripcionM.getDescripcionProblema());
+            tmp.setDescripcionSolucion(this.descripcionM.getDescripcionSolucion());
+            tmp.setAudFechaCreacion(new Date());
+            id = oreo.UsuarioId();
+            this.directorio = dfl.find(id);
+            tmp.setAudNombreCreacion(this.directorio.getUsuario());
+            dmfl.edit(tmp);
+
+            //CAMBIANDO EL ESTADO DEL TICKET A TERMINADO            
+            this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
+            this.estadoSolicitud.setFecha(new Date());
+            this.estadoSolicitud.setIdEstado(efl.find(4));
+            this.estadoSolicitud.setIdSolicitud(listaSol.get(0));
+            this.estadoSolicitud.setJustificacion("Terminada");
+            this.estadoSolicitud.setAudNombreCreacion(this.directorio.getUsuario());
+            this.estadoSolicitud.setAudFechaCreacion(new Date());
+            this.estadoSolicitud.setAudStatus(true);
+            esfl.create(this.estadoSolicitud);
+
+            //CAMBIANDO EL ESTADO DEL TECNICO A LIBRE PARA PODER SER ASIGNADO A OTRAS SOLICITUDES
+            tmpEnc = enfl.FindBySolicitudE(listaSol.get(0).getIdSolicitud(), this.directorio.getIdDirectorio());
+            tmpEnc.setEstado(false);
+            tmpEnc.setAudFechaModificacion(new Date());
+            enfl.edit(tmpEnc);
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Ticket Terminado"));
+            FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error al terminar el ticket"));
+        }
 
     }
 
@@ -491,6 +661,22 @@ public class ManejadorSolicitud implements Serializable {
         Prioridad p = pfl.find(idPrioridad);
         Directorio d = dfl.find(idDirectorio);
         this.directorio = dfl.find(oreo.UsuarioId());
+        
+        List<EstadoSolicitud> esEdit = esfl.findByLastEStado(solicitudS.getIdSolicitud());
+        
+        EstadoSolicitud edit = esEdit.get(0);
+        
+        edit.setAudStatus(false);
+        
+        esfl.edit(edit);
+        
+        
+
+                
+        
+        //cambiando valor a false de un audStatus
+        
+        
         //llenarFiltro();
 
         //crear DescripcionMtto
@@ -532,7 +718,7 @@ public class ManejadorSolicitud implements Serializable {
             mefl.create(mantEnc);
             enfl.create(encargado);
             esfl.create(estadoSolicitud);
-            mail.EnviarCorreo(solicitudS, d);
+            //mail.EnviarCorreo(solicitudS, d);
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("AsignarPrioridad.jsf");
             } catch (IOException ex) {
@@ -599,6 +785,21 @@ public class ManejadorSolicitud implements Serializable {
         }
 
     }
+    
+    public int DevolverEstadoID(Solicitud s) {
+        listaEs = new ArrayList<>();
+        if (s == null) {
+            return 0;
+        } else {
+            listaEs = efl.findLastEstado(s.getIdSolicitud());
+            if (listaEs.isEmpty()) {
+                return 0;
+            } else {
+                return listaEs.get(0).getIdEstado();
+            }
+        }
+
+    }
 
     //METODO PARA BUSCAR LAS FECHAS DE CREACION DE LAS SOLICITUDES EN LA TABLA ESTADO SOLICITUD
     public String DevolverFechaCreacion(Solicitud s) {
@@ -614,6 +815,10 @@ public class ManejadorSolicitud implements Serializable {
                 return formateador.format(listaESOl.get(0).getFecha());
             }
         }
+    }
+
+    public String Dialogo() {
+        return retorno;
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -641,5 +846,139 @@ public class ManejadorSolicitud implements Serializable {
     public void setSolicitudSeleccionada(Solicitud solicitudSeleccionada) {
         this.solicitudSeleccionada = solicitudSeleccionada;
     }
+
+    public DescripcionMantenimiento getDescripcionM() {
+        return descripcionM;
+    }
+
+    public void setDescripcionM(DescripcionMantenimiento descripcionM) {
+        this.descripcionM = descripcionM;
+    }
+
+    public DescripcionMantenimiento getDMSeleccionada() {
+        return DMSeleccionada;
+    }
+
+    public void setDMSeleccionada(DescripcionMantenimiento DMSeleccionada) {
+        this.DMSeleccionada = DMSeleccionada;
+    }
+
+    public String imagen(String ruta) {
+        String path = System.getProperty("user.home") + "/img/tmp/" + ruta;
+        String contenType = FacesContext.getCurrentInstance().getExternalContext().getMimeType(path);
+        int en = ruta.indexOf(".") + 1;
+        int fi = ruta.length();
+        String re = ruta.substring(en, fi);
+        if (re.equals("png") || re.equals("jpg") || re.equals("jpeg")) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "mess" + contenType));
+            return contenType;
+        } else {
+            return "";
+
+        }
+    }
+
+    public StreamedContent archivo(String ruta) throws FileNotFoundException, IOException {
+        StreamedContent files = null;
+        String path = System.getProperty("user.home") + "/img/tmp/" + ruta;
+        String contenType = FacesContext.getCurrentInstance().getExternalContext().getMimeType(path);
+        try {
+            StreamedContent sc = new DefaultStreamedContent(new FileInputStream(path), contenType, ruta);
+            files = sc;
+            //FacesContext.getCurrentInstance().getExternalContext().redirect("principal.jsf");
+        } catch (FileNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "No contiene adjunto"));
+        }
+        return files;
+    }
+
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
+    }
+
+    public void pausar() {
+        listaSol = sfl.findByTecnic(oreo.UsuarioId());
+        id = oreo.UsuarioId();
+
+        this.directorio = dfl.find(id);
+        this.estadoSolicitud.setIdEstadoSolicitud(esfl.count() + 1);
+        this.estadoSolicitud.setFecha(new Date());
+        this.estadoSolicitud.setIdEstado(efl.find(3));
+        this.estadoSolicitud.setIdSolicitud(listaSol.get(0));
+        this.estadoSolicitud.setJustificacion(justificacion);
+        this.estadoSolicitud.setAudNombreCreacion(this.directorio.getUsuario());
+        this.estadoSolicitud.setAudFechaCreacion(new Date());
+        this.estadoSolicitud.setAudStatus(true);
+        esfl.create(this.estadoSolicitud);
+
+        tmpEnc = enfl.FindBySolicitudE(listaSol.get(0).getIdSolicitud(), this.directorio.getIdDirectorio());
+        tmpEnc.setEstado(false);
+        tmpEnc.setAudFechaModificacion(new Date());
+        enfl.edit(tmpEnc);
+
+    }
+
+    public List<Directorio> getCreadas() {
+        return creadas;
+    }
+
+    public void setCreadas(List<Directorio> creadas) {
+        this.creadas = creadas;
+    }
+
+    public List<Directorio> getCreadasIT() {
+        return creadasIT;
+    }
+
+    public void setCreadasIT(List<Directorio> creadasIT) {
+        this.creadasIT = creadasIT;
+    }
+
+    public List<Directorio> getCreadasIF() {
+        return creadasIF;
+    }
+
+    public void setCreadasIF(List<Directorio> creadasIF) {
+        this.creadasIF = creadasIF;
+    }
+    
+    
+        public List<Solicitud> llenarFiltroPAUSADOS() {
+        Directorio dir = dfl.find(oreo.UsuarioId());
+        if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
+            if (listaGenP != null && !listaGenP.isEmpty() ) {
+                
+                return listaGenP;
+            } else {
+                return new ArrayList<>();
+            }
+        } else if (listaITP != null && !listaITP.isEmpty()) {
+            return listaITP;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Solicitud> getListaITP() {
+        return listaITP;
+    }
+
+    public void setListaITP(List<Solicitud> listaITP) {
+        this.listaITP = listaITP;
+    }
+
+    public List<Solicitud> getListaGenP() {
+        return listaGenP;
+    }
+
+    public void setListaGenP(List<Solicitud> listaGenP) {
+        this.listaGenP = listaGenP;
+    }
+        
+        
 
 }

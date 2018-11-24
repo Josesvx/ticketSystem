@@ -16,11 +16,11 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 @Local
 public interface DirectorioFacadeLocal {
 
-    void create(Directorio directorio);
+    boolean create(Directorio directorio);
 
-    void edit(Directorio directorio);
+    boolean edit(Directorio directorio);
 
-    void remove(Directorio directorio);
+    boolean remove(Directorio directorio);
 
     Directorio find(Object id);
 
@@ -35,5 +35,7 @@ public interface DirectorioFacadeLocal {
     Directorio FindByEmail(String correo, String contrasenia);
 
     List<Directorio> findByTecFree(int idDirectorio);
+    
+    List<Directorio> findByAuditor(String auditor);
 
 }
