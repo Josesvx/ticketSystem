@@ -10,7 +10,7 @@
 
         <ui:define name="titulo">
             <h:head>
-                <title>#{Mantenimiento['mant.mantenimientosPausados']}</title>
+                <title>#{Mantenimiento['mant.mantenimiento']}</title>
                 <style>
                     body{
                         background-image: url(img/FondoLogin.png);
@@ -197,7 +197,7 @@
                                                     <p:outputLabel value="#{Mantenimiento['mant.descProblem']}" for="descripcionP" />
                                                 </td>
                                                 <td>
-                                                    <p:inputTextarea rows="7" cols="35" id="descripcionP" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Problema" value="#{manejadorSolicitud.descripcionM.descripcionProblema}">
+                                                    <p:inputTextarea rows="7" cols="35" id="descripcionP" required="true" requiredMessage="Descripcion Requerida" placeholder="#{Mantenimiento['mant.descProblem']}" value="#{manejadorSolicitud.descripcionM.descripcionProblema}">
                                                         <f:validateLength minimum="100" maximum="500"/>
                                                     </p:inputTextarea> 
                                                 </td>
@@ -210,7 +210,7 @@
                                                     <p:outputLabel value="#{Mantenimiento['mant.descSol']}" for="descripcionS" />
                                                 </td>
                                                 <td>
-                                                    <p:inputTextarea rows="7" cols="35" id="descripcionS" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Solución" value="#{manejadorSolicitud.descripcionM.descripcionSolucion}" maxlength="250">
+                                                    <p:inputTextarea rows="7" cols="35" id="descripcionS" required="true" requiredMessage="Descripcion Requerida" placeholder="#{Mantenimiento['mant.descSol']}" value="#{manejadorSolicitud.descripcionM.descripcionSolucion}" maxlength="250">
                                                         <f:validateLength minimum="200" maximum="500" />
                                                     </p:inputTextarea> 
                                                 </td>
