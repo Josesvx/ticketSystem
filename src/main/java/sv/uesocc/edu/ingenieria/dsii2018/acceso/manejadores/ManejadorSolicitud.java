@@ -175,8 +175,13 @@ public class ManejadorSolicitud implements Serializable {
         }
 
         for (Solicitud solicitud1 : listaSolP) {
-            if (solicitud1.getIdCategoria().getIdCategoria() == 1) {
-                listaITP.add(solicitud1);
+            if (solicitud1.getIdCategoria().getIdCategoria() == 1 ) {
+                
+                    
+                       listaITP.add(solicitud1); 
+                    
+                
+                
             } else {
                 listaGenP.add(solicitud1);
             }
@@ -633,6 +638,22 @@ public class ManejadorSolicitud implements Serializable {
         Prioridad p = pfl.find(idPrioridad);
         Directorio d = dfl.find(idDirectorio);
         this.directorio = dfl.find(oreo.UsuarioId());
+        
+        List<EstadoSolicitud> esEdit = esfl.findByLastEStado(solicitudS.getIdSolicitud());
+        
+        EstadoSolicitud edit = esEdit.get(0);
+        
+        edit.setAudStatus(false);
+        
+        esfl.edit(edit);
+        
+        
+
+                
+        
+        //cambiando valor a false de un audStatus
+        
+        
         //llenarFiltro();
 
         //crear DescripcionMtto
@@ -674,7 +695,7 @@ public class ManejadorSolicitud implements Serializable {
             mefl.create(mantEnc);
             enfl.create(encargado);
             esfl.create(estadoSolicitud);
-            mail.EnviarCorreo(solicitudS, d);
+            //mail.EnviarCorreo(solicitudS, d);
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("AsignarPrioridad.jsf");
             } catch (IOException ex) {
@@ -737,6 +758,21 @@ public class ManejadorSolicitud implements Serializable {
                 return "Sin Estado";
             } else {
                 return listaEs.get(0).getNombre();
+            }
+        }
+
+    }
+    
+    public int DevolverEstadoID(Solicitud s) {
+        listaEs = new ArrayList<>();
+        if (s == null) {
+            return 0;
+        } else {
+            listaEs = efl.findLastEstado(s.getIdSolicitud());
+            if (listaEs.isEmpty()) {
+                return 0;
+            } else {
+                return listaEs.get(0).getIdEstado();
             }
         }
 
@@ -891,7 +927,8 @@ public class ManejadorSolicitud implements Serializable {
         public List<Solicitud> llenarFiltroPAUSADOS() {
         Directorio dir = dfl.find(oreo.UsuarioId());
         if (dir.getIdDepartamento().getIdDepartamento() == 7 && dir.getIdRol().getIdRol() == 3) {
-            if (listaGenP != null && !listaGenP.isEmpty()) {
+            if (listaGenP != null && !listaGenP.isEmpty() ) {
+                
                 return listaGenP;
             } else {
                 return new ArrayList<>();

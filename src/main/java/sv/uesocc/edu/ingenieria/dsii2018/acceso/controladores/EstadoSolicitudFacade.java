@@ -45,4 +45,17 @@ public class EstadoSolicitudFacade extends AbstractFacade<EstadoSolicitud> imple
         return lista;
     }
     
+    @Override
+    public List<EstadoSolicitud> findByLastEStado(int idSolicitud) {
+        List<EstadoSolicitud> lista = null;
+        try {
+            Query consulta = em.createNamedQuery("EstadoSolicitud.findByPausadoC");
+            consulta.setParameter("idSolicitud", idSolicitud);
+            lista = consulta.getResultList();
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return lista;
+    }
+    
 }

@@ -32,4 +32,6 @@ public interface EstadoSolicitudFacadeLocal {
     
     List<EstadoSolicitud> findByCreation(int idSolicitud);
     
+    List<EstadoSolicitud> findByLastEStado(int idSolicitud);
+    
 }

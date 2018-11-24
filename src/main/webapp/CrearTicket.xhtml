@@ -133,7 +133,7 @@
                                             <p:fileUpload id = "adjunto" fileUploadListener="#{manejadorSolicitud.subirImagen}" 
                                                           mode="advanced" dragDropSupport="true"
                                                           update="messages" fileLimit="1" 
-                                                          allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xls|docx)$/"
+                                                          allowTypes="/(\.|\/)(jpe?g|png|pdf|xls|docx)$/i"
                                                           uploadLabel="Guardar" label="Buscar" cancelLabel="Cancelar" />
 
                                             <p:growl id="messages" showDetail="true" />

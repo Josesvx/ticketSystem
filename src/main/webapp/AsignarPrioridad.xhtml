@@ -279,7 +279,7 @@
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="5,10,15">
                                 <f:facet name="header" >
-                                    Mantenimientos Solicitados
+                                    Mantenimientos Pausados
                                 </f:facet>
                                 <p:column headerText="Codigo">
                                     <h:outputText value="#{solicitud.NSeguimiento}" />
@@ -294,6 +294,29 @@
                                     <h:outputText value="#{solicitud.idCategoria.nombre}" />
                                 </p:column>
                             </p:dataTable>
+                            <p:contextMenu for="pausados">
+                                <p:menuitem value="Reabrir"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo1').show()"/>
+                            </p:contextMenu>
+
+                            <p:dialog header="Asignaciones" widgetVar="dialogo1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <p:outputPanel id="asignar" style="text-align:center;">
+                                    <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
+                                        <h:outputText value="Asignar Prioriodad: " />
+                                        <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.idPrioridad}">
+                                            <f:selectItems value="#{manejadorSolicitud.listaP}" var="valor" itemValue="#{valor.idPrioridad}" itemLabel="#{valor.nombre}">
+                                            </f:selectItems>
+                                        </p:selectOneMenu>
+                                        <h:outputText value="Asignar Técnico " />
+                                        <p:selectOneMenu id="cmbTecnico" value="#{manejadorSolicitud.idDirectorio}">
+                                            <f:selectItems value="#{manejadorTecnico.listaTec}" var="valorT" itemValue="#{valorT.idDirectorio}" itemLabel="#{valorT.nombre1}">
+                                            </f:selectItems>
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>
+                                    <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" update="frmAsignarP:pausados"
+                                                     actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}">
+                                    </p:commandButton>
+                                </p:outputPanel>
+                            </p:dialog>
 
                             
                         </center>
