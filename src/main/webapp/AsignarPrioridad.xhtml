@@ -134,7 +134,7 @@
                         </center>
                     </h:form>
                 </p:tab>
-                <p:tab title="Ticket Asignados IT">
+                <p:tab title="#{Crear['crear.ticketsAsignadosIT']}">
                     <p:dataTable id="solicitudesMG" var="audIT" 
                                  rows="10"
                                  paginator="true"
@@ -145,44 +145,35 @@
                                  style="
                                  width: 70%;">
                         <f:facet name="header" >
-                            Mantenimientos Solicitados
+                            #{Inicio['inicio.mantenimientosSolicitados']}
                         </f:facet>
-                        <p:column headerText="Nombre">
+                        <p:column headerText="#{Crear['crear.nombre']}">
                             <h:outputText value="#{audIT.nombre1}" />
                         </p:column>
-                        <p:column headerText="Apellido">
+                        <p:column headerText="#{Crear['crear.apellido']}">
                             <h:outputText value="#{audIT.apellido1}" />
                         </p:column>
-                        <p:column headerText="Departamento">
+                        <p:column headerText="#{Crear['crear.departamento']}">
                             <h:outputText value="#{audIT.idDepartamento.nombre}" />
                         </p:column>
-                        <p:column headerText="Categoria">
+                        <p:column headerText="#{Inicio['inicio.categoria']}">
                             <h:outputText value="#{audIT.correo}" />
                         </p:column>
                     </p:dataTable>
                 </p:tab>
-                <p:tab title="Ticket Asignados Infraestructura">
+                <p:tab title="#{Crear['crear.ticketsAsignadosIT']}">
 
                 </p:tab>
-                <p:tab title="Mantenimientos pausados IT">
+                <p:tab title="#{Crear['crear.mantenimientosPausadosIT']}">
 
                 </p:tab>
-                <p:tab title="Mantenimientos pausados Infraestructura">
+                <p:tab title="#{Crear['crear.mantenimientosPausadosInfra']}">
 
                 </p:tab>
             </p:tabView>
 
-            
-            
-            
-            
-            
-            
-            
-            
-            
             <p:tabView rendered="#{manejadorLogin.GerenteGeneralTabla()}">
-                <p:tab title="Mantenimientos">
+                <p:tab title="#{Inicio['inicio.mantenimientos']}">
                     <h:form id="frmAsignar" rendered="#{manejadorLogin.GerenteGeneralTabla()}">
 
                         <center>
@@ -196,41 +187,41 @@
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="5,10,15">
                                 <f:facet name="header" >
-                                    Mantenimientos Solicitados
+                                    #{Inicio['inicio.mantenimientosSolicitados']}
                                 </f:facet>
-                                <p:column headerText="Codigo">
+                                <p:column headerText="#{Inicio['inicio.seguimiento']}">
                                     <h:outputText value="#{solicitud.NSeguimiento}" />
                                 </p:column>
-                                <p:column headerText="Titulo">
+                                <p:column headerText="#{Inicio['inicio.titulo']}">
                                     <h:outputText value="#{solicitud.titulo}" />
                                 </p:column>
-                                <p:column headerText="Departamento">
+                                <p:column headerText="#{Crear['crear.departamento']}">
                                     <h:outputText value="#{solicitud.idDirectorio.idDepartamento.nombre}" />
                                 </p:column>
-                                <p:column headerText="Categoria">
+                                <p:column headerText="#{Inicio['inicio.categoria']}">
                                     <h:outputText value="#{solicitud.idCategoria.nombre}" />
                                 </p:column>
                             </p:dataTable>
 
                             <p:contextMenu for="solicitudes">
-                                <p:menuitem value="Asignar"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo').show()"/>
+                                <p:menuitem value="#{Crear['crear.asignar']}"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo').show()"/>
                             </p:contextMenu>
 
-                            <p:dialog header="Asignaciones" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:dialog header="#{Crear['crear.asignaciones']}" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                                 <p:outputPanel id="asignar" style="text-align:center;">
                                     <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
-                                        <h:outputText value="Asignar Prioriodad: " />
+                                        <h:outputText value="#{Crear['crear.asignarPrioridad']} " />
                                         <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.idPrioridad}">
                                             <f:selectItems value="#{manejadorSolicitud.listaP}" var="valor" itemValue="#{valor.idPrioridad}" itemLabel="#{valor.nombre}">
                                             </f:selectItems>
                                         </p:selectOneMenu>
-                                        <h:outputText value="Asignar Técnico " />
+                                        <h:outputText value="#{Crear['crear.asignarTecnico']}" />
                                         <p:selectOneMenu id="cmbTecnico" value="#{manejadorSolicitud.idDirectorio}">
                                             <f:selectItems value="#{manejadorTecnico.listaTec}" var="valorT" itemValue="#{valorT.idDirectorio}" itemLabel="#{valorT.nombre1}">
                                             </f:selectItems>
                                         </p:selectOneMenu>
                                     </p:panelGrid>
-                                    <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" update="frmAsignar:solicitudes"
+                                    <p:commandButton value="#{Crear['crear.asignar']}" id="btnAsignar" icon="ui-icon-check" update="frmAsignar:solicitudes"
                                                      actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}">
                                     </p:commandButton>
                                 </p:outputPanel>
@@ -239,7 +230,7 @@
 
                     </h:form>
                 </p:tab>
-                <p:tab title="Tecnicos asignados">
+                <p:tab title="#{Crear['crear.tecnicosAsignados']}">
                     <p:dataTable id="idAud" var="aud" value="#{manejadorSolicitud.findxAud()}" 
 
                                  rows="10"
@@ -252,22 +243,22 @@
                             #{Inicio['inicio.mantenimientosSolicitados']}
                         </f:facet>
 
-                        <p:column headerText="Nombre">
+                        <p:column headerText="#{Crear['crear.nombre']}">
                             <h:outputText value="#{aud.nombre1}" />
                         </p:column>
-                        <p:column headerText="Apellido">
+                        <p:column headerText="#{Crear['crear.apellido']}">
                             <h:outputText value="#{aud.apellido1}" />
                         </p:column>
-                        <p:column headerText="Departamento">
+                        <p:column headerText="#{Crear['crear.departamento']}">
                             <h:outputText value="#{aud.idDepartamento.nombre}" />
                         </p:column>
-                        <p:column headerText="Categoria">
+                        <p:column headerText="#{Inicio['inicio.categoria']}">
                             <h:outputText value="#{aud.correo}" />
 
                         </p:column>
                     </p:dataTable>
                 </p:tab>
-                <p:tab title="Mantenimientos pausados">
+                <p:tab title="#{Crear['crear.mantenimientosPausados']}">
                     <h:form id="frmAsignarP" rendered="#{manejadorLogin.GerenteGeneralTabla()}">
 
                         <center>
@@ -281,40 +272,40 @@
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="5,10,15">
                                 <f:facet name="header" >
-                                    Mantenimientos Pausados
+                                    #{Crear['crear.mantenimientosPausados']}
                                 </f:facet>
-                                <p:column headerText="Codigo">
+                                <p:column headerText="#{Inicio['inicio.seguimiento']}">
                                     <h:outputText value="#{solicitud.NSeguimiento}" />
                                 </p:column>
-                                <p:column headerText="Titulo">
+                                <p:column headerText="#{Inicio['inicio.titulo']}">
                                     <h:outputText value="#{solicitud.titulo}" />
                                 </p:column>
-                                <p:column headerText="Departamento">
+                                <p:column headerText="#{Crear['crear.departamento']}">
                                     <h:outputText value="#{solicitud.idDirectorio.idDepartamento.nombre}" />
                                 </p:column>
-                                <p:column headerText="Categoria">
+                                <p:column headerText="#{inicio['inicio.categoria']}">
                                     <h:outputText value="#{solicitud.idCategoria.nombre}" />
                                 </p:column>
                             </p:dataTable>
                             <p:contextMenu for="pausados">
-                                <p:menuitem value="Reabrir"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo1').show()"/>
+                                <p:menuitem value="#{Crear['crear.reabrir']}"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo1').show()"/>
                             </p:contextMenu>
 
-                            <p:dialog header="Asignaciones" widgetVar="dialogo1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:dialog header="#{Crear['crear.asignaciones']}" widgetVar="dialogo1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                                 <p:outputPanel id="asignar" style="text-align:center;">
                                     <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
-                                        <h:outputText value="Asignar Prioriodad: " />
+                                        <h:outputText value="#{Crear['crear.asignarPrioridad']}" />
                                         <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.idPrioridad}">
                                             <f:selectItems value="#{manejadorSolicitud.listaP}" var="valor" itemValue="#{valor.idPrioridad}" itemLabel="#{valor.nombre}">
                                             </f:selectItems>
                                         </p:selectOneMenu>
-                                        <h:outputText value="Asignar Técnico " />
+                                        <h:outputText value="#{Crear['crear.asignarTecnico']}" />
                                         <p:selectOneMenu id="cmbTecnico" value="#{manejadorSolicitud.idDirectorio}">
                                             <f:selectItems value="#{manejadorTecnico.listaTec}" var="valorT" itemValue="#{valorT.idDirectorio}" itemLabel="#{valorT.nombre1}">
                                             </f:selectItems>
                                         </p:selectOneMenu>
                                     </p:panelGrid>
-                                    <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" update="frmAsignarP:pausados"
+                                    <p:commandButton value="#{Crear['crear.asignar']}" id="btnAsignar" icon="ui-icon-check" update="frmAsignarP:pausados"
                                                      actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}">
                                     </p:commandButton>
                                 </p:outputPanel>

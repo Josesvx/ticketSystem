@@ -10,7 +10,7 @@
 
         <ui:define name="titulo">
             <h:head>
-                <title>Resolucion</title>
+                <title>#{Mantenimiento['mant.mantenimientosPausados']}</title>
                 <style>
                     body{
                         background-image: url(img/FondoLogin.png);
@@ -39,7 +39,7 @@
                                 left:20%;
                                 display:#{manejadorSolicitud.comprobar2()};
                                 color: #585858;">
-                                No tienes mantenimientos asignados
+                                #{Mantenimiento['mant.sinAsignar']}
                             </h1>
                         </center>
                     </div>
@@ -54,15 +54,15 @@
                          left:10%;
                          display:#{manejadorSolicitud.comprobar()};
                          color: #585858;">
-                        <h2>Mantenimiento</h2>
+                        <h2>#{Mantenimiento['mant.mantenimiento']}</h2>
                         <center>
                             <p:tabView dynamic="true" cache="true" effect="fold">
-                                <p:tab title="Informacion">                               
+                                <p:tab title="#{Mantenimiento['mant.informacion']}">                               
                                     <table cellspacing="10" cellpadding="10" border="0">
 
                                         <tr>
                                             <td>
-                                                <h:outputText value="Titulo: " /> 
+                                                <h:outputText value="#{Inicio['inicio.titulo']} " /> 
                                             </td>
                                             <td>
                                                 <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().titulo}" /> 
@@ -70,7 +70,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h:outputText value="Descripcion: " /> 
+                                                <h:outputText value="#{Inicio['inicio.descripcion']} " /> 
                                             </td>
                                             <td>
                                                 <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().descripcion}" /> 
@@ -78,7 +78,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h:outputText value="Prioridad: " />
+                                                <h:outputText value="#{Inicio['inicio.prioridad']} " />
                                             </td>
                                             <td>
                                                 <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idPrioridad.nombre}" />
@@ -86,7 +86,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h:outputText value="Categoria: " />
+                                                <h:outputText value="#{Inicio['inicio.categoria']} " />
                                             </td>
                                             <td>
                                                 <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idCategoria.nombre}" />
@@ -94,7 +94,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h:outputText value="Numero de Seguimiento: " />
+                                                <h:outputText value="#{Inicio['inicio.seguimiento']}" />
                                             </td>
                                             <td>
                                                 <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().NSeguimiento}" />
@@ -102,7 +102,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h:outputText value="Correlativo: " />
+                                                <h:outputText value="#{Crear['crear.correlativo']} " />
                                             </td>
                                             <td>
                                                 <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().correlativo}" />
@@ -110,7 +110,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h:outputText value="Solicitante: " />
+                                                <h:outputText value="#{Mantenimiento['mant.solicitante']} " />
                                             </td>
                                             <td>
                                                 <h:outputText value="#{manejadorSolicitud.nombreC()}" />
@@ -118,7 +118,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h:outputText value="Departamento" />
+                                                <h:outputText value="#{Crear['crear.departamento']}" />
                                             </td>
                                             <td>
                                                 <h:outputText value="#{manejadorSolicitud.ObtenerSolicitudesXTec().idDirectorio.idDepartamento.nombre}" />
@@ -126,12 +126,12 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <h:outputText value="Adjunto" />
+                                                <h:outputText value="#{Crear['crear.adjunto']}" />
 
                                             </td>
                                             <td>
                                                 <h:form>
-                                                    <p:commandButton value="Descargar" ajax="false" icon="ui-icon-circle-arrow-s" onclick="PF('dlg3').hide();$('#form').trigger('reset');" >
+                                                    <p:commandButton value="#{Mantenimiento['mant.descargar']}" ajax="false" icon="ui-icon-circle-arrow-s" onclick="PF('dlg3').hide();$('#form').trigger('reset');" >
                                                         <p:fileDownload value="#{manejadorSolicitud.archivo(manejadorSolicitud.ObtenerSolicitudesXTec.adjunto)}"> </p:fileDownload>
                                                     </p:commandButton>
                                                 </h:form>                                            </td>
@@ -139,7 +139,7 @@
                                     </table>
 
                                 </p:tab>
-                                <p:tab title="Historial">
+                                <p:tab title="#{Mantenimiento['mant.historial']}">
                                     <center>
                                         <h:form id="form">
                                             <p:dataTable id="mantenimientos" var="Dmantenimiento"
@@ -165,15 +165,15 @@
                                                 <p:column headerText="ID">
                                                     <h:outputText value="#{Dmantenimiento.idDescripcionMantenimiento}" />
                                                 </p:column>
-                                                <p:column headerText="Descripcion Problema">
+                                                <p:column headerText="#{Mantenimiento['mant.descProblem']}">
                                                     <h:outputText value="#{Dmantenimiento.descripcionProblema}" />
                                                 </p:column>                    
 
-                                                <p:column headerText="Descripcion Solucion">
+                                                <p:column headerText="#{Mantenimiento['mant.descSol']}">
                                                     <h:outputText value="#{Dmantenimiento.descripcionSolucion}" />
                                                 </p:column> 
                                                 <f:facet name="footer">
-                                                    <p:commandButton process="mantenimientos"  icon="fa-eye" value="Seguimiento"  />
+                                                    <p:commandButton process="mantenimientos"  icon="fa-eye" value="#{Inicio['inicio.seguimiento']}"  />
                                                 </f:facet>
                                             </p:dataTable>
 
@@ -181,7 +181,7 @@
                                     </center>
 
                                 </p:tab>
-                                <p:tab title="Mantenimiento">
+                                <p:tab title="#{Mantenimiento['mant.mantenimiento']}">
 
                                     <h:form>
                                         <p:messages  id="mensaje" autoUpdate="true"  />
@@ -194,7 +194,7 @@
                                             </tr>                                                                                                                                                                     
                                             <tr>
                                                 <td>
-                                                    <p:outputLabel value="Descripcion Problema: " for="descripcionP" />
+                                                    <p:outputLabel value="#{Mantenimiento['mant.descProblem']}" for="descripcionP" />
                                                 </td>
                                                 <td>
                                                     <p:inputTextarea rows="7" cols="35" id="descripcionP" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Problema" value="#{manejadorSolicitud.descripcionM.descripcionProblema}">
@@ -207,7 +207,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <p:outputLabel value="Descripcion Solucion: " for="descripcionS" />
+                                                    <p:outputLabel value="#{Mantenimiento['mant.descSol']}" for="descripcionS" />
                                                 </td>
                                                 <td>
                                                     <p:inputTextarea rows="7" cols="35" id="descripcionS" required="true" requiredMessage="Descripcion Requerida" placeholder="Descripcion Solución" value="#{manejadorSolicitud.descripcionM.descripcionSolucion}" maxlength="250">
@@ -221,7 +221,7 @@
 
                                             <tr>
                                                 <td colspan="2" align="center">
-                                                    <p:commandButton value="Terminar ticket" 
+                                                    <p:commandButton value="#{Mantenimiento['mant.terminarTicket']}" 
                                                                      id="terminar"
                                                                      action="#{manejadorSolicitud.ActualizarDatos()}"
                                                                      icon="ui-icon-check" 
@@ -233,7 +233,7 @@
                                         </table>
                                     </h:form>  
                                     <h:form>
-                                        <p:commandButton value="Pausar ticket" id="pausarticket" icon="ui-icon-pause"  onclick="PF('dlg4').show();"/>
+                                        <p:commandButton value="#{Mantenimiento['mant.pausarTicket']}" id="pausarticket" icon="ui-icon-pause"  onclick="PF('dlg4').show();"/>
                                     </h:form>
                                 </p:tab>
                             </p:tabView>
@@ -242,12 +242,12 @@
                     </div>
                 </center>
             </center>
-            <p:dialog header="Justificación" widgetVar="dlg4"  height="100">
+            <p:dialog header="#{Mantenimiento['mant.justificacion']}" widgetVar="dlg4"  height="100">
                 <h:form>
                     <table>
                         <tr>
                             <td>
-                                <p:outputLabel value="Justificación:"/>
+                                <p:outputLabel value="#{Mantenimiento['mant.justificacion']}"/>
                             </td>
                             <td>
                                 <p:inputTextarea id="IdJustificacionP" value="#{manejadorSolicitud.justificacion}" required="true"></p:inputTextarea>
