@@ -7,9 +7,11 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.Idiomas.ws.SesionDeUsuarioBean;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieLenguage;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
@@ -26,6 +28,8 @@ public class ManejadorTecnico implements Serializable {
     private CookieInstance oreo;
     private Directorio dir;
     protected int idDirectorio;
+    private CookieLenguage canCan;
+    private SesionDeUsuarioBean bean;
     @EJB
     private DirectorioFacadeLocal dfl;
     private SolicitudFacadeLocal sfl;
@@ -33,6 +37,11 @@ public class ManejadorTecnico implements Serializable {
     @PostConstruct
 //    @Override
     public void init() {
+        canCan = new CookieLenguage();
+        
+        bean = new SesionDeUsuarioBean();
+        
+        bean.cambioIdioma(canCan.getIdioma());
         listaTec = new ArrayList<>();
 
         oreo = new CookieInstance();

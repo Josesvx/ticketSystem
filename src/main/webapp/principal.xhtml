@@ -34,45 +34,48 @@
                                  rowsPerPageTemplate="5,10, 15"
                                  value="#{manejadorSolicitud.llenarPorDirectorio()}">
                         <f:facet name="header" >
-                            Mantenimientos Solicitados
+                            #{Inicio['inicio.mantenimientosSolicitados']}
                         </f:facet>
-                        <p:column headerText="Seguimiento">
+                        <p:column headerText="#{Inicio['inicio.seguimiento']}">
                             <h:outputText value="#{solicitud.NSeguimiento}" />
                         </p:column>
-                        <p:column headerText="Titulo">
+                        <p:column headerText="#{Inicio['inicio.titulo']}">
                             <h:outputText value="#{solicitud.titulo}" />
                         </p:column>                    
 
-                        <p:column headerText="Fecha Creación">
+                        <p:column headerText="#{Inicio['inicio.fecha']}">
                             <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(solicitud)}" />
                         </p:column> 
                         <f:facet name="footer">
-                            <p:commandButton process="solicitudes" update=":form:carDetail" icon="fa-eye" value="Seguimiento" oncomplete="PF('carDialog').show()" />
+                            <p:commandButton process="solicitudes" update=":form:carDetail" 
+                                             icon="fa-eye" value="#{Inicio['inicio.seguimiento']}" 
+                                             oncomplete="PF('carDialog').show()" 
+                                             rendered="#{empty manejadorSolicitud.solicitudSeleccionada}"/>
                         </f:facet>
                     </p:dataTable>
-                    <p:dialog header="Informacion de la Solicitud" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:dialog header="#{Inicio['inicio.informacion']}" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel id="carDetail" style="text-align:center;">
-                            <p:panelGrid  columns="2"  columnClasses="label,value" rendered="#{not empty manejadorSolicitud.solicitudSeleccionada}">
+                            <p:panelGrid  columns="2"  columnClasses="label,value">
 
-                                <h:outputText value="Numero de Seguimiento" />
+                                <h:outputText value="#{Inicio['inicio.numeroSeguimiento']}" />
                                 <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.NSeguimiento}" />
 
-                                <h:outputText value="Titulo" />
+                                <h:outputText value="#{Inicio['inicio.titulo']}" />
                                 <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.titulo}" />
 
-                                <h:outputText value="Descripcion:" />
+                                <h:outputText value="#{Inicio['inicio.descripcion']}" />
                                 <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.descripcion}"/>
 
-                                <h:outputText value="Categoria:" />
+                                <h:outputText value="#{Inicio['inicio.categoria']}" />
                                 <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.idCategoria.nombre}"/>
 
-                                <h:outputText value="Prioridad Asignada" />
+                                <h:outputText value="#{Inicio['inicio.prioridad']}" />
                                 <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.idPrioridad.nombre}"/>
 
-                                <h:outputText value="Estado" />
+                                <h:outputText value="#{Inicio['inicio.estado']}" />
                                 <h:outputText value="#{manejadorSolicitud.DevolverEstado(manejadorSolicitud.solicitudSeleccionada)}"/>
 
-                                <h:outputText value="Fechade creacion" />
+                                <h:outputText value="#{Inicio['inicio.fecha']}" />
                                 <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(manejadorSolicitud.solicitudSeleccionada)}"/>
 
                                 <h:outputText value="Adjunto" />

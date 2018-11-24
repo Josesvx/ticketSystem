@@ -15,8 +15,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.Idiomas.ws.SesionDeUsuarioBean;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.DirectorioFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieLenguage;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Directorio;
 
 /**
@@ -33,13 +35,38 @@ public class ManejadorLogin implements Serializable {
     private String redireccionar = null, nombreUsuario, rol;
     private CookieInstance oreo;
     private int id, id2, idg;
+    private CookieLenguage canCan;
+    private SesionDeUsuarioBean bean;
+    private String codigo;
 
     @PostConstruct
     public void init() {
         directorio = new Directorio();
         oreo = new CookieInstance();
+        canCan = new CookieLenguage();
+        
+        bean = new SesionDeUsuarioBean();
+        
+        bean.cambioIdioma(canCan.getIdioma());
 
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    
+    
+    
+    public void actualizarIdioma() throws IOException{
+        canCan.CrearCookieLenguage(codigo);
+        bean.cambioIdioma(canCan.getIdioma());
+        FacesContext.getCurrentInstance().getExternalContext().redirect("InicioSesion.jsf");
+    }
+    
 
     public Directorio getDirectorio() {
         return directorio;

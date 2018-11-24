@@ -22,6 +22,7 @@ import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.Idiomas.ws.SesionDeUsuarioBean;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieInstance;
@@ -34,6 +35,7 @@ import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.EstadoSolicitudFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.MantenimientoEncargadoFacadeLocal;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieLenguage;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Categoria;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.DescripcionMantenimiento;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.EstadoSolicitud;
@@ -70,6 +72,7 @@ public class ManejadorSolicitud implements Serializable {
     private Solicitud solicitudSeleccionada;
     private DescripcionMantenimiento descripcionM, tmp, DMSeleccionada;
     private List<Solicitud> selectedSolicitud;
+    private Boolean disabled = true;
     protected Solicitud solicitudS;
     private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
@@ -77,6 +80,8 @@ public class ManejadorSolicitud implements Serializable {
     private Categoria categoria;
     private Directorio directorio, Departamento, dir;
     private CookieInstance oreo;
+    private CookieLenguage canCan;
+    private SesionDeUsuarioBean bean;
     private String imagenAdjunto;
     private byte[] adjuntoProv;
     private String nombre, seguimiento, nombreDep, redirecccion = null, finale = null, nombreC, retorno, justificacion;
@@ -224,6 +229,12 @@ public class ManejadorSolicitud implements Serializable {
 
         mail = new ManejadorCorreo();
 
+        canCan = new CookieLenguage();
+
+        bean = new SesionDeUsuarioBean();
+
+        bean.cambioIdioma(canCan.getIdioma());
+
         id2 = oreo.UsuarioId();
         Departamento = dfl.find(id2);
         nombreDep = Departamento.getIdDepartamento().getNombre();
@@ -240,6 +251,18 @@ public class ManejadorSolicitud implements Serializable {
         findxAud();
         llenarAudIT();
 
+    }
+
+    public void onRow2Select(SelectEvent event) {
+        disabled = false;
+    }
+
+    public Boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
     }
 
     public List<Solicitud> llenarFiltro() {

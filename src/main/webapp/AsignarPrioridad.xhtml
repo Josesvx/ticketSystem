@@ -9,7 +9,7 @@
     <ui:composition template="resources/layout.xhtml">
         <ui:define name="titulo">
             <h:head>
-                <title>Asignar Prioridad</title>
+                <title>#{Crear['crear.asignarPrioridad']}</title>
             </h:head>
             <style>
                 body{
@@ -19,7 +19,7 @@
         </ui:define>
         <ui:define name="body">
             <p:tabView rendered="#{manejadorLogin.GerenteGeneral()}">
-                <p:tab title="IT-Gerente">
+                <p:tab title="#{Crear['crear.gerenteIT']}">
                     <h:form id="frmAsignarIG"  >
 
                         <center>
@@ -34,42 +34,42 @@
                                          style="
                                          width: 70%;">
                                 <f:facet name="header" >
-                                    Mantenimientos Solicitados
+                                    #{Inicio['inicio.mantenimientosSolicitados']}
                                 </f:facet>
-                                <p:column headerText="Codigo">
+                                <p:column headerText="#{Inicio['inicio.seguimiento']}">
                                     <h:outputText value="#{solicitudIG.NSeguimiento}" />
                                 </p:column>
-                                <p:column headerText="Titulo">
+                                <p:column headerText="#{Inicio['inicio.titulo']}">
                                     <h:outputText value="#{solicitudIG.titulo}" />
                                 </p:column>
-                                <p:column headerText="Departamento">
+                                <p:column headerText="#{Crear['crear.departamento']}">
                                     <h:outputText value="#{solicitudIG.idDirectorio.idDepartamento.nombre}" />
                                 </p:column>
-                                <p:column headerText="Categoria">
+                                <p:column headerText="#{Inicio['inicio.categoria']}">
                                     <h:outputText value="#{solicitudIG.idCategoria.nombre}" />
                                 </p:column>
                             </p:dataTable> 
 
                             <p:contextMenu for="solicitudesIG">
-                                <p:menuitem value="Asignar"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo1').show()"/>
+                                <p:menuitem value="#{Crear['crear.asignar']}"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo1').show()"/>
                             </p:contextMenu>
 
-                            <p:dialog header="Asignaciones" widgetVar="dialogo1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:dialog header="#{Crear['crear.asignaciones']}" widgetVar="dialogo1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                                 <p:outputPanel id="asignar" style="text-align:center;">
                                     <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
 
-                                        <h:outputText value="Asignar Prioriodad: " />
+                                        <h:outputText value="#{Crear['crear.asignarPrioridad']}" />
                                         <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.idPrioridad}">
                                             <f:selectItems value="#{manejadorSolicitud.listaP}" var="valor" itemValue="#{valor.idPrioridad}" itemLabel="#{valor.nombre}">
                                             </f:selectItems>
                                         </p:selectOneMenu>
-                                        <h:outputText value="Asignar técnico " />
+                                        <h:outputText value="#{Crear['crear.asignarTecnico']}" />
                                         <p:selectOneMenu id="cmbTecnico" value="#{manejadorSolicitud.idDirectorio}">
                                             <f:selectItems value="#{manejadorTecnico.listaTecIT}" var="valorT" itemValue="#{valorT.idDirectorio}" itemLabel="#{valorT.nombre1}">
                                             </f:selectItems>
                                         </p:selectOneMenu>
                                     </p:panelGrid>
-                                    <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}"></p:commandButton>
+                                    <p:commandButton value="#{Crear['crear.asignar']}" id="btnAsignar" icon="ui-icon-check" actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}"></p:commandButton>
                                 </p:outputPanel>
                             </p:dialog>
 
@@ -77,7 +77,7 @@
                         </center>
                     </h:form>
                 </p:tab>
-                <p:tab title="Mantenimiento-Gerente">
+                <p:tab title="#{Crear['crear.gerenteMantenimiento']}">
                     <h:form id="frmAsignarMG"  >
 
                         <center>
@@ -92,42 +92,42 @@
                                          style="
                                          width: 70%;">
                                 <f:facet name="header" >
-                                    Mantenimientos Solicitados
+                                    #{Inicio['inicio.mantenimientosSolicitados']}
                                 </f:facet>
-                                <p:column headerText="Codigo">
+                                <p:column headerText="#{Inicio['inicio.seguimiento']}">
                                     <h:outputText value="#{solicitudMG.NSeguimiento}" />
                                 </p:column>
-                                <p:column headerText="Titulo">
+                                <p:column headerText="#{Inicio['inicio.titulo']}">
                                     <h:outputText value="#{solicitudMG.titulo}" />
                                 </p:column>
-                                <p:column headerText="Departamento">
+                                <p:column headerText="#{Crear['crear.departamento']}">
                                     <h:outputText value="#{solicitudMG.idDirectorio.idDepartamento.nombre}" />
                                 </p:column>
-                                <p:column headerText="Categoria">
+                                <p:column headerText="#{Inicio['inicio.categoria']}">
                                     <h:outputText value="#{solicitudMG.idCategoria.nombre}" />
                                 </p:column>
                             </p:dataTable>
 
                             <p:contextMenu for="solicitudesMG">
-                                <p:menuitem value="Asignar"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo').show()"/>
+                                <p:menuitem value="#{Crear['crear.asignar']}"  update="asignar" icon="ui-icon-pencil" oncomplete="PF('dialogo').show()"/>
                             </p:contextMenu>
 
-                            <p:dialog header="Asignaciones" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:dialog header="#{Crear['crear.asignaciones']}" widgetVar="dialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                                 <p:outputPanel id="asignar" style="text-align:center;">
                                     <p:panelGrid  columns="2" rendered="#{not empty manejadorSolicitud.solicitudS}" columnClasses="label,value">
 
-                                        <h:outputText value="Asignar Prioriodad: " />
+                                        <h:outputText value="#{Crear['crear.asignarPrioridad']}" />
                                         <p:selectOneMenu id="cmbPrioridad" value="#{manejadorSolicitud.idPrioridad}">
                                             <f:selectItems value="#{manejadorSolicitud.listaP}" var="valor" itemValue="#{valor.idPrioridad}" itemLabel="#{valor.nombre}">
                                             </f:selectItems>
                                         </p:selectOneMenu>
-                                        <h:outputText value="Asignar técnico " />
+                                        <h:outputText value="#{Crear['crear.asignarTecnico']}" />
                                         <p:selectOneMenu id="cmbTecnico" value="#{manejadorSolicitud.idDirectorio}">
                                             <f:selectItems value="#{manejadorTecnico.listaTecMA}" var="valorT" itemValue="#{valorT.idDirectorio}" itemLabel="#{valorT.nombre1}">
                                             </f:selectItems>
                                         </p:selectOneMenu>
                                     </p:panelGrid>
-                                    <p:commandButton value="asignar" id="btnAsignar" icon="ui-icon-check" actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}"></p:commandButton>
+                                    <p:commandButton value="#{Crear['crear.asignar']}" id="btnAsignar" icon="ui-icon-check" actionListener="#{manejadorSolicitud.Actualizar(solicitudS)}"></p:commandButton>
                                 </p:outputPanel>
                             </p:dialog>
 
@@ -249,8 +249,9 @@
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="5,10,15">
                         <f:facet name="header" >
-                            Mantenimientos Solicitados
+                            #{Inicio['inicio.mantenimientosSolicitados']}
                         </f:facet>
+
                         <p:column headerText="Nombre">
                             <h:outputText value="#{aud.nombre1}" />
                         </p:column>
@@ -262,6 +263,7 @@
                         </p:column>
                         <p:column headerText="Categoria">
                             <h:outputText value="#{aud.correo}" />
+
                         </p:column>
                     </p:dataTable>
                 </p:tab>
@@ -321,6 +323,7 @@
                             
                         </center>
 
+
                     </h:form>
                 </p:tab>
             </p:tabView>
@@ -330,4 +333,3 @@
         </ui:define>
     </ui:composition>
 </html>
-

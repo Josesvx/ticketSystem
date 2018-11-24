@@ -1,13 +1,20 @@
 package sv.uesocc.edu.ingenieria.dsii2018.acceso.manejadores;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
@@ -16,7 +23,9 @@ import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.PieChartModel;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.Idiomas.ws.SesionDeUsuarioBean;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.controladores.SolicitudFacadeLocal;
+import sv.uesocc.edu.ingenieria.dsii2018.acceso.cookie.CookieLenguage;
 import sv.uesocc.edu.ingenieria.dsii2018.acceso.definiciones.Solicitud;
 
 /**
@@ -32,7 +41,7 @@ public class ManejadorEstadistica implements Serializable {
             numeroSolicitudes6, numeroSolicitudes7, numeroSolicitudes8;
     private int numeroPorEstado, numeroPorEstado1, numeroPorEstado2, numeroPorEstado3, numeroPorEstado4, numeroPorEstado5;
     private int numeroPorPrioridad, numeroPorPrioridad1, numeroPorPrioridad2, numeroPorPrioridad3;
-    private int numeroPorCat, numeroPorCat1, numeroPorCat2, numeroPorCat3;
+    private int numeroPorCat, numeroPorCat1, numeroPorCat2, numeroPorCat3, numeroPorFecha;
     private List<Solicitud> listaSol;
     private BarChartModel barModel;
     private BarChartModel barModelEstado;
@@ -46,12 +55,24 @@ public class ManejadorEstadistica implements Serializable {
     private PieChartModel pieModelEstado;
     private PieChartModel pieModelPrioridad;
     private PieChartModel pieModelCategoria;
+    private Date date1, date2;
+    private Date fecha1;
+    private Date fecha2, d1, d2;
+    String fechaSeleccionada;
+    private List<Solicitud> solicitudFecha, listaTabla;
+    private CookieLenguage canCan;
+    private SesionDeUsuarioBean bean;
 
     @EJB
     private SolicitudFacadeLocal sfl;
 
     @PostConstruct
     public void init() {
+        canCan = new CookieLenguage();
+        
+        bean = new SesionDeUsuarioBean();
+        
+        bean.cambioIdioma(canCan.getIdioma());
 
         llenarLista();
 
@@ -117,7 +138,7 @@ public class ManejadorEstadistica implements Serializable {
                     break;
             }
         }
-        
+
         for (int i = 1; i <= 3; i++) {
             switch (i) {
                 case 1:
@@ -136,8 +157,26 @@ public class ManejadorEstadistica implements Serializable {
         llenarEstado();
         llenarPrioridad();
         llenarCategoria();
+        llenarPorFecha();
 
     }
+
+    public Date getFecha1() {
+        return fecha1;
+    }
+
+    public void setFecha1(Date fecha1) {
+        this.fecha1 = fecha1;
+    }
+
+    public Date getFecha2() {
+        return fecha2;
+    }
+
+    public void setFecha2(Date fecha2) {
+        this.fecha2 = fecha2;
+    }
+    
 
     public void llenarDepartamento() {
         createBarModel();
@@ -159,8 +198,8 @@ public class ManejadorEstadistica implements Serializable {
         createLineModelPrioridad();
         createPieModelPrioridad();
     }
-    
-    public void llenarCategoria(){
+
+    public void llenarCategoria() {
         createBarModelCategoria();
         initBarModelCategoria();
         createLineModelCategoria();
@@ -186,6 +225,16 @@ public class ManejadorEstadistica implements Serializable {
         return numeroPorEstado;
     }
 
+    public List<Solicitud> llenarPorFecha() {
+        solicitudFecha = sfl.findByDates(fecha1, fecha2);
+        return solicitudFecha;
+    }
+    
+    public List<Solicitud> llenarDesdeFecha(){
+        solicitudFecha=sfl.findByDates(fecha1, new Date());
+        return solicitudFecha;
+    }
+
     public int llenarPorPrioridad(int id) {
         List<Solicitud> lista = sfl.findByPrioridad(id);
         if (lista != null || !lista.isEmpty()) {
@@ -195,15 +244,21 @@ public class ManejadorEstadistica implements Serializable {
         }
         return numeroPorPrioridad;
     }
-    
+
     public int llenarPorCategoria(int id) {
-        List<Solicitud> lista=sfl.findByCategoria(id);
-        if(lista != null || !lista.isEmpty()) {
-            numeroPorCat= lista.size();
-        }else{
-            numeroPorCat=0;
+        List<Solicitud> lista = sfl.findByCategoria(id);
+        if (lista != null || !lista.isEmpty()) {
+            numeroPorCat = lista.size();
+        } else {
+            numeroPorCat = 0;
         }
         return numeroPorCat;
+    }
+
+    public void onDateSelect(SelectEvent event) throws ParseException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", dateFormat.format(event.getObject())));
     }
 
     private void createBarModel() {
@@ -217,7 +272,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = barModel.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(sfl.count()+10);
+        yAxis.setMax(sfl.count() + 10);
     }
 
     private void createBarModelestado() {
@@ -231,7 +286,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = barModelEstado.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(sfl.count()+10);
+        yAxis.setMax(sfl.count() + 10);
     }
 
     private void createBarModelPrioridad() {
@@ -245,9 +300,23 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = barModelPrioridad.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(sfl.count()+10);
+        yAxis.setMax(sfl.count() + 10);
     }
-    
+
+    private void createBarModelFecha() {
+        barModelPrioridad = initBarModelPrioridad();
+        barModelPrioridad.setTitle("Solicitudes Por Prioridad");
+        barModelPrioridad.setLegendPosition("ne");
+
+        Axis xAxis = barModelPrioridad.getAxis(AxisType.X);
+        xAxis.setLabel("Prioridad");
+
+        Axis yAxis = barModelPrioridad.getAxis(AxisType.Y);
+        yAxis.setLabel("Numero Solicitudes");
+        yAxis.setMin(0);
+        yAxis.setMax(sfl.count() + 10);
+    }
+
     private void createBarModelCategoria() {
         barModelCategoria = initBarModelCategoria();
         barModelCategoria.setTitle("Solicitudes Por Categoria");
@@ -259,7 +328,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = barModelCategoria.getAxis(AxisType.Y);
         yAxis.setLabel("Numero Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(sfl.count()+10);
+        yAxis.setMax(sfl.count() + 10);
     }
 
     private void createLineModel() {
@@ -271,7 +340,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Numero de Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(sfl.count()+10);
+        yAxis.setMax(sfl.count() + 10);
     }
 
     private void createLineModelEstado() {
@@ -283,7 +352,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = lineModelEstado.getAxis(AxisType.Y);
         yAxis.setLabel("Numero de Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(sfl.count()+10);
+        yAxis.setMax(sfl.count() + 10);
     }
 
     private void createLineModelPrioridad() {
@@ -295,9 +364,9 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = lineModelPrioridad.getAxis(AxisType.Y);
         yAxis.setLabel("Numero de Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(sfl.count()+10);
+        yAxis.setMax(sfl.count() + 10);
     }
-    
+
     private void createLineModelCategoria() {
         lineModelCategoria = initLineModelCategoria();
         lineModelCategoria.setTitle("Solicitudes por Categoria");
@@ -307,7 +376,7 @@ public class ManejadorEstadistica implements Serializable {
         Axis yAxis = lineModelCategoria.getAxis(AxisType.Y);
         yAxis.setLabel("Numero de Solicitudes");
         yAxis.setMin(0);
-        yAxis.setMax(sfl.count()+10);
+        yAxis.setMax(sfl.count() + 10);
     }
 
     private void createPieModel() {
@@ -352,7 +421,7 @@ public class ManejadorEstadistica implements Serializable {
         pieModelPrioridad.setLegendPosition("w");
         pieModelPrioridad.setShadow(false);
     }
-    
+
     private void createPieModelCategoria() {
         pieModelCategoria = new PieChartModel();
 
@@ -398,6 +467,21 @@ public class ManejadorEstadistica implements Serializable {
         return model;
     }
 
+    private BarChartModel initBarModelfecha() {
+        BarChartModel model = new BarChartModel();
+
+        ChartSeries solicitudes = new ChartSeries();
+        solicitudes.setLabel("Estado");
+        solicitudes.set("Creado", numeroPorEstado1);
+        solicitudes.set("Asignado", numeroPorEstado2);
+        solicitudes.set("Pausado", numeroPorEstado3);
+        solicitudes.set("Cerrado", numeroPorEstado4);
+        solicitudes.set("Reabierto", numeroPorEstado5);
+
+        model.addSeries(solicitudes);
+        return model;
+    }
+
     private BarChartModel initBarModelPrioridad() {
         BarChartModel model = new BarChartModel();
 
@@ -410,7 +494,7 @@ public class ManejadorEstadistica implements Serializable {
         model.addSeries(solicitudes);
         return model;
     }
-    
+
     private BarChartModel initBarModelCategoria() {
         BarChartModel model = new BarChartModel();
 
@@ -423,7 +507,6 @@ public class ManejadorEstadistica implements Serializable {
         model.addSeries(solicitudes);
         return model;
     }
-
 
     private LineChartModel initLineModel() {
         LineChartModel model = new LineChartModel();
@@ -470,7 +553,7 @@ public class ManejadorEstadistica implements Serializable {
         model.addSeries(series1);
         return model;
     }
-    
+
     private LineChartModel initLineModelCategoria() {
         LineChartModel model = new LineChartModel();
 
@@ -495,7 +578,7 @@ public class ManejadorEstadistica implements Serializable {
     public BarChartModel getBarModelPrioridad() {
         return barModelPrioridad;
     }
-    
+
     public BarChartModel getBarModelCategoria() {
         return barModelCategoria;
     }
@@ -515,7 +598,7 @@ public class ManejadorEstadistica implements Serializable {
     public LineChartModel getLineModelCategoria() {
         return lineModelCategoria;
     }
-    
+
     public PieChartModel getPieModel() {
         return pieModel;
     }
@@ -527,9 +610,33 @@ public class ManejadorEstadistica implements Serializable {
     public PieChartModel getPieModelPrioridad() {
         return pieModelPrioridad;
     }
-    
+
     public PieChartModel getPieModelCategoria() {
         return pieModelCategoria;
+    }
+
+    public Date getDate1() {
+        return date1;
+    }
+
+    public void setDate1(Date date1) {
+        this.date1 = date1;
+    }
+
+    public Date getDate2() {
+        return date2;
+    }
+
+    public void setDate2(Date date2) {
+        this.date2 = date2;
+    }
+
+    public List<Solicitud> getSolicitudFecha() {
+        return solicitudFecha;
+    }
+
+    public void setSolicitudFecha(List<Solicitud> solicitudFecha) {
+        this.solicitudFecha = solicitudFecha;
     }
 
 }

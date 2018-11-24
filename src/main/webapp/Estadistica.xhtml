@@ -12,7 +12,7 @@
 
         <ui:define name="titulo">
             <h:head>
-                <title>Estadisticas</title>
+                <title>#{Estadisticas['estadisticas.estadisticas']}</title>
             </h:head>
             <style>
                 body{
@@ -22,59 +22,128 @@
 
         </ui:define>
         <ui:define name="body"  >
-
+            <br></br><br></br><br></br>
             <p:tabView>
-                <p:tab title="por Departamento" >
+                <p:tab title="#{Estadisticas['estadisticas.porDepartamento']}" >
                     <p:tabView>
-                        <p:tab title="Grafico de Barras">
+                        <p:tab title="#{Estadisticas['estadisticas.barra']}">
                             <p:chart type="bar" model="#{manejadorEstadistica.barModel}" style="height:300px; background-color: black;"/>
                         </p:tab>
-                        <p:tab title="Grafico de Lineas">
+                        <p:tab title="#{Estadisticas['estadisticas.lineas']}">
                             <p:chart type="line" model="#{manejadorEstadistica.lineModel}" style="height:300px; background-color: black;"/> 
                         </p:tab>
-                        <p:tab title="Grafico Circular">
+                        <p:tab title="#{Estadisticas['estadisticas.circular']}">
                             <p:chart type="pie" model="#{manejadorEstadistica.pieModel}" style="width:400px;height:300px; background-color: black;" />
                         </p:tab>
                     </p:tabView>
                 </p:tab>
-                <p:tab title="Por Estado">
+                <p:tab title="#{Estadisticas['estadisticas.porEstado']}">
                     <p:tabView>
-                        <p:tab title="Grafico de Barras">
+                        <p:tab title="#{Estadisticas['estadisticas.barra']}">
                             <p:chart type="bar" model="#{manejadorEstadistica.barModelEstado}" style="height:300px; background-color: black;"/>
                         </p:tab>
-                        <p:tab title="Grafico de Lineas">
+                        <p:tab title="#{Estadisticas['estadisticas.lineas']}">
                             <p:chart type="line" model="#{manejadorEstadistica.lineModelestado}" style="height:300px; background-color: black;"/> 
                         </p:tab>
-                        <p:tab title="Grafico Circular">
+                        <p:tab title="#{Estadisticas['estadisticas.circular']}">
                             <p:chart type="pie" model="#{manejadorEstadistica.pieModelEstado}" style="width:400px;height:300px; background-color: black;" />
                         </p:tab>
                     </p:tabView>
                 </p:tab>
-                <p:tab title="Por Prioridad">
+                <p:tab title="#{Estadisticas['estadisticas.porPrioridad']}">
                     <p:tabView>
-                        <p:tab title="Grafico de Barras">
+                        <p:tab title="#{Estadisticas['estadisticas.barra']}">
                             <p:chart type="bar" model="#{manejadorEstadistica.barModelPrioridad}" style="height:300px; background-color: black;"/>
                         </p:tab>
-                        <p:tab title="Grafico de Lineas">
+                        <p:tab title="#{Estadisticas['estadisticas.lineas']}">
                             <p:chart type="line" model="#{manejadorEstadistica.lineModelPrioridad}" style="height:300px; background-color: black;"/> 
                         </p:tab>
-                        <p:tab title="Grafico Circular">
+                        <p:tab title="#{Estadisticas['estadisticas.circular']}">
                             <p:chart type="pie" model="#{manejadorEstadistica.pieModelPrioridad}" style="width:400px;height:300px; background-color: black;" />
                         </p:tab>
                     </p:tabView>
                 </p:tab>
-                <p:tab title="Por Categoria">
+                <p:tab title="#{Estadisticas['estadisticas.porCategoria']}">
                     <p:tabView>
-                        <p:tab title="Grafico de Barras">
+                        <p:tab title="#{Estadisticas['estadisticas.barra']}">
                             <p:chart type="bar" model="#{manejadorEstadistica.barModelCategoria}" style="height:300px; background-color: black;"/>
                         </p:tab>
-                        <p:tab title="Grafico de Lineas">
+                        <p:tab title="#{Estadisticas['estadisticas.lineas']}">
                             <p:chart type="line" model="#{manejadorEstadistica.lineModelCategoria}" style="height:300px; background-color: black;"/> 
                         </p:tab>
-                        <p:tab title="Grafico Circular">
+                        <p:tab title="#{Estadisticas['estadisticas.circular']}">
                             <p:chart type="pie" model="#{manejadorEstadistica.pieModelCategoria}" style="width:400px;height:300px; background-color: black;" />
                         </p:tab>
                     </p:tabView>
+                </p:tab>
+                <p:tab title="#{Estadisticas['estadisticas.porFecha']}">
+                    <center>
+                        <h:form>
+                            <p:calendar id="popup" value="#{manejadorEstadistica.fecha1}"/>
+                            <p:calendar id="popup1" value="#{manejadorEstadistica.fecha2}"/>
+                            <p:commandButton value="#{Estadisticas['estadisticas.buscar']}" actionListener="#{manejadorEstadistica.llenarPorFecha()}"
+                                             update="solicitudes">
+                                <p:ajax event="click" listener="#{manejadorEstadistica.llenarPorFecha()}"  />
+                            </p:commandButton>
+                            <br></br>
+                            <p:dataTable id="solicitudes" var="solicitud"
+                                         style="
+                                         width: 70%;"
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10, 15"
+                                         value="#{manejadorEstadistica.llenarPorFecha()}">
+                                <f:facet name="header" >
+                                    #{Inicio['inicio.mantenimientosSolicitados']}
+                                </f:facet>
+                                <p:column headerText="#{Inicio['inicio.seguimiento']}">
+                                    <h:outputText value="#{solicitud.NSeguimiento}" />
+                                </p:column>
+                                <p:column headerText="#{Inicio['inicio.titulo']}">
+                                    <h:outputText value="#{solicitud.titulo}" />
+                                </p:column>                    
+
+                                <p:column headerText="#{Inicio['inicio.fecha']}">
+                                    <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(solicitud)}" />
+                                </p:column> 
+                            </p:dataTable>
+                        </h:form>
+                    </center>
+                </p:tab>
+                <p:tab title="#{Estadisticas['estadisticas.desdeFecha']}">
+                    <center>
+                        <h:form>
+                            <p:calendar id="popup" value="#{manejadorEstadistica.fecha1}"/>
+                            <p:commandButton value="#{Estadisticas['estadisticas.buscar']}" actionListener="#{manejadorEstadistica.llenarDesdeFecha()}"
+                                             update="solicitudes">
+                                <p:ajax event="click" listener="#{manejadorEstadistica.llenarDesdeFecha()}"  />
+                            </p:commandButton>
+                            <br></br>
+                            <p:dataTable id="solicitudes" var="solicitud"
+                                         style="
+                                         width: 70%;"
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10, 15"
+                                         value="#{manejadorEstadistica.llenarDesdeFecha()}">
+                                <f:facet name="header" >
+                                    #{Inicio['inicio.mantenimientosSolicitados']}
+                                </f:facet>
+                                <p:column headerText="#{Inicio['inicio.seguimiento']}">
+                                    <h:outputText value="#{solicitud.NSeguimiento}" />
+                                </p:column>
+                                <p:column headerText="#{Inicio['inicio.titulo']}">
+                                    <h:outputText value="#{solicitud.titulo}" />
+                                </p:column>                    
+
+                                <p:column headerText="#{Inicio['inicio.fecha']}">
+                                    <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(solicitud)}" />
+                                </p:column> 
+                            </p:dataTable>
+                        </h:form>
+                    </center>
                 </p:tab>
 
             </p:tabView>

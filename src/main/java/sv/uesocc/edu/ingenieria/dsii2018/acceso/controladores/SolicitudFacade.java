@@ -70,7 +70,17 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> implements Solici
 
     @Override
     public List<Solicitud> findByDates(Date fechaInicio, Date fechaFinal) {
-        return null;
+        List<Solicitud> listaF = null;
+
+        try {
+            Query consulta = em.createNamedQuery("Solicitud.findByFecha");
+            consulta.setParameter("date1", fechaInicio);
+            consulta.setParameter("date2", fechaFinal);
+            listaF = consulta.getResultList();
+        } catch (Exception ex) {
+            throw ex;
+        }
+       return listaF;
     }
 
     @Override
