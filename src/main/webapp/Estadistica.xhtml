@@ -22,7 +22,7 @@
 
         </ui:define>
         <ui:define name="body"  >
-
+            <br></br><br></br><br></br>
             <p:tabView>
                 <p:tab title="#{Estadisticas['estadisticas.porDepartamento']}" >
                     <p:tabView>
@@ -76,12 +76,12 @@
                         </p:tab>
                     </p:tabView>
                 </p:tab>
-                <p:tab title="Por Fechas">
+                <p:tab title="#{Estadisticas['estadisticas.porFecha']}">
                     <center>
                         <h:form>
                             <p:calendar id="popup" value="#{manejadorEstadistica.fecha1}"/>
                             <p:calendar id="popup1" value="#{manejadorEstadistica.fecha2}"/>
-                            <p:commandButton value="Buscar" actionListener="#{manejadorEstadistica.llenarPorFecha()}"
+                            <p:commandButton value="#{Estadisticas['estadisticas.buscar']}" actionListener="#{manejadorEstadistica.llenarPorFecha()}"
                                              update="solicitudes">
                                 <p:ajax event="click" listener="#{manejadorEstadistica.llenarPorFecha()}"  />
                             </p:commandButton>
@@ -111,11 +111,11 @@
                         </h:form>
                     </center>
                 </p:tab>
-                <p:tab title="Desde Fecha">
+                <p:tab title="#{Estadisticas['estadisticas.desdeFecha']}">
                     <center>
                         <h:form>
                             <p:calendar id="popup" value="#{manejadorEstadistica.fecha1}"/>
-                            <p:commandButton value="Buscar" actionListener="#{manejadorEstadistica.llenarDesdeFecha()}"
+                            <p:commandButton value="#{Estadisticas['estadisticas.buscar']}" actionListener="#{manejadorEstadistica.llenarDesdeFecha()}"
                                              update="solicitudes">
                                 <p:ajax event="click" listener="#{manejadorEstadistica.llenarDesdeFecha()}"  />
                             </p:commandButton>

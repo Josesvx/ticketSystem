@@ -63,7 +63,7 @@ public class ManejadorSolicitud implements Serializable {
     private Solicitud solicitud;
     private Solicitud solicitudSeleccionada;
     private List<Solicitud> selectedSolicitud;
-    ;
+    private Boolean disabled = true;
     protected Solicitud solicitudS;
     private EstadoSolicitud estadoSolicitud;
     private EstadoSolicitud eSol;
@@ -160,11 +160,11 @@ public class ManejadorSolicitud implements Serializable {
         oreo = new CookieInstance();
 
         mail = new ManejadorCorreo();
-        
+
         canCan = new CookieLenguage();
-        
+
         bean = new SesionDeUsuarioBean();
-        
+
         bean.cambioIdioma(canCan.getIdioma());
 
         id2 = oreo.UsuarioId();
@@ -181,6 +181,18 @@ public class ManejadorSolicitud implements Serializable {
         llenarFiltroManGerente();
         ObtenerSolicitudesXTec();
 
+    }
+
+    public void onRow2Select(SelectEvent event) {
+        disabled = false;
+    }
+
+    public Boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
     }
 
     public List<Solicitud> llenarFiltro() {

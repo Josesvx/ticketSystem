@@ -47,12 +47,15 @@
                             <h:outputText value="#{manejadorSolicitud.DevolverFechaCreacion(solicitud)}" />
                         </p:column> 
                         <f:facet name="footer">
-                            <p:commandButton process="solicitudes" update=":form:carDetail" icon="fa-eye" value="#{Inicio['inicio.seguimiento']}" oncomplete="PF('carDialog').show()" />
+                            <p:commandButton process="solicitudes" update=":form:carDetail" 
+                                             icon="fa-eye" value="#{Inicio['inicio.seguimiento']}" 
+                                             oncomplete="PF('carDialog').show()" 
+                                             rendered="#{empty manejadorSolicitud.solicitudSeleccionada}"/>
                         </f:facet>
                     </p:dataTable>
                     <p:dialog header="#{Inicio['inicio.informacion']}" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel id="carDetail" style="text-align:center;">
-                            <p:panelGrid  columns="2"  columnClasses="label,value" rendered="#{not empty manejadorSolicitud.solicitudSeleccionada}">
+                            <p:panelGrid  columns="2"  columnClasses="label,value">
 
                                 <h:outputText value="#{Inicio['inicio.numeroSeguimiento']}" />
                                 <h:outputText value="#{manejadorSolicitud.solicitudSeleccionada.NSeguimiento}" />

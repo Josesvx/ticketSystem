@@ -59,7 +59,7 @@
                                     <p:outputLabel value="#{Inicio['inicio.titulo']}" for="titulo" style=" font-size:16px; font-weight: bold; position: relative; left: -20px;" />
                                 </td>
                                 <td>
-                                    <p:inputText id="titulo" required="true" requiredMessage="#{Crear['crear.tituloRequerido']}" placeholder="#{Inicio['inicio.titulo']}" value="#{manejadorSolicitud.solicitud.titulo}" maxlength="50"/>
+                                    <p:inputText id="titulo" size="35" validatorMessage="Error" required="true" requiredMessage="#{Crear['crear.tituloRequerido']}" placeholder="#{Inicio['inicio.titulo']}" value="#{manejadorSolicitud.solicitud.titulo}" maxlength="50"/>
                                 </td>
                                 <td>
                                     <p:message for="titulo"/>  
@@ -87,7 +87,7 @@
                                     <p:outputLabel value="#{Crear['crear.departamento']} " for="departamento" style="position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
                                 </td>
                                 <td>
-                                    <p:inputText id="departamento" disabled="true" value="#{manejadorSolicitud.nombre}"/>
+                                    <p:inputText id="departamento" size="35" disabled="true" value="#{manejadorSolicitud.nombre}"/>
                                 </td>
                                 <td>
                                     <p:message for="departamento"/>
@@ -99,7 +99,7 @@
                                     <p:outputLabel value="#{Crear['crear.correlativo']}" style=" position: relative; left: -20px; font-size:16px; font-weight: bold;"/> 
                                 </td>
                                 <td>
-                                    <p:inputText id="correlativo"  placeholder="#{Crear['crear.correlativo']}"  value="#{manejadorSolicitud.solicitud.correlativo}" maxlength="10" />    
+                                    <p:inputText id="correlativo"  size="35" placeholder="#{Crear['crear.correlativo']}"  value="#{manejadorSolicitud.solicitud.correlativo}" maxlength="10" />    
                                 </td>
                                 <td>                                    
                                     <p:message for="correlativo"/>

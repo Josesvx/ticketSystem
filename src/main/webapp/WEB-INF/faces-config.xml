@@ -34,5 +34,9 @@
             <base-name>/Estadisticas</base-name>
             <var>Estadisticas</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>/Mantenimiento</base-name>
+            <var>Mantenimiento</var>
+        </resource-bundle>
     </application>
 </faces-config>
